@@ -1,0 +1,16 @@
+{
+  "version": "M3.5",
+  "title": "MERCOLEDI / THE OTHER OFFICE",
+  "base": "M3.4.2 SMART INTERACTION + DOOR SEAL",
+  "changes": [
+    "full Wednesday chapter",
+    "legacy inventory terminal mission",
+    "NORMAL / GLITCH / DECAYED reality layer",
+    "empty office reality shift and corridor silhouette",
+    "Betty lore escalation",
+    "Lorenzo Wednesday return and old-plan foreshadowing",
+    "optional HR trainee archive clue",
+    "Wednesday DEV checkpoints"
+  ],
+  "frozen": ["architecture", "walkable floor", "collision map", "FP controls", "smart interaction targeting"]
+}

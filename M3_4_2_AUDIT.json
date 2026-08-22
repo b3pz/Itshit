@@ -1,0 +1,14 @@
+{
+  "version": "M3.4.2",
+  "title": "SMART INTERACTION + DOOR SEAL",
+  "base": "M3.4.1 PSX VISUAL VERTICAL SLICE",
+  "fixes": [
+    "natural first-person NPC interaction distance",
+    "front-cone smart target selection to prevent nearby trigger overlap",
+    "wall and closed-door line-of-sight interaction blocking",
+    "Direzione closed door collision seals complete doorway cutout",
+    "legacy floating ceiling light proxies hidden in first-person mode"
+  ],
+  "architecture_changed": false,
+  "story_changed": false
+}

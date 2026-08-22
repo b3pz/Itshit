@@ -428,10 +428,33 @@ Continua dalla base stabile M3.1.1 senza modificare architettura, collisioni o p
 - Prima persona resta GAME mode; F3 mantiene la camera 3/4 DEV.
 
 
-## M3.4.1 — PSX VISUAL VERTICAL SLICE
+## M3.4.2 — PSX VISUAL VERTICAL SLICE
 
 Questa build NON ridisegna il gioco. Congela un primo linguaggio visivo quasi-definitivo su REPARTO IT, HR e il breve corridoio centrale: pavimento a piastrelle low-res, CRT spessi, tastiere, schedari, piante, battiscopa, poster geometrici, pannelli fluorescenti, dithering/quantizzazione colore e risoluzione interna leggermente più bassa. Tutti gli elementi aggiunti sono visual-only e non introducono nuove collisioni.
 
 La lore M3.4 rimane invariata. Internamente Lorenzo è ora marcato come `apparent_ally_hidden_rival`, senza rendere il twist visibile nei dialoghi. DON resta alleato genuino.
 
 Checkpoint DEV dedicato: `IT + HR — ART TEST`.
+
+
+## M3.4.2 — SMART INTERACTION + DOOR SEAL
+- First-person NPC interaction range increased to a natural conversation distance.
+- Devices keep a tighter range; targets are chosen by front-facing aim + distance.
+- Current mission target gets only a small priority when actually in view.
+- Wall/closed-door line-of-sight blocks interactions through architecture.
+- Direzione closed door now seals the full architectural doorway cutout, preventing side bypass.
+- Legacy M3.0 ceiling-light proxies render only in 3/4 DEV; first person shows only the real PSX ceiling fixtures.
+- No room dimensions, mission flow, NPC population, player movement or floor geometry changed.
+
+## M3.5 — MERCOLEDÌ / THE OTHER OFFICE
+
+- Mercoledì è ora un capitolo giocabile e separato nel Week System.
+- Nuova missione IT sul terminale inventario legacy nel Server / Magazzino IT.
+- Primo sistema runtime `NORMAL -> GLITCH -> DECAYED` senza duplicare geometria o collisioni.
+- Durante la prima trasformazione lo stesso studio appare vuoto, fatiscente e con dispositivi/luci alterati.
+- Una silhouette non interagibile compare nel corridoio e svanisce all'avvicinarsi.
+- Raggiungendo HR la realtà normale ritorna e Betty lascia capire di conoscere già il fenomeno.
+- Lorenzo torna come NPC dinamico e introduce il tema delle planimetrie vecchie che non coincidono con lo studio attuale.
+- Archivio HR opzionale: primo indizio esplorabile sui tirocinanti IT precedenti.
+- Nuovi checkpoint DEV per terminale, Other Office, Betty e Lorenzo.
+- Mappa, collisioni, porte e controlli M3.4.2 restano invariati.
