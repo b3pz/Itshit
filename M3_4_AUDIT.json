@@ -1,0 +1,16 @@
+{
+  "version": "M3.4",
+  "chapter": "MARTEDI — VOCI DI CORRIDOIO",
+  "base": "M3.3.2 FP ROTATION FIX",
+  "architecture_changed": false,
+  "controls_changed": false,
+  "features": [
+    "authored Tuesday story flow",
+    "Betty HR key lore arc begins",
+    "Lorenzo electrician dynamic ally introduced",
+    "Capo first normal-looking appearance",
+    "Direzione locked door and electrical panel lore",
+    "all 17 fixed staff become optional talkable NPCs on Tuesday",
+    "Tuesday-specific DEV checkpoints"
+  ]
+}

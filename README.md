@@ -1,4 +1,4 @@
-# IT SHIFT PSX — M3.3.2 DUAL CAMERA + FP CONTROLS
+# IT SHIFT PSX — M3.4 DUAL CAMERA + FP CONTROLS
 
 Branch sperimentale derivato dalla M3.3 stabile. Non sostituisce la build 3/4.
 
@@ -406,7 +406,7 @@ Continua dalla base stabile M3.1.1 senza modificare architettura, collisioni o p
 - DEV checkpoint aggiunti per 13:32 e per il test diretto dell'apparizione alle 13:52.
 
 
-## M3.3.2 — DUAL CAMERA + FP CONTROLS
+## M3.4 — DUAL CAMERA + FP CONTROLS
 
 - Modalità gameplay predefinita: prima persona.
 - F3 alterna istantaneamente GAME/FP e DEV/3-4 senza cambiare missione o posizione.
@@ -416,3 +416,22 @@ Continua dalla base stabile M3.1.1 senza modificare architettura, collisioni o p
 - In 3/4 tornano muri cutaway, niente soffitto e player sprite visibile.
 - In FP: muri pieni, soffitto e player nascosto.
 - Mobile: joystick per movimento/strafe, Q/E dedicati alla rotazione, pulsante interazione.
+
+
+## M3.4 — MARTEDI / VOCI DI CORRIDOIO
+- Martedi e ora giocabile, non piu uno snapshot vuoto.
+- Betty/HR e un personaggio chiave: adepta conflittuale, primi segnali protettivi verso il protagonista.
+- Lorenzo entra come NPC dinamico/elettricista e primo alleato reale.
+- Prima apparizione del Capo come figura apparentemente normale e cordiale.
+- Porta Direzione chiusa + badge temporaneo + quadro Q-DIR con assorbimento anomalo.
+- Tutti i 17 NPC fissi sono ora parlabili: il martedi offre dialoghi ambientali opzionali e voci di corridoio.
+- Prima persona resta GAME mode; F3 mantiene la camera 3/4 DEV.
+
+
+## M3.4.1 — PSX VISUAL VERTICAL SLICE
+
+Questa build NON ridisegna il gioco. Congela un primo linguaggio visivo quasi-definitivo su REPARTO IT, HR e il breve corridoio centrale: pavimento a piastrelle low-res, CRT spessi, tastiere, schedari, piante, battiscopa, poster geometrici, pannelli fluorescenti, dithering/quantizzazione colore e risoluzione interna leggermente più bassa. Tutti gli elementi aggiunti sono visual-only e non introducono nuove collisioni.
+
+La lore M3.4 rimane invariata. Internamente Lorenzo è ora marcato come `apparent_ally_hidden_rival`, senza rendere il twist visibile nei dialoghi. DON resta alleato genuino.
+
+Checkpoint DEV dedicato: `IT + HR — ART TEST`.

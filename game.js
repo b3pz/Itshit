@@ -8,7 +8,7 @@ const atmoOverlay=document.getElementById("atmoOverlay"),flickerOverlay=document
 const devMenu=document.getElementById("devMenu"),devButton=document.getElementById("devButton"),devStatusText=document.getElementById("devStatusText");
 let tt=0;function toast(t){toastEl.textContent=t;toastEl.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>toastEl.classList.remove("on"),1400)}
 const VS=`attribute vec3 aPos;attribute vec3 aCol;uniform mat4 uMVP;varying vec3 vCol;void main(){vCol=aCol;gl_Position=uMVP*vec4(aPos,1.);}`;
-const FS=`precision mediump float;varying vec3 vCol;void main(){float q=mod(floor(gl_FragCoord.x+gl_FragCoord.y),2.)*.025;gl_FragColor=vec4(max(vCol-q,0.),1.);}`;
+const FS=`precision mediump float;varying vec3 vCol;void main(){float q=mod(floor(gl_FragCoord.x+gl_FragCoord.y),2.)*.022;vec3 c=max(vCol-q,0.);c=floor(c*31.0)/31.0;gl_FragColor=vec4(c,1.);}`;
 function sh(t,s){const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(x));return x}
 const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);gl.useProgram(pr);
 const aP=gl.getAttribLocation(pr,"aPos"),aC=gl.getAttribLocation(pr,"aCol"),uM=gl.getUniformLocation(pr,"uMVP"),buf=gl.createBuffer();
@@ -35,6 +35,59 @@ function wall(x,z,w,d,h=2.15){
 }
 function desk(x,z,w=1.7,d=.65){solids.push({x,z,w,d});box(x,0,z,w,.68,d,[.34,.23,.15]);box(x,.68,z,w,.08,d,[.49,.32,.20])}
 function rack(x,z){solids.push({x,z,w:.7,d:.65});box(x,0,z,.7,1.75,.65,[.1,.15,.12])}
+
+
+// -----------------------------------------------------------------------------
+// M3.4.1 // PSX VISUAL VERTICAL SLICE
+// A small near-release art-language test covering REPARTO IT + HR + their corridor.
+// IMPORTANT: these are visual-only props; no new solids/collisions are introduced.
+// The frozen M2.9.2 architecture and all M3.4 gameplay remain unchanged.
+// -----------------------------------------------------------------------------
+function floorPlate(x,z,w,d,col,y=-.001){
+ quad([x-w/2,y,z-d/2],[x+w/2,y,z-d/2],[x+w/2,y,z+d/2],[x-w/2,y,z+d/2],col);
+}
+function psxTilePatch(cx,cz,w,d,size=.52){
+ const x0=cx-w/2,z0=cz-d/2;
+ const nx=Math.max(1,Math.floor(w/size)),nz=Math.max(1,Math.floor(d/size));
+ const tw=w/nx,td=d/nz;
+ for(let iz=0;iz<nz;iz++)for(let ix=0;ix<nx;ix++){
+   const col=((ix+iz)&1)?[.245,.252,.235]:[.205,.214,.201];
+   floorPlate(x0+tw*(ix+.5),z0+td*(iz+.5),tw-.025,td-.025,col,-.0015);
+ }
+}
+function psxCrtShell(x,z,w=.48){
+ // Thick beige CRT casing around the live M3.0 screen.
+ box(x,.735,z+.045,w+.13,.40,.19,[.43,.42,.36]);
+ box(x,.715,z+.105,w+.18,.27,.13,[.34,.34,.30]);
+ box(x,.695,z+.095,.30,.075,.23,[.39,.38,.33]);
+ // keyboard + small mouse on the desk, both visual-only
+ box(x,.767,z-.32,.58,.025,.17,[.44,.43,.38]);
+ box(x+.38,.768,z-.31,.10,.025,.14,[.34,.34,.31]);
+}
+function psxFilingCabinet(x,z,w=.62,d=.42,h=1.02){
+ box(x,0,z,w,h,d,[.34,.35,.32]);
+ for(let i=0;i<3;i++){
+   box(x+.001,.18+i*.27,z-d/2-.012,w*.74,.018,.018,[.23,.24,.22]);
+   box(x,.25+i*.27,z-d/2-.024,.12,.035,.018,[.12,.13,.12]);
+ }
+}
+function psxPlant(x,z){
+ box(x,0,z,.34,.34,.34,[.28,.20,.13]);
+ box(x-.10,.30,z,.08,.48,.08,[.12,.28,.15]);
+ box(x+.08,.38,z+.03,.07,.42,.07,[.15,.34,.18]);
+ box(x,.49,z-.05,.08,.34,.08,[.11,.30,.14]);
+}
+function psxPosterX(x,z,base=[.42,.30,.26],accent=[.66,.55,.30]){
+ box(x,.96,z,.025,.62,.72,base);
+ box(x-.014,1.08,z,.012,.13,.52,accent);
+ box(x-.015,1.34,z+.12,.012,.10,.24,[.72,.70,.58]);
+}
+function psxWallTrimX(x,z,d){box(x,.015,z,.045,.16,d,[.20,.14,.10]);}
+function psxWallTrimZ(x,z,w){box(x,.015,z,w,.16,.045,[.20,.14,.10]);}
+function psxFluorescent(x,z,w=1.05){
+ box(x,2.105,z,w,.045,.30,[.30,.31,.27]);
+ box(x,2.145,z,w*.84,.018,.17,[.72,.72,.60]);
+}
 
 function doorFrame(x,z,axis="z",col=[.34,.22,.12]){
  if(axis==="z"){
@@ -284,6 +337,34 @@ desk(-9.65,-11.10,2.80,.85);               // cucina table / island
  desk(-1.60,-11.00,2.00,.65);               // rifugio digitale
  desk(3.70,-11.00,2.80,.82);                 // spazio A main table
 
+// M3.4.1 // FINAL-STYLE SAMPLE: REPARTO IT + HR + short central corridor.
+// Tile language inspired by late-90s office games: deliberately low-frequency,
+// low-resolution forms rather than modern PBR detail.
+psxTilePatch(-5.0,2.90,3.72,3.52,.50);
+psxTilePatch(-5.0,7.00,3.72,3.30,.50);
+psxTilePatch(0,4.85,3.12,4.85,.52);
+
+// Dark wooden/rubber skirting makes rooms read as real interiors in first person.
+psxWallTrimX(-6.92,2.90,3.45);psxWallTrimZ(-5.0,1.08,3.72);psxWallTrimZ(-5.0,4.72,3.72);
+psxWallTrimX(-6.92,7.00,3.28);psxWallTrimZ(-5.0,5.25,3.72);psxWallTrimZ(-5.0,8.74,3.72);
+
+// Chunky CRT workstations: live screen colours still come from officeState.
+psxCrtShell(-5.45,2.85,.48);psxCrtShell(-4.20,1.85,.44);psxCrtShell(-5.10,7.05,.46);
+
+// Non-blocking dressing: filing, plants, wall print and fluorescent panels.
+psxFilingCabinet(-6.48,4.28,.58,.38,.95);
+psxFilingCabinet(-6.48,8.20,.62,.40,1.02);
+psxPlant(-3.55,4.28);psxPlant(-3.55,8.15);
+psxPosterX(-6.91,2.30,[.31,.26,.22],[.58,.49,.25]);
+psxPosterX(-6.91,7.35,[.28,.31,.30],[.38,.57,.49]);
+psxFluorescent(-5.0,2.90,1.10);psxFluorescent(-5.0,7.0,1.10);psxFluorescent(0,4.8,1.25);
+
+// Tiny desk clutter: phone-sized block, mug and paper stacks. Purely cosmetic.
+box(-4.92,.765,2.55,.22,.055,.16,[.16,.17,.15]);
+box(-5.95,.765,2.72,.09,.11,.09,[.46,.43,.34]);
+box(-4.67,.765,1.73,.26,.025,.18,[.66,.64,.54]);
+box(-5.62,.765,7.00,.24,.025,.18,[.68,.66,.56]);
+
 // Story devices. Monitor bodies/screens are now rendered by the M3.0 live-office layer.
 box(-4.80,.72,-1.35,.18,.18,.06,[.72,.58,.18]);
 
@@ -300,6 +381,12 @@ box(8.10,.80,-11.00,.44,.08,.40,[.49,.50,.45]);
 
 // RENDER_04, INTERIOR_03 and the meeting-room PBX phone are rendered by
 // the M3.0 live-office device layer so their state can change at runtime.
+// M3.4 // DIREZIONE access reader + electrical panel. Pure visual props;
+// frozen architecture/collisions remain untouched.
+box(9.58,.90,7.05,.06,.24,.15,[.14,.18,.15]);
+box(9.55,.58,8.72,.08,.72,.46,[.22,.24,.21]);
+box(9.50,.76,8.72,.025,.10,.28,[.50,.42,.16]);
+
 
 const interactables=[
  {id:"zia_ale",label:"ZIA ALE",x:-1.55,z:10.55,range:1.35,type:"npc"},
@@ -313,7 +400,13 @@ const interactables=[
  {id:"interior_pc_03",label:"PC INTERIOR_03",x:11.65,z:.45,range:1.35,type:"device"},
  {id:"meet_phone",label:"TELEFONO SALA MEET CAPO",x:12.65,z:7.70,range:1.40,type:"device"},
  {id:"bim_02",label:"BIM 02",x:-4.15,z:-5.05,range:1.35,type:"npc"},
- {id:"bim_pc_02",label:"PC BIM 02",x:-4.15,z:-5.75,range:1.28,type:"device"}
+ {id:"bim_pc_02",label:"PC BIM 02",x:-4.15,z:-5.75,range:1.28,type:"device"},
+ // M3.4 // Tuesday lore/NPC interactables
+ {id:"hr_01",label:"BETTY",x:-5.10,z:6.35,range:1.38,type:"npc"},
+ {id:"lorenzo",label:"LORENZO",x:-.75,z:9.95,range:1.45,type:"npc"},
+ {id:"capo",label:"CAPO",x:9.05,z:7.70,range:1.55,type:"npc"},
+ {id:"direzione_door",label:"PORTA DIREZIONE",x:9.34,z:7.70,range:1.35,type:"device"},
+ {id:"direzione_panel",label:"QUADRO ELETTRICO DIREZIONE",x:9.28,z:8.72,range:1.35,type:"device"}
 ];
 
 // -----------------------------------------------------------------------------
@@ -371,21 +464,39 @@ function deviceScreenColor(state){
  return [.12,.34,.22];
 }
 function syncOfficeStateFromStory(){
- // Existing story drives visible device state, but never changes geometry.
+ // M3.4 // Weekday-specific runtime states. Monday keeps the proven legacy path;
+ // Tuesday starts clean and only changes the Direzione door/light states.
+ if(currentDay===1){
+   for(const r of rooms)setRoomLight(r.name,"on");
+   for(const d of doors)setDoorState(d.room,"open");
+   for(const sc of officeScreens)setDeviceState(sc.id,"on");
+   for(const ph of officePhones)setDeviceState(ph.id,"idle");
+   setDeviceState("server_rack_02","online");setDeviceState("printer_main","ready");
+   setDeviceState("render_04","off");setDeviceState("interior_pc_03","ready");setDeviceState("bim_pc_02","ready");
+   // Direzione is deliberately inaccessible until the Capo opens it himself.
+   setDoorState("SALA MEET CAPO",storyStep===55?"open":"closed");
+   if(storyStep>=53&&storyStep<=55)setRoomLight("SALA MEET CAPO","flicker");
+   return;
+ }
+ if(currentDay>=2){
+   for(const r of rooms)setRoomLight(r.name,"on");
+   for(const d of doors)setDoorState(d.room,"open");
+   for(const sc of officeScreens)setDeviceState(sc.id,"on");
+   for(const ph of officePhones)setDeviceState(ph.id,"idle");
+   setDeviceState("server_rack_02","online");setDeviceState("printer_main","ready");
+   setDeviceState("render_04","off");setDeviceState("interior_pc_03","ready");setDeviceState("bim_pc_02","ready");
+   return;
+ }
+ // Monday story drives visible device state, but never changes geometry.
  setDeviceState("server_rack_02",storyStep>=6?"online":(storyStep>=4?"warn":"online"));
  setDeviceState("printer_main",storyStep>=12?"ready":(storyStep>=10?"error":"idle"));
  setDeviceState("render_04","off");
  setDeviceState("interior_pc_03",storyStep>=24?"ready":(storyStep>=21&&storyStep<24?"error":"on"));
  setDeviceState("bim_pc_02",storyStep>=41?"ready":(storyStep>=38&&storyStep<41?"error":"on"));
  setDeviceState("meet_phone",storyStep===27||storyStep===28?"ringing":(storyStep>=29?"offline":"idle"));
- // First room-specific light behaviours. They are subtle in dev view and are
- // ready to become full ceiling lighting in the eventual first-person pass.
  setRoomLight("RENDERISTI",storyStep>=16?"flicker":"on");
  setRoomLight("SALA MEET CAPO",storyStep>=27?"flicker":"on");
- if(storyStep>=35){
-   setRoomLight("SALA MEET","off");
-   setRoomLight("STAMPA 3D","off");
- }
+ if(storyStep>=35){setRoomLight("SALA MEET","off");setRoomLight("STAMPA 3D","off");}
 }
 
 function buildOfficeLiveMesh(now){
@@ -513,6 +624,9 @@ const npcSprites=[
  {id:"interior_02",name:"INTERIOR 02",role:"INTERIOR",kind:"staff",x:10.85,z:.45,w:.72,h:1.36,from:0,to:999,pal:{body:"#635346",accent:"#9d856f",legs:"#342e29",skin:"#cb9474",hair:"#46332c",light:"#b49b82"}},
  {id:"render_01",name:"RENDER 01",role:"RENDERISTI",kind:"staff",x:10.85,z:-2.75,w:.72,h:1.36,from:0,to:999,pal:{body:"#49566b",accent:"#7f8fa7",legs:"#29303b",skin:"#c78e70",hair:"#3c302b",light:"#98a6ba"}},
  {id:"render_02",name:"RENDER 02",role:"RENDERISTI",kind:"staff",x:11.55,z:-5.00,w:.72,h:1.36,from:0,to:999,pal:{body:"#5f4c48",accent:"#987974",legs:"#332b2a",skin:"#ce9675",hair:"#4c342d",light:"#ae8d87"}},
+ // M3.4 // Tuesday dynamic cast. These do not change the canonical 17 fixed staff.
+ {id:"lorenzo",name:"LORENZO",role:"ELETTRICISTA",kind:"dynamic",day:1,x:-.75,z:9.95,w:.74,h:1.40,from:51,to:55,pal:{body:"#7a6335",accent:"#d3a84c",legs:"#333127",skin:"#c99170",hair:"#3b3029",light:"#e0bd67"}},
+ {id:"capo",name:"CAPO",role:"DIREZIONE",kind:"dynamic",day:1,x:9.05,z:7.70,w:.76,h:1.44,from:55,to:55,pal:{body:"#282d35",accent:"#6c7280",legs:"#171a1f",skin:"#d0a083",hair:"#5a5149",light:"#a5acb8"}},
  // M3.2 // first visible manifestation. Dynamic: never counted as office staff,
  // never shown on the development map and never directly interactable.
  {id:"corridor_figure",name:"...",role:"ANOMALIA",kind:"dynamic",x:-.25,z:.65,w:.70,h:1.52,from:43,to:43,pal:{body:"#141715",accent:"#252a26",legs:"#0c0e0d",skin:"#6f756d",hair:"#080908",light:"#384039"}}
@@ -528,7 +642,7 @@ const narrativeRoles={
  hr_01:{alignment:"adept_conflicted",fixed:true,displayName:"BETTY"},
  it_manager:{alignment:"adept_pure",fixed:true},
  capo:{alignment:"demon_leader",fixed:false},
- lorenzo:{alignment:"ally",fixed:false,role:"ELETTRICISTA"},
+ lorenzo:{alignment:"apparent_ally_hidden_rival",fixed:false,role:"ELETTRICISTA"},
  don:{alignment:"ally",fixed:false,role:"MANUTENTORE"}
 };
 
@@ -540,11 +654,22 @@ const playerSprite={
 };
 playerSprite.tex=spriteTexture(playerSprite.pal,"idle");
 let activeTalkingNpcId=null;
-const dialogueNpcMap={"ZIA ALE":"zia_ale","IT MANAGER":"it_manager","ALICE":"alice_editoria","MARINO":"marino_interior","BIM 02":"bim_02"};
+const dialogueNpcMap={"ZIA ALE":"zia_ale","IT MANAGER":"it_manager","ALICE":"alice_editoria","MARINO":"marino_interior","BIM 02":"bim_02","BETTY":"hr_01","LORENZO":"lorenzo","CAPO":"capo"};
+for(const n of npcSprites)dialogueNpcMap[n.name]=n.id;
 function npcById(id){return npcSprites.find(n=>n.id===id)||null;}
-function isNpcVisible(id){const n=npcById(id);return !!n&&storyStep>=n.from&&storyStep<=n.to;}
+function isNpcVisible(id){
+ const n=npcById(id);if(!n)return false;
+ if(Number.isInteger(n.day)&&n.day!==currentDay)return false;
+ return storyStep>=n.from&&storyStep<=n.to;
+}
 function setNpcVisibleWindow(id,from=0,to=999){const n=npcById(id);if(n){n.from=from;n.to=to;}}
 function fixedStaffCount(){return npcSprites.filter(n=>n.kind==="staff").length;}
+// M3.4 // Every fixed colleague is now examinable/talkable. Key story NPCs keep
+// their authored mission dialogue; the rest supply optional corridor lore.
+for(const n of npcSprites){
+ if(n.kind!=="staff"||interactables.some(it=>it.id===n.id))continue;
+ interactables.push({id:n.id,label:n.name,x:n.x,z:n.z,range:1.30,type:"npc"});
+}
 // Reserved for later: Capo, manutentori and visitors will use kind="dynamic"
 // and will NOT change the canonical 17-person fixed staff count.
 const npcHomePositions={
@@ -578,8 +703,15 @@ function applyNpcSceneFromStory(){
  for(const [id,pos] of Object.entries(npcHomePositions))setNpcWorldPosition(id,pos.x,pos.z);
  // Lunch scene: relocate the SAME 17 fixed NPCs instead of spawning lunch extras.
  // 6 CUCINA + 6 SPAZIO A + 5 SALA MEET = 17.
- if(storyStep===33||storyStep===34){
+ if(currentDay===0&&(storyStep===33||storyStep===34)){
    for(const [id,pos] of Object.entries(npcLunchPositions))setNpcWorldPosition(id,pos.x,pos.z);
+ }
+ // Tuesday dynamic staging: Lorenzo arrives at reception, then relocates to the
+ // Direzione electrical panel so the player actually escorts him through the studio.
+ if(currentDay===1){
+   if(storyStep===51)setNpcWorldPosition("lorenzo",-.75,9.95);
+   else if(storyStep>=52&&storyStep<=55)setNpcWorldPosition("lorenzo",8.45,8.55);
+   if(storyStep===55)setNpcWorldPosition("capo",9.05,7.70);
  }
 }
 function renderNpcSprites(vp,camX,camZ){
@@ -744,14 +876,25 @@ const storySteps=[
  {id:"report_figure",time:"13:59",objective:"PARLA CON L'IT MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
  {id:"m32_complete",time:"14:02",objective:"M3.2 // QUALCOSA ERA NEL CORRIDOIO",targetRoom:null},
 
- // M3.3 // WEEK SYSTEM SCAFFOLD
- // These four steps are chapter entry snapshots only. Their actual missions are
- // intentionally added in M3.4+ so the stable Monday gameplay remains isolated.
- {id:"tuesday_start",time:"09:05",objective:"MARTEDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT",devOnly:true},
+ // M3.4 // MARTEDI — VOCI DI CORRIDOIO
+ {id:"tuesday_reach_it",time:"09:05",objective:"MARTEDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT"},
+ {id:"tuesday_manager",time:"09:07",objective:"PARLA CON L'IT MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
+ {id:"tuesday_betty_badge",time:"09:12",objective:"VAI DA BETTY IN HR",targetRoom:"HR",targetInteractable:"hr_01"},
+ {id:"tuesday_lorenzo",time:"09:18",objective:"LORENZO E ARRIVATO // TORNA IN SEGRETERIA",targetRoom:"INGRESSO / SEGRETERIA",targetInteractable:"lorenzo"},
+ {id:"tuesday_reserved_door",time:"09:23",objective:"ACCOMPAGNA LORENZO ALLA PORTA DIREZIONE",targetRoom:"CORRIDOIO",targetInteractable:"direzione_door"},
+ {id:"tuesday_panel",time:"09:26",objective:"CONTROLLA IL QUADRO ELETTRICO DIREZIONE",targetRoom:"CORRIDOIO",targetInteractable:"direzione_panel"},
+ {id:"tuesday_lorenzo_panel",time:"09:30",objective:"PARLA CON LORENZO",targetRoom:"CORRIDOIO",targetInteractable:"lorenzo"},
+ {id:"tuesday_capo",time:"09:33",objective:"...",targetRoom:"CORRIDOIO",targetInteractable:"capo"},
+ {id:"tuesday_betty_after",time:"09:36",objective:"PASSA DA BETTY",targetRoom:"HR",targetInteractable:"hr_01"},
+ {id:"tuesday_manager_end",time:"09:42",objective:"TORNA DALL'IT MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
+ {id:"tuesday_complete",time:"09:47",objective:"MARTEDI // VOCI DI CORRIDOIO",targetRoom:null},
+
+ // Future weekday chapter entry snapshots. Their missions remain isolated until M3.5+.
  {id:"wednesday_start",time:"09:05",objective:"MERCOLEDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT",devOnly:true},
  {id:"thursday_start",time:"09:05",objective:"GIOVEDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT",devOnly:true},
  {id:"friday_start",time:"09:05",objective:"VENERDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT",devOnly:true}
 ];
+const TUESDAY_START_STEP=48,TUESDAY_END_STEP=58,WEDNESDAY_START_STEP=59,THURSDAY_START_STEP=60,FRIDAY_START_STEP=61;
 
 // M3.3 // WEEK / CHAPTER RUNTIME
 const WEEK_DAYS=[
@@ -819,6 +962,8 @@ function triggerStoryAtmosphere(prev,next){
  if(next===29 && prev!==29){visualFlicker(.22,120);setTimeout(()=>visualFlicker(.08,65),235);}
  if(next===43 && prev!==43){visualFlicker(.10,70);tone(74,.14,.018,'triangle',52);}
  if(next===44 && prev!==44){visualFlicker(.30,120);setTimeout(()=>visualFlicker(.07,55),190);tone(58,.16,.024,'triangle',38);}
+ if(currentDay===1&&next===53&&prev!==53){visualFlicker(.08,70);tone(118,.055,.010,'square',82);}
+ if(currentDay===1&&next===55&&prev!==55){visualFlicker(.13,90);tone(82,.08,.014,'triangle',62);setTimeout(()=>tone(164,.035,.008,'square',118),105);}
 }
 let dtForAtmosphere=0;
 
@@ -885,10 +1030,10 @@ const DEV_MODE=true;
 const devCheckpoints={
  // WEEK STARTS // the main M3.3 development entry points
  monday:{label:"LUNEDI — 09:00",day:0,step:0,x:-.45,z:10.35,kind:"week"},
- tuesday:{label:"MARTEDI — 09:05",day:1,step:48,x:-.45,z:10.35,kind:"week"},
- wednesday:{label:"MERCOLEDI — 09:05",day:2,step:49,x:-.45,z:10.35,kind:"week"},
- thursday:{label:"GIOVEDI — 09:05",day:3,step:50,x:-.45,z:10.35,kind:"week"},
- friday:{label:"VENERDI — 09:05",day:4,step:51,x:-.45,z:10.35,kind:"week"},
+ tuesday:{label:"MARTEDI — 09:05",day:1,step:TUESDAY_START_STEP,x:-.45,z:10.35,kind:"week"},
+ wednesday:{label:"MERCOLEDI — 09:05",day:2,step:WEDNESDAY_START_STEP,x:-.45,z:10.35,kind:"week"},
+ thursday:{label:"GIOVEDI — 09:05",day:3,step:THURSDAY_START_STEP,x:-.45,z:10.35,kind:"week"},
+ friday:{label:"VENERDI — 09:05",day:4,step:FRIDAY_START_STEP,x:-.45,z:10.35,kind:"week"},
 
  // MONDAY QUICK TESTS // preserved from M3.2
  start:{label:"09:00 — INIZIO TURNO",day:0,step:0,x:-.45,z:10.35},
@@ -898,7 +1043,13 @@ const devCheckpoints={
  lunch:{label:"13:00 — PRANZO",day:0,step:34,x:-9.65,z:-9.25},
  post_lunch:{label:"13:30 — POST PRANZO",day:0,step:36,x:-4.35,z:2.70},
  m32_start:{label:"13:32 — M3.2 INIZIO",day:0,step:37,x:-4.35,z:2.70},
- manifestation:{label:"13:52 — APPARIZIONE",day:0,step:43,x:-1.35,z:-3.55}
+ manifestation:{label:"13:52 — APPARIZIONE",day:0,step:43,x:-1.35,z:-3.55},
+ // MARTEDI QUICK TESTS // M3.4 lore + dynamic NPCs
+ tue_betty:{label:"MARTEDI 09:12 — BETTY",day:1,step:50,x:-2.35,z:7.05},
+ tue_lorenzo:{label:"MARTEDI 09:18 — LORENZO",day:1,step:51,x:-.35,z:9.55},
+ tue_direzione:{label:"MARTEDI 09:23 — PORTA DIREZIONE",day:1,step:52,x:8.55,z:7.70},
+ tue_capo:{label:"MARTEDI 09:33 — CAPO",day:1,step:55,x:8.45,z:7.70},
+ visual_slice:{label:"PSX VISUAL SLICE — IT / HR",day:1,step:50,x:-5.85,z:4.15}
 };
 function resetOfficeForCheckpoint(){
  for(const r of rooms)officeState.lights[r.name]="on";
@@ -919,13 +1070,15 @@ function applyWeekStartProfile(){
  weekRuntime.profile="DAY_START";
  // Keep the stable architecture completely untouched. Only runtime states live here.
  for(const [id,pos] of Object.entries(npcHomePositions))setNpcWorldPosition(id,pos.x,pos.z);
+ syncOfficeStateFromStory();
 }
 function closeDialogueForCheckpoint(){
  dialogueOpen=false;dialogueLines=[];dialogueIndex=0;dialogueDone=null;activeTalkingNpcId=null;
  dialogueEl.classList.remove("on");promptEl.classList.remove("on");
 }
 function anomalyCountForStep(step=storyStep){
- if(currentDay>0 && step>=48)return 4; // Monday anomalies are already part of history.
+ if(currentDay===1 && step>=TUESDAY_START_STEP)return 4; // Tuesday is suspicion/lore, not a new hard manifestation.
+ if(currentDay>=2 && step>=WEDNESDAY_START_STEP)return 4;
  return (step>=18?1:0)+(step>=29?1:0)+(step>=35?1:0)+(step>=43?1:0);
 }
 function updateDevStatus(){
@@ -1253,14 +1406,137 @@ function updateInteractionPrompt(){
  promptEl.innerHTML=`<b>[SPAZIO]</b> ${active?"INTERAGISCI":"ESAMINA"} — ${it.label}`;
  promptEl.classList.add("on");
 }
+const tuesdayAmbientDialogue={
+ zia_ale:["Secondo giorno e sei ancora qui. Direi che e un ottimo inizio.","Non farti mettere fretta dal Manager: qui sembrano tutti nati gia sapendo dove andare."],
+ alice_editoria:["Hai una faccia da secondo giorno.","Quello prima di te al secondo giorno aveva gia imparato a ignorare meta delle richieste. Poi non l'ho piu visto in giro."],
+ bim_01:["Ieri verso le due ho sentito passi nel corridoio BIM.","Pensavo fossi tu, ma quando sono uscito non c'era nessuno."],
+ bim_02:["Desktop Connector oggi collabora. Non dirlo troppo forte."],
+ central_01:["Ti hanno gia dato un badge temporaneo? A me per averne uno ci sono volute settimane."],
+ central_02:["Se senti storie sui tirocinanti, ignorale. Qui la gente si annoia."],
+ central_03:["Direzione oggi ha chiesto di non lasciare porte aperte. Non so perche."],
+ central_04:["Il martedi e il giorno piu normale. Di solito."],
+ central_05:["Hai gia conosciuto il Capo? No? Meglio... cioe, prima o poi capita."],
+ central_06:["Qua sopra tutti sanno tutto di tutti. Tranne le cose importanti."],
+ editoria_02:["Alice parla troppo. Pero sul vecchio stagista non si inventa tutto."],
+ marino_interior:["Oggi il server va. Segnatelo sul calendario."],
+ interior_02:["La Sala Meet Capo? Io ci entro solo se mi chiamano per nome."],
+ render_01:["Render_04 stamattina si e acceso per qualche secondo. Nessuno ha fatto login."],
+ render_02:["Quello prima di te restava spesso fino a tardi. Almeno credo. Qui gli orari si confondono."],
+ hr_01:["Sei venuto a trovare HR senza che ti abbia chiamato? Cosi mi abitui male."],
+ it_manager:["Se non hai un ticket aperto, goditi il momento. Dura poco."]
+};
+function handleTuesdayInteraction(it){
+ if(currentDay!==1||storyStep<TUESDAY_START_STEP||storyStep>TUESDAY_END_STEP)return false;
+ if(it.id==="it_manager"){
+   if(storyStep===49){
+     openDialogue("IT MANAGER",[
+       "Secondo giorno. Bene. Non e scontato.",
+       "Direzione ha segnalato uno sbalzo sulla linea della Sala Meet Capo.",
+       "Sta arrivando Lorenzo, l'elettricista. Prima passa da Betty in HR: ti serve un badge temporaneo per quella zona.",
+       "E limita l'intervento a quello che ti viene chiesto. Le aree Direzione non sono un posto dove curiosare."
+     ],()=>setStoryStep(50,"MARTEDI // PASSA DA BETTY"));
+   }else if(storyStep===57){
+     openDialogue("IT MANAGER",[
+       "Intervento chiuso? Perfetto.",
+       "Se Direzione dice che e a posto, e a posto.",
+       "Un consiglio: qui non serve capire tutto. Serve che funzioni.",
+       "E non perdere quel badge. Venerdi potresti averne ancora bisogno."
+     ],()=>setStoryStep(58,"MARTEDI COMPLETATO // VOCI DI CORRIDOIO"));
+   }else openDialogue("IT MANAGER",tuesdayAmbientDialogue.it_manager,null);
+   return true;
+ }
+ if(it.id==="hr_01"){
+   if(storyStep===50){
+     openDialogue("BETTY",[
+       "Secondo giorno e gia ti mandano ai piani alti? Ti stanno prendendo in simpatia.",
+       "Questo badge e temporaneo. Vale solo oggi e solo dove decidono loro.",
+       "Quello prima di te ne aveva uno uguale...",
+       "Lascia stare. Se la porta non si apre, non insistere. Torna da me."
+     ],()=>setStoryStep(51,"LORENZO E ARRIVATO // TORNA IN SEGRETERIA"));
+   }else if(storyStep===56){
+     openDialogue("BETTY",[
+       "L'hai incontrato.",
+       "Non serve che mi rispondi, si vede.",
+       "Il badge non doveva aprire quella porta. E infatti non l'ha aperta.",
+       "Se venerdi ti chiedono di restare oltre l'orario... passa da me prima.",
+       "Sto facendo terrorismo aziendale, niente di piu. Vai, prima che il Manager ti cerchi."
+     ],()=>setStoryStep(57,"TORNA DALL'IT MANAGER"));
+   }else openDialogue("BETTY",tuesdayAmbientDialogue.hr_01,null);
+   return true;
+ }
+ if(it.id==="lorenzo"){
+   if(storyStep===51){
+     openDialogue("LORENZO",[
+       "Tu devi essere il nuovo IT. Lorenzo. Elettricista, rompiscatole professionista.",
+       "Mi hanno chiamato per la linea della Sala Meet Capo. Salta senza sovraccarico.",
+       "La cosa divertente e che quando arrivo io funziona sempre tutto.",
+       "Andiamo a vedere prima che qualcuno decida che e colpa del Wi-Fi."
+     ],()=>setStoryStep(52,"ACCOMPAGNA LORENZO // DIREZIONE"));
+   }else if(storyStep===54){
+     openDialogue("LORENZO",[
+       "Due kilowatt con la stanza vuota? Non sono quattro faretti.",
+       "Guarda il sigillo: la targhetta e vecchia, il sigillo e nuovo.",
+       "Ogni volta che provo a staccare quella linea compare qualcuno a dirmi di lasciarla stare.",
+       "Facciamo finta di non aver visto niente. E una tecnica di manutenzione molto usata."
+     ],()=>setStoryStep(55,"CLACK // LA PORTA SI APRE"));
+   }else openDialogue("LORENZO",["Io resto qui ancora un minuto. Se senti un botto, non era il Wi-Fi."],null);
+   return true;
+ }
+ if(it.id==="direzione_door"){
+   if(storyStep===52){
+     deviceBeep();openDialogue("PORTA DIREZIONE",[
+       "BADGE TEMPORANEO // LETTURA...",
+       "ACCESSO NEGATO // PROFILO NON AUTORIZZATO.",
+       "ULTIMO ACCESSO REGISTRATO: 06:12 // DIREZIONE.",
+       "PORTA BLOCCATA."
+     ],()=>setStoryStep(53,"ACCESSO NEGATO // CONTROLLA IL QUADRO"));
+   }else if(storyStep<55)openDialogue("PORTA DIREZIONE",["ACCESSO RISERVATO // BADGE NON AUTORIZZATO."],null);
+   else openDialogue("PORTA DIREZIONE",["ACCESSO DIREZIONE."],null);
+   return true;
+ }
+ if(it.id==="direzione_panel"){
+   if(storyStep===53){
+     deviceBeep();openDialogue("QUADRO ELETTRICO DIREZIONE",[
+       "Q-DIR // LINEA 4.",
+       "STATO: ATTIVA // PROTEZIONE: OK.",
+       "ASSORBIMENTO ISTANTANEO: 2.1 kW.",
+       "OCCUPAZIONE SALA: 0.",
+       "ETICHETTA MANUALE: NON DISALIMENTARE."
+     ],()=>setStoryStep(54,"PARLA CON LORENZO"));
+   }else openDialogue("QUADRO ELETTRICO DIREZIONE",["Q-DIR // LINEA 4 ATTIVA.","ETICHETTA: NON DISALIMENTARE."],null);
+   return true;
+ }
+ if(it.id==="capo"){
+   if(storyStep===55){
+     openDialogue("CAPO",[
+       "Ah. Tu devi essere il nuovo stagista IT.",
+       "Benvenuto. Spero che il primo giorno non ti abbia spaventato.",
+       "Qui all'inizio sembra tutto piu complicato di quanto sia.",
+       "Venerdi facciamo sempre un piccolo punto con i nuovi. Ci vediamo allora."
+     ],()=>setStoryStep(56,"PASSA DA BETTY"));
+   }
+   return true;
+ }
+ // Optional conversations make Tuesday feel populated and reward exploration.
+ if(it.type==="npc"&&tuesdayAmbientDialogue[it.id]){
+   openDialogue(it.label,tuesdayAmbientDialogue[it.id],null);return true;
+ }
+ if(it.type==="device"){
+   openDialogue(it.label,["MARTEDI // NESSUN INTERVENTO ASSEGNATO SU QUESTO DISPOSITIVO."],null);return true;
+ }
+ return false;
+}
+
 function interact(){
  if(dialogueOpen){advanceDialogue();return;}
  const it=nearestInteractable();
  if(!it){toast(roomAt(player.x,player.z)+" // NIENTE DA INTERAGIRE");return;}
 
- // M3.3 future weekday entries are structural checkpoints only. Prevent them
+ if(handleTuesdayInteraction(it))return;
+
+ // M3.4 future weekday entries remain structural checkpoints only. Prevent them
  // from falling through into Monday dialogue until their chapters are authored.
- if(currentDay>0 && storyStep>=48){
+ if(currentDay>=2 && storyStep>=WEDNESDAY_START_STEP){
    const d=currentDayDef();
    if(it.type==="npc")openDialogue(it.label,[`${d.label} // ${d.chapter}.`,`CAPITOLO PRONTO PER LO SVILUPPO NEL PROSSIMO MILESTONE.`],null);
    else openDialogue(it.label,[`${d.label} // STATO DI TEST.`,`QUESTO OGGETTO E PRONTO PER LE MISSIONI DEL CAPITOLO.`],null);
@@ -1849,7 +2125,7 @@ function cameraSafeDistance(targetX,targetZ,yaw,wantedDist){
  return wantedDist;
 }
 
-function resize(){const d=Math.min(1.3,devicePixelRatio||1),w=Math.max(320,Math.floor(innerWidth*d*.72)),h=Math.max(180,Math.floor(innerHeight*d*.72));if(c.width!==w||c.height!==h){c.width=w;c.height=h}}
+function resize(){const d=Math.min(1.25,devicePixelRatio||1),w=Math.max(320,Math.floor(innerWidth*d*.64)),h=Math.max(180,Math.floor(innerHeight*d*.64));if(c.width!==w||c.height!==h){c.width=w;c.height=h}}
 let last=performance.now();function frame(now){const dt=Math.min(.04,(now-last)/1000);last=now;dtForAtmosphere=dt;const mapOpen=bigMap&&!bigMap.classList.contains("hidden");const devOpen=devMenu&&!devMenu.classList.contains("hidden");
 
 // M3.3.2 // Dual controls.
@@ -1909,7 +2185,10 @@ if(currentRoom!==player._lastRoom){
 
  // Story triggers only advance a travel step into its explicit interaction.
  // No mission is ever solved merely by crossing a room threshold.
- if(currentRoom==="REPARTO IT"&&storyStep===1){
+ if(currentDay===1&&currentRoom==="REPARTO IT"&&storyStep===48){
+   setStoryStep(49,"MARTEDI // PARLA CON IL MANAGER");
+ }
+ else if(currentRoom==="REPARTO IT"&&storyStep===1){
    setStoryStep(2,"REPARTO IT // CERCA IL MANAGER");
  }
  else if(currentRoom==="SERVER / MAGAZZINO IT"&&storyStep===4){

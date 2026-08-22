@@ -1,0 +1,16 @@
+{
+  "version": "M3.4.1",
+  "name": "PSX VISUAL VERTICAL SLICE",
+  "base": "M3.4 stable",
+  "scope": ["REPARTO IT", "HR", "central corridor sample"],
+  "changes": [
+    "PSX colour quantization in fragment shader",
+    "slightly reduced internal render resolution",
+    "low-res tiled floor sample",
+    "chunky CRT casings and keyboards around live screens",
+    "filing cabinets, plants, skirting, posters and fluorescent fixtures",
+    "dedicated DEV checkpoint for visual review",
+    "Lorenzo hidden-rival metadata only; no visible story spoiler"
+  ],
+  "unchanged": ["architecture", "collisions", "missions", "Tuesday lore", "NPC counts", "FP controls"]
+}

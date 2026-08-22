@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>IT SHIFT PSX // M3.3.2 DUAL CAMERA + FP CONTROLS</title>
+<title>IT SHIFT PSX // M3.4.1 PSX VISUAL VERTICAL SLICE</title>
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;color:#dce5df;font-family:Consolas,monospace}
 #app{position:fixed;inset:0} canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
@@ -78,7 +78,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 /* M2.8 atmosphere overlays: visual-only, never intercept input. */
 #atmoOverlay,#psxNoise,#flickerOverlay{position:absolute;inset:0;z-index:3;pointer-events:none}
 #atmoOverlay{background:radial-gradient(circle at 50% 45%,transparent 34%,rgba(0,0,0,.10) 100%);transition:background .45s linear}
-#psxNoise{opacity:.025;background:repeating-linear-gradient(0deg,rgba(205,235,218,.08) 0,rgba(205,235,218,.08) 1px,transparent 1px,transparent 4px);mix-blend-mode:soft-light}
+#psxNoise{opacity:.042;background:repeating-linear-gradient(0deg,rgba(205,235,218,.08) 0,rgba(205,235,218,.08) 1px,transparent 1px,transparent 4px);mix-blend-mode:soft-light}
 #flickerOverlay{z-index:4;background:#07100b;opacity:0;transition:opacity .045s linear}
 
 /* M3.3 weekday chapter banner */
@@ -110,7 +110,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <div id="atmoOverlay"></div><div id="psxNoise"></div><div id="flickerOverlay"></div><div id="fpCrosshair">+</div><div id="fpBadge">GAME // FIRST PERSON</div>
 <div id="hud">
 <div class="card"><b>IT SHIFT // PSX PROTOTYPE</b><span id="room">INGRESSO / SEGRETERIA</span></div>
-<div id="objective" class="card"><b>OBIETTIVO M3.3</b><span id="objText">PARLA CON ZIA ALE</span></div>
+<div id="objective" class="card"><b>OBIETTIVO M3.4.1</b><span id="objText">PARLA CON ZIA ALE</span></div>
 <div id="clockCard" class="card"><b>ORARIO</b><span id="clock">09:00</span></div>
 <div id="dayCard" class="card"><b>GIORNO</b><span id="day">LUNEDI</span></div>
 </div>
@@ -132,13 +132,22 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <div id="devMenu">
   <div class="devMenuCard">
     <div class="devTitle">IT SHIFT // WEEK SYSTEM</div>
-    <div class="devSub">Scegli direttamente il giorno da sviluppare. I capitoli da martedi a venerdi sono snapshot strutturali M3.3: le missioni verranno montate nei milestone successivi senza rifare ogni volta il lunedi.</div>
+    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. Mercoledi–Venerdi restano checkpoint strutturali per lo sviluppo successivo.</div>
     <div class="devWeekGrid">
       <button class="devCheckpoint" data-cp="monday"><strong>LUNEDI</strong><span>09:00<br>Primo turno</span></button>
       <button class="devCheckpoint" data-cp="tuesday"><strong>MARTEDI</strong><span>09:05<br>Voci di corridoio</span></button>
       <button class="devCheckpoint" data-cp="wednesday"><strong>MERCOLEDI</strong><span>09:05<br>The Other Office</span></button>
       <button class="devCheckpoint" data-cp="thursday"><strong>GIOVEDI</strong><span>09:05<br>Precedenti stagisti</span></button>
       <button class="devCheckpoint" data-cp="friday"><strong>VENERDI</strong><span>09:05<br>The Last Day</span></button>
+    </div>
+    <div class="devDivider">M3.4.1 // PSX VISUAL VERTICAL SLICE</div>
+    <div class="devGrid"><button class="devCheckpoint" data-cp="visual_slice"><strong>IT + HR — ART TEST</strong><span>CRT, pavimento, props, luci e palette PSX quasi-definitiva</span></button></div>
+    <div class="devDivider">MARTEDI // CHECKPOINT RAPIDI LORE + NPC</div>
+    <div class="devGrid">
+      <button class="devCheckpoint" data-cp="tue_betty"><strong>09:12 — BETTY</strong><span>Badge temporaneo · primo accenno allo stagista precedente</span></button>
+      <button class="devCheckpoint" data-cp="tue_lorenzo"><strong>09:18 — LORENZO</strong><span>Arrivo elettricista · primo alleato</span></button>
+      <button class="devCheckpoint" data-cp="tue_direzione"><strong>09:23 — PORTA DIREZIONE</strong><span>Badge negato · quadro Q-DIR</span></button>
+      <button class="devCheckpoint" data-cp="tue_capo"><strong>09:33 — CAPO</strong><span>Prima apparizione del Capo</span></button>
     </div>
     <div class="devDivider">LUNEDI // CHECKPOINT RAPIDI PER TEST MISSIONI</div>
     <div class="devGrid">
@@ -151,10 +160,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
       <button class="devCheckpoint" data-cp="m32_start"><strong>13:32 — M3.2 INIZIO</strong><span>Ticket BIM 02</span></button>
       <button class="devCheckpoint" data-cp="manifestation"><strong>13:52 — APPARIZIONE</strong><span>Test diretto figura nel corridoio</span></button>
     </div>
-    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M3.3.2 DEVELOPMENT</span></div>
+    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M3.4.1 VISUAL SLICE</span></div>
   </div>
 </div>
-<div id="version">PSX M3.3.2 // DUAL CAMERA + FP CONTROLS</div>
+<div id="version">PSX M3.4.1 // VISUAL SLICE — IT + HR</div>
 <div id="mobile"><div id="stick"><i></i></div><button id="turnL" class="turnBtn">Q</button><button id="turnR" class="turnBtn">E</button><button id="act">␣<small>INTERAGISCI</small></button></div>
 </div>
 <script src="game.js"></script>
