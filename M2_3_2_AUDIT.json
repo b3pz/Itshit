@@ -1,0 +1,11 @@
+{
+  "version": "M2.3.2",
+  "focus": "door-gap widening and walkable-floor seam cleanup",
+  "changes": [
+    "widened corridor footprints to better match visible circulation",
+    "enlarged doorway connectors and wall openings",
+    "added generous door access aprons even when corridor contact already exists",
+    "added door clear zones that ignore wall seams while preserving furniture collision",
+    "increased walkable padding around door connectors and links"
+  ]
+}

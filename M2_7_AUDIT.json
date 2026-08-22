@@ -1,0 +1,15 @@
+{
+  "version": "M2.7",
+  "name": "LIGHT ESCALATION",
+  "base": "M2.6 stable",
+  "map_collision_changes": false,
+  "new_gameplay": [
+    "Marino NPC in Interior",
+    "INTERIOR_03 workstation interaction",
+    "normal SMB mapping support ticket",
+    "Sala Meet Capo phone interaction",
+    "second narrative anomaly with disconnected PBX line",
+    "story progression extended to 10:58"
+  ],
+  "horror_level": "subtle; no monster, no jumpscare"
+}

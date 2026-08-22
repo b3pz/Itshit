@@ -1,0 +1,11 @@
+{
+  "build": "IT SHIFT PSX M1.3",
+  "base": "M1.2",
+  "root_cause": "lookAt camera X basis used the opposite sign of cross(worldUp, z)",
+  "fixes": [
+    "correct right-handed lookAt basis",
+    "upright world orientation",
+    "remove mirrored camera perception"
+  ],
+  "gameplay_changes": false
+}

@@ -1,0 +1,31 @@
+{
+  "version": "M2.5",
+  "name": "OPENING SHIFT",
+  "base": "M2.4 CORE GAMEPLAY + M2.3.2 WALKABLE FLOOR",
+  "map_geometry_changed": false,
+  "sequence": [
+    "09:00 talk to Zia Ale",
+    "reach IT department",
+    "talk to IT Manager",
+    "use IT workstation",
+    "receive Rack Server 02 ticket",
+    "reach server room and repair Rack 02",
+    "return to IT",
+    "report to IT Manager",
+    "09:22 first intervention complete"
+  ],
+  "added": [
+    "Zia Ale NPC",
+    "IT Manager NPC",
+    "NPC contextual interactions",
+    "opening narrative chain"
+  ],
+  "preserved": [
+    "M2.3.2 walkable floor",
+    "door gaps",
+    "collision footprint",
+    "minimap",
+    "camera",
+    "PC/mobile dialogue controls"
+  ]
+}

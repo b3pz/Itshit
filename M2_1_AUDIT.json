@@ -1,0 +1,15 @@
+{
+  "build": "IT SHIFT PSX M2.1",
+  "base": "M2",
+  "focus": "navigation rewrite",
+  "changes": {
+    "camera_relative_controls": true,
+    "stable_fixed_distance_camera": true,
+    "aggressive_wall_lowering": true,
+    "room_transition_banner": true,
+    "corridor_visual_spine": true,
+    "double_sided_door_thresholds": true,
+    "slower_indoor_player_speed": true,
+    "minimap_preserved": true
+  }
+}

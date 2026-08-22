@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>IT SHIFT PSX // M2.7 LIGHT ESCALATION</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;color:#dce5df;font-family:Consolas,monospace}
+#app{position:fixed;inset:0} canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
+#hud{position:absolute;left:12px;top:12px;z-index:5;display:grid;gap:7px;pointer-events:none}
+.card{min-width:270px;padding:9px 11px;background:#07100de8;border:2px solid #526a5b;box-shadow:3px 3px #000}
+.card b{display:block;color:#b7ff4a;font-size:11px}.card span{display:block;margin-top:4px;font-size:10px}
+#objective{border-color:#9b8d45}#objective b{color:#ffc857}
+#clockCard{min-width:118px;width:max-content}#clockCard b{color:#79d7ff}#clock{font-size:15px!important;letter-spacing:2px}
+#help{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);z-index:5;padding:6px 10px;background:#040705d9;border:1px solid #314038;font-size:9px}
+#version{position:absolute;right:10px;bottom:9px;z-index:5;color:#73907d;font-size:8px}
+#toast{position:absolute;left:50%;top:18%;transform:translateX(-50%);z-index:12;padding:8px 12px;border:2px solid #6f855f;background:#10150f;opacity:0;transition:.15s;font-size:10px}
+#toast.on{opacity:1}
+#mobile{display:none;position:absolute;inset:0;z-index:10;pointer-events:none}
+#stick{position:absolute;left:18px;bottom:18px;width:108px;height:108px;border:2px solid #83a86d80;border-radius:50%;background:#071009aa;pointer-events:auto;touch-action:none}
+#stick i{position:absolute;left:33px;top:33px;width:40px;height:40px;border-radius:50%;background:#b7ff4aaa}
+#act{position:absolute;right:22px;bottom:28px;width:76px;height:76px;border-radius:50%;border:3px solid #ffc857;background:#171005dc;color:#ffc857;font:bold 24px Consolas;pointer-events:auto}
+#act small{display:block;font-size:7px}
+@media(hover:none),(pointer:coarse){#mobile{display:block}#help{display:none}}
+
+#miniWrap{
+ position:absolute;right:12px;top:12px;z-index:7;
+ width:248px;padding:6px;background:#07100de8;border:2px solid #526a5b;box-shadow:3px 3px #000;
+}
+#miniWrap canvas{display:block;width:100%;height:auto;background:#050706}
+#miniWrap span{display:block;margin-top:4px;text-align:center;color:#8da093;font-size:8px;letter-spacing:1px}
+#bigMap{position:absolute;inset:0;z-index:30;background:#000d;display:flex;align-items:center;justify-content:center}
+#bigMap.hidden{display:none}
+.bigMapCard{width:min(94vw,980px);padding:12px;background:#09100c;border:3px solid #526a5b;box-shadow:8px 8px #000}
+.bigMapHead{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;color:#b7ff4a;font-size:11px}
+.bigMapHead span{color:#9bad9e}
+#bigMapCanvas{display:block;width:100%;height:auto;max-height:78vh;background:#040604;border:2px solid #26352c}
+@media(hover:none),(pointer:coarse){
+ #miniWrap{width:190px;right:6px;top:6px}
+ .bigMapCard{width:96vw;padding:7px}
+}
+
+
+#roomTransition{
+ position:absolute;left:50%;top:10%;transform:translate(-50%,-8px);
+ z-index:18;opacity:0;pointer-events:none;
+ padding:9px 18px;background:#08100bdc;border:2px solid #779079;
+ color:#dce8da;font:900 14px Consolas,monospace;letter-spacing:2px;
+ transition:.16s;
+}
+#roomTransition.on{opacity:1;transform:translate(-50%,0)}
+#miniWrap{background:#050a07f2!important}
+#miniWrap canvas{border:1px solid #28382e}
+
+
+#interactionPrompt{
+ position:absolute;left:50%;bottom:42px;transform:translateX(-50%);z-index:14;
+ padding:7px 11px;background:#06100bea;border:2px solid #6f855f;color:#dce8da;
+ font:900 10px Consolas,monospace;letter-spacing:.4px;opacity:0;pointer-events:none;
+ transition:.12s;white-space:nowrap;box-shadow:3px 3px #000;
+}
+#interactionPrompt.on{opacity:1}
+#interactionPrompt b{color:#ffc857}
+#dialogue{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);z-index:40;width:min(760px,88vw);display:none;pointer-events:auto}
+#dialogue.on{display:block}
+.dialogueBox{background:#06100bf4;border:3px solid #526a5b;box-shadow:7px 7px #000;padding:12px 14px;cursor:pointer;user-select:none}
+#dialogueName{color:#b7ff4a;font:900 11px Consolas,monospace;letter-spacing:1px;margin-bottom:7px}
+#dialogueText{color:#e0e8e2;font:12px/1.45 Consolas,monospace;min-height:36px}
+#dialogueHint{text-align:right;color:#87978c;font:8px Consolas,monospace;margin-top:8px}
+@media(hover:none),(pointer:coarse){
+ #interactionPrompt{bottom:120px;max-width:58vw;white-space:normal;text-align:center}
+ #dialogue{bottom:126px;width:88vw}
+ .dialogueBox{padding:11px}
+}
+
+</style>
+</head>
+<body>
+<div id="app">
+<canvas id="c"></canvas>
+<div id="hud">
+<div class="card"><b>IT SHIFT // PSX PROTOTYPE</b><span id="room">INGRESSO / SEGRETERIA</span></div>
+<div id="objective" class="card"><b>OBIETTIVO M2.7</b><span id="objText">PARLA CON ZIA ALE</span></div>
+<div id="clockCard" class="card"><b>ORARIO</b><span id="clock">09:00</span></div>
+</div>
+<div id="toast"></div>
+<div id="interactionPrompt"></div>
+<div id="dialogue"><div class="dialogueBox"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">E / INVIO / TOCCA — CONTINUA</div></div></div>
+<div id="help">WASD / FRECCE — MUOVITI · E — INTERAGISCI</div>
+<div id="miniWrap"><canvas id="miniMap" width="240" height="170"></canvas><span>● PLAYER ↑ &nbsp; ◎ OBIETTIVO &nbsp; ○ PORTA</span></div>
+<div id="bigMap" class="hidden">
+  <div class="bigMapCard">
+    <div class="bigMapHead"><b>MAPPA STUDIO // IT SHIFT</b><span>TAB — CHIUDI</span></div>
+    <canvas id="bigMapCanvas" width="900" height="620"></canvas>
+  </div>
+</div>
+<div id="version">PSX M2.7 // LIGHT ESCALATION</div>
+<div id="mobile"><div id="stick"><i></i></div><button id="act">E<small>INTERAGISCI</small></button></div>
+</div>
+<script src="game.js"></script>
+</body></html>

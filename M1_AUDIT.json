@@ -1,0 +1,12 @@
+{
+  "build": "IT SHIFT PSX M1",
+  "engine": "WebGL1 custom",
+  "dependencies": [],
+  "features": [
+    "movement",
+    "camera",
+    "collision",
+    "IT\u2192Server objective",
+    "touch"
+  ]
+}

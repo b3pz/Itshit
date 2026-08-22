@@ -1,0 +1,15 @@
+{
+  "version": "M2.6",
+  "name": "MORNING SHIFT",
+  "base": "M2.5 stable",
+  "map_geometry_changed": false,
+  "features": [
+    "second chained IT mission in Editoria/Stampanti",
+    "Alice NPC and printer interaction",
+    "ticket close-out at IT workstation",
+    "Render_04 investigation",
+    "first subtle narrative anomaly",
+    "story clock extended to 10:10"
+  ],
+  "test_path": "Zia Ale -> IT Manager -> PC -> Rack 02 -> Manager -> Alice -> Stampanti -> Alice -> PC IT -> Render_04 -> IT Manager"
+}

@@ -1,0 +1,24 @@
+{
+  "build": "IT SHIFT PSX M2.3.2",
+  "base": "M2.3",
+  "scope": "walkable floor and peripheral doors only",
+  "fixes": {
+    "corridor_spines_no_longer_cross_room_walls": true,
+    "east_corridor_has_real_physical_width": true,
+    "south_hallway_connects_peripheral_row": true,
+    "kitchen_and_bathroom_doors_face_accessible_hallway": true,
+    "automatic_door_links_to_nearest_corridor": true,
+    "door_links_used_by_render_collision_and_minimap": true,
+    "movement_and_room_classification_share_walkable_footprint": true,
+    "walkable_points_can_no_longer_report_fuori_mappa": true
+  },
+  "validation": {
+    "javascript_syntax": "PASS",
+    "collision_grid_step": 0.1,
+    "player_radius": 0.22,
+    "rooms_reachable_from_spawn": 17,
+    "rooms_total": 17,
+    "all_rooms_reachable": true
+  },
+  "next": "manual playtest of every doorway; only after approval move to horror/gameplay content"
+}

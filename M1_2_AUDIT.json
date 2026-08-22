@@ -1,0 +1,12 @@
+{
+  "build": "IT SHIFT PSX M1.2",
+  "base": "M1.1",
+  "fixes": [
+    "lower camera height",
+    "closer camera distance",
+    "look-ahead target",
+    "narrower FOV",
+    "larger player silhouette"
+  ],
+  "gameplay_changes": false
+}

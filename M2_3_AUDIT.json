@@ -1,0 +1,13 @@
+{
+  "build": "IT SHIFT PSX M2.3",
+  "base": "M2.2",
+  "fixes": {
+    "door_connector_walkable_zones": true,
+    "door_seam_wall_tolerance": true,
+    "floor_render_bleed": true,
+    "camera_aligned_minimap": true,
+    "rotated_minimap_polygons": true,
+    "door_connectors_drawn_on_map": true
+  },
+  "next": "M2.4 desk/layout visual pass after navigation validation"
+}

@@ -1,0 +1,15 @@
+{
+  "build": "IT SHIFT PSX M2",
+  "base": "M1.5 stable",
+  "features": {
+    "expanded_full_studio_blockout": true,
+    "minimap_always_visible": true,
+    "player_marker": true,
+    "objective_marker": true,
+    "current_room_highlight": true,
+    "tab_big_map": true,
+    "room_labels_big_map": true,
+    "camera_follow_preserved": true,
+    "occlusion_system_preserved": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "version": "M2.4",
+  "base": "M2.3.2 stable walkable map",
+  "focus": "core gameplay loop",
+  "added": [
+    "data-driven story steps and objectives",
+    "narrative clock HUD",
+    "contextual interaction prompt",
+    "PC IT interactable",
+    "server rack 02 interactable",
+    "dialogue overlay with keyboard and touch advance",
+    "room-entry triggers",
+    "first complete IT ticket loop"
+  ],
+  "sequence": [
+    "reach IT",
+    "use IT PC",
+    "receive server ticket",
+    "reach server room",
+    "repair rack 02",
+    "complete M2.4"
+  ]
+}

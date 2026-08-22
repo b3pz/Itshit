@@ -1,0 +1,10 @@
+{
+  "build": "IT SHIFT PSX M1.1",
+  "base": "M1",
+  "fixes": [
+    "WebGL column-major matrix multiplication",
+    "lookAt matrix",
+    "camera framing"
+  ],
+  "gameplay_changes": false
+}

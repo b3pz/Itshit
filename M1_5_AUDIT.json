@@ -1,0 +1,12 @@
+{
+  "build": "IT SHIFT PSX M1.5",
+  "base": "M1.4",
+  "fixes": {
+    "real_corridor_to_it_collision_gap": true,
+    "real_it_to_server_collision_gap": true,
+    "door_threshold_markers": true,
+    "separate_dynamic_wall_render": true,
+    "occluding_walls_lower_to_parapet": true,
+    "camera_wall_avoidance_retained": true
+  }
+}

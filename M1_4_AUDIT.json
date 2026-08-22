@@ -1,0 +1,13 @@
+{
+  "build": "IT SHIFT PSX M1.4",
+  "base": "M1.3",
+  "features": {
+    "follow_camera": true,
+    "camera_smoothing": true,
+    "camera_wall_avoidance": true,
+    "visual_door_frames": true,
+    "room_transition_feedback": true
+  },
+  "wall_fade_note": "Implemented as camera occlusion avoidance in M1.4; transparent wall fade deferred until separated render meshes.",
+  "gameplay_changes": false
+}
