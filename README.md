@@ -1,3 +1,24 @@
+# IT SHIFT PSX — M3.3.2 DUAL CAMERA + FP CONTROLS
+
+Branch sperimentale derivato dalla M3.3 stabile. Non sostituisce la build 3/4.
+
+## Controlli POV
+- W/S o frecce su/giu: avanti / indietro
+- A/D o frecce sinistra/destra: rotazione
+- E: interagisci
+- TAB: mappa
+- F2: DEV menu
+- M: audio
+- Mouse non necessario
+
+## Differenze dal ramo stabile
+- camera ad altezza occhi
+- muri a tutta altezza
+- soffitto chiuso
+- player sprite nascosto
+- NPC billboard PSX invariati
+- missioni, collisioni, week system e checkpoint DEV invariati
+
 # IT SHIFT // PSX M3.3 — WEEK SYSTEM
 
 ## M3.3
@@ -383,3 +404,15 @@ Continua dalla base stabile M3.1.1 senza modificare architettura, collisioni o p
 - La figura non ha collisione, non compare sulla mappa e non conta nei 17 NPC fissi.
 - Il Manager reagisce senza trasformare ancora il gioco in un inseguimento/horror esplicito.
 - DEV checkpoint aggiunti per 13:32 e per il test diretto dell'apparizione alle 13:52.
+
+
+## M3.3.2 — DUAL CAMERA + FP CONTROLS
+
+- Modalità gameplay predefinita: prima persona.
+- F3 alterna istantaneamente GAME/FP e DEV/3-4 senza cambiare missione o posizione.
+- FP: W/S avanti-indietro, A/D strafe, WA/WD/SA/SD diagonali, Q/E rotazione, SPAZIO interazione.
+- Frecce su/giù muovono; frecce sinistra/destra ruotano.
+- Mouse non richiesto.
+- In 3/4 tornano muri cutaway, niente soffitto e player sprite visibile.
+- In FP: muri pieni, soffitto e player nascosto.
+- Mobile: joystick per movimento/strafe, Q/E dedicati alla rotazione, pulsante interazione.

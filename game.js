@@ -635,6 +635,13 @@ function renderPlayerSprite(vp,camX,camZ){
 
 const staticV=new Float32Array(V);
 
+// M3.3.2 // Ceiling is a separate mesh: rendered only in first person so the
+// 3/4 development camera can still see the whole office from above.
+const FP_CEILING_Y=2.20;
+const _ceilingSaved=V.slice();V.length=0;
+quad([-12.55,FP_CEILING_Y,-13.65],[14.55,FP_CEILING_Y,-13.65],[14.55,FP_CEILING_Y,12.75],[-12.55,FP_CEILING_Y,12.75],[.145,.165,.145]);
+const ceilingV=new Float32Array(V);V.length=0;V.push(..._ceilingSaved);
+
 function segPointDist(ax,az,bx,bz,px,pz){
  const abx=bx-ax,abz=bz-az;
  const den=abx*abx+abz*abz||1;
@@ -655,14 +662,14 @@ function wallOccludesPlayer(w,cx,cz){
 
  return nearPlayer||onSightLine;
 }
-function buildWallMesh(cx,cz){
+function buildWallMesh(cx,cz,fullHeight=false){
  const saved=V.slice();
  V.length=0;
 
- // Stable architectural cutaway: no wall appears/disappears while moving.
- // Full-height wall posts remain implied by door frames.
+ // GAME/FP: true architectural walls. DEV/3/4: low cutaway walls so the whole
+ // office remains readable while positioning NPCs, triggers and props.
  for(const w of wallDefs){
-   const h=.92;
+   const h=fullHeight?(w.h||2.15):.92;
    box(w.x,0,w.z,w.w,h,w.d,[.22,.28,.24]);
  }
 
@@ -829,14 +836,42 @@ function setStoryStep(i,msg){
  applyNpcSceneFromStory();
  updateDevStatus();
 }
+// M3.3.2 // GAME MODE defaults to first person; F3 instantly switches to the
+// original 3/4 development camera without changing story/player state.
+const FP_DEFAULT_YAW=-.72;
+const DEV_DEFAULT_YAW=-.72;
+let viewMode="fp"; // "fp" = gameplay, "dev" = 3/4 development view
+let savedFpYaw=FP_DEFAULT_YAW;
 const cameraState={
  x:player.x,
  z:player.z,
- yaw:-.72,
- dist:7.0,
- height:3.65,
- lookAhead:1.20
+ yaw:FP_DEFAULT_YAW,
+ dist:0,
+ height:1.20,
+ lookAhead:1.0
 };
+const FP_TURN_SPEED=1.85;
+function applyCameraMode(showToast=true){
+ if(viewMode==="fp"){
+   cameraState.yaw=savedFpYaw;
+   cameraState.dist=0;cameraState.height=1.20;cameraState.lookAhead=1.0;
+   document.getElementById("fpCrosshair")?.classList.remove("hidden");
+   const badge=document.getElementById("fpBadge");if(badge){badge.textContent="GAME // FIRST PERSON";badge.classList.remove("dev");}
+   if(showToast)toast("GAME MODE // FIRST PERSON");
+ }else{
+   cameraState.yaw=DEV_DEFAULT_YAW;
+   cameraState.dist=7.0;cameraState.height=3.65;cameraState.lookAhead=1.20;
+   document.getElementById("fpCrosshair")?.classList.add("hidden");
+   const badge=document.getElementById("fpBadge");if(badge){badge.textContent="DEV // 3/4 CAMERA";badge.classList.add("dev");}
+   if(showToast)toast("DEV CAMERA // 3/4");
+ }
+ cameraState.x=player.x;cameraState.z=player.z;
+ updateDevStatus();
+}
+function toggleCameraMode(){
+ if(viewMode==="fp"){savedFpYaw=cameraState.yaw;viewMode="dev";}else viewMode="fp";
+ applyCameraMode(true);
+}
 function smoothTo(a,b,k,dt){
  return a+(b-a)*(1-Math.exp(-k*dt));
 }
@@ -898,12 +933,12 @@ function updateDevStatus(){
  const st=storySteps[storyStep],d=currentDayDef();
  const activeStaff=npcSprites.filter(n=>n.kind==="staff"&&isNpcVisible(n.id)).length;
  const activeDynamic=npcSprites.filter(n=>n.kind==="dynamic"&&isNpcVisible(n.id)).length;
- devStatusText.innerHTML=`${d.label} // ${d.chapter}<br>STEP ${storyStep} // ${st?.id||"?"} · ORA ${st?.time||"--:--"}<br>NPC ${activeStaff}/${fixedStaffCount()} + PLAYER${activeDynamic?` · DYNAMIC ${activeDynamic}`:""} · ANOMALIE ${anomalyCountForStep()}`;
+ devStatusText.innerHTML=`${d.label} // ${d.chapter}<br>STEP ${storyStep} // ${st?.id||"?"} · ORA ${st?.time||"--:--"}<br>CAM ${viewMode==="fp"?"FP GAME":"3/4 DEV"} · NPC ${activeStaff}/${fixedStaffCount()} + PLAYER${activeDynamic?` · DYNAMIC ${activeDynamic}`:""} · ANOMALIE ${anomalyCountForStep()}`;
 }
 function openDevMenu(){
  if(!DEV_MODE||!devMenu)return;
- keys.w=keys.a=keys.s=keys.d=keys.arrowup=keys.arrowdown=keys.arrowleft=keys.arrowright=0;
- jx=jy=0;if(nub)nub.style.transform="";
+ keys.w=keys.a=keys.s=keys.d=keys.q=keys.e=keys.arrowup=keys.arrowdown=keys.arrowleft=keys.arrowright=0;
+ jx=jy=0;mobileTurn=0;if(nub)nub.style.transform="";
  closeDialogueForCheckpoint();
  devMenu.classList.remove("hidden");
 }
@@ -919,7 +954,7 @@ function loadDevCheckpoint(key){
  // Re-apply NPC scene after profile reset; Monday lunch/checkpoint relocation remains intact.
  applyNpcSceneFromStory();
  player.x=cp.x;player.z=cp.z;player._lastRoom=roomAt(player.x,player.z);
- cameraState.x=player.x;cameraState.z=player.z;
+ savedFpYaw=FP_DEFAULT_YAW;cameraState.x=player.x;cameraState.z=player.z;cameraState.yaw=viewMode==="fp"?savedFpYaw:DEV_DEFAULT_YAW;
  phoneRingLast=performance.now();ambientOneShotLast=performance.now();sceneTint=atmosphereLevel();
  closeDevMenu();
  showDayBanner();
@@ -935,6 +970,7 @@ else{
 // Safe initial week + story state.
 setWeekDay(0,false);
 setStoryStep(0);
+applyCameraMode(false);
 
 function insideZone(x,z,r,pad=.03){
  return Math.abs(x-r.x)<=r.w/2+pad&&Math.abs(z-r.z)<=r.d/2+pad;
@@ -1136,14 +1172,15 @@ function updatePhoneEvent(now,currentRoom){
 const keys={};
 addEventListener("keydown",e=>{
  const k=e.key.toLowerCase();
- if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright","e","enter"," "].includes(k))ensureAudio();
+ if(["w","a","s","d","q","e","arrowup","arrowdown","arrowleft","arrowright","enter"," "].includes(k))ensureAudio();
  if(k==="m"&&!e.repeat){e.preventDefault();setAudioMuted(!audioMuted);return;}
  if(k==="f2"&&!e.repeat){e.preventDefault();openDevMenu();return;}
+ if(k==="f3"&&!e.repeat){e.preventDefault();toggleCameraMode();return;}
  if(devMenu&&!devMenu.classList.contains("hidden")){
    if(k==="escape"&&!e.repeat)closeDevMenu();
    e.preventDefault();return;
  }
- if(dialogueOpen&&(k==="e"||k==="enter"||k===" ")){
+ if(dialogueOpen&&(k==="enter"||k===" ")){
    e.preventDefault();if(!e.repeat)advanceDialogue();return;
  }
  if(e.key==="Tab"){
@@ -1151,8 +1188,11 @@ addEventListener("keydown",e=>{
    if(!e.repeat)toggleBigMap();
    return;
  }
+ // SPACE is the canonical interaction key in both modes. E is reserved for
+ // right-turn in FP; legacy E interaction remains available only in 3/4 DEV.
+ if(k===" "&&!e.repeat){e.preventDefault();interact();return;}
+ if(viewMode==="dev"&&k==="e"&&!e.repeat){interact();return;}
  keys[k]=1;
- if(k==="e"&&!e.repeat){interact();}
 });
 addEventListener("keyup",e=>keys[e.key.toLowerCase()]=0);
 
@@ -1210,7 +1250,7 @@ function updateInteractionPrompt(){
  if(!it){promptEl.classList.remove("on");return;}
  const step=storySteps[storyStep];
  const active=step.targetInteractable===it.id;
- promptEl.innerHTML=`<b>[E]</b> ${active?"INTERAGISCI":"ESAMINA"} — ${it.label}`;
+ promptEl.innerHTML=`<b>[SPAZIO]</b> ${active?"INTERAGISCI":"ESAMINA"} — ${it.label}`;
  promptEl.classList.add("on");
 }
 function interact(){
@@ -1547,10 +1587,16 @@ function interact(){
    return;
  }
 }
-let jx=0,jy=0;const st=document.getElementById("stick"),nub=st?.querySelector("i");
+let jx=0,jy=0,mobileTurn=0;const st=document.getElementById("stick"),nub=st?.querySelector("i");
 if(st){const set=e=>{ensureAudio();const t=e.touches?.[0]||e,r=st.getBoundingClientRect();let x=(t.clientX-r.left-r.width/2)/(r.width*.32),y=(t.clientY-r.top-r.height/2)/(r.height*.32),l=Math.hypot(x,y);if(l>1){x/=l;y/=l}jx=x;jy=y;nub.style.transform=`translate(${x*31}px,${y*31}px)`;e.preventDefault()};
 const stop=e=>{jx=jy=0;nub.style.transform="";e.preventDefault()};st.addEventListener("pointerdown",set,{passive:false});st.addEventListener("pointermove",e=>{if(e.buttons||e.pointerType==="touch")set(e)},{passive:false});st.addEventListener("pointerup",stop,{passive:false});st.addEventListener("touchstart",set,{passive:false});st.addEventListener("touchmove",set,{passive:false});st.addEventListener("touchend",stop,{passive:false})}
 document.getElementById("act")?.addEventListener("pointerdown",e=>{e.preventDefault();ensureAudio();dialogueOpen?advanceDialogue():interact()});
+for(const [id,val] of [["turnL",1],["turnR",-1]]){
+ const b=document.getElementById(id);if(!b)continue;
+ const on=e=>{e.preventDefault();ensureAudio();mobileTurn=val;};
+ const off=e=>{e.preventDefault();if(mobileTurn===val)mobileTurn=0;};
+ b.addEventListener("pointerdown",on,{passive:false});b.addEventListener("pointerup",off,{passive:false});b.addEventListener("pointercancel",off,{passive:false});b.addEventListener("pointerleave",off,{passive:false});
+}
 function mul(a,b){
  const o=new Float32Array(16);
  const a00=a[0],a01=a[1],a02=a[2],a03=a[3];
@@ -1804,20 +1850,35 @@ function cameraSafeDistance(targetX,targetZ,yaw,wantedDist){
 }
 
 function resize(){const d=Math.min(1.3,devicePixelRatio||1),w=Math.max(320,Math.floor(innerWidth*d*.72)),h=Math.max(180,Math.floor(innerHeight*d*.72));if(c.width!==w||c.height!==h){c.width=w;c.height=h}}
-let last=performance.now();function frame(now){const dt=Math.min(.04,(now-last)/1000);last=now;dtForAtmosphere=dt;const mapOpen=bigMap&&!bigMap.classList.contains("hidden");const devOpen=devMenu&&!devMenu.classList.contains("hidden");let sx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+jx;
-let sy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+jy;
-let sl=Math.hypot(sx,sy);if(sl>1){sx/=sl;sy/=sl}
+let last=performance.now();function frame(now){const dt=Math.min(.04,(now-last)/1000);last=now;dtForAtmosphere=dt;const mapOpen=bigMap&&!bigMap.classList.contains("hidden");const devOpen=devMenu&&!devMenu.classList.contains("hidden");
 
-// Camera-relative controls: UP always moves toward the top of the screen.
-const forwardX=-Math.sin(cameraState.yaw);
-const forwardZ=-Math.cos(cameraState.yaw);
-const rightX=Math.cos(cameraState.yaw);
-const rightZ=-Math.sin(cameraState.yaw);
-
-let dx=rightX*sx + forwardX*(-sy);
-let dz=rightZ*sx + forwardZ*(-sy);
-
-if(mapOpen||dialogueOpen||devOpen){dx=0;dz=0;}
+// M3.3.2 // Dual controls.
+// FP GAME: W/S forward-back, A/D strafe, diagonals work naturally, Q/E rotate.
+// Arrow left/right also rotate; arrow up/down move. Mouse is not required.
+// DEV 3/4: original camera-relative WASD movement is preserved.
+let dx=0,dz=0;
+if(viewMode==="fp"){
+ let strafe=((keys.d)?1:0)-((keys.a)?1:0)+jx;
+ let move=((keys.w||keys.arrowup)?1:0)-((keys.s||keys.arrowdown)?1:0)-jy;
+ let turn=((keys.q||keys.arrowleft)?1:0)-((keys.e||keys.arrowright)?1:0)+mobileTurn;
+ const ml=Math.hypot(strafe,move);if(ml>1){strafe/=ml;move/=ml;}
+ turn=Math.max(-1,Math.min(1,turn));
+ if(mapOpen||dialogueOpen||devOpen){turn=0;move=0;strafe=0;}
+ cameraState.yaw+=turn*FP_TURN_SPEED*dt;savedFpYaw=cameraState.yaw;
+ const forwardX=-Math.sin(cameraState.yaw),forwardZ=-Math.cos(cameraState.yaw);
+ const rightX=Math.cos(cameraState.yaw),rightZ=-Math.sin(cameraState.yaw);
+ dx=forwardX*move+rightX*strafe;
+ dz=forwardZ*move+rightZ*strafe;
+}else{
+ let sx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+jx;
+ let sy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+jy;
+ let sl=Math.hypot(sx,sy);if(sl>1){sx/=sl;sy/=sl;}
+ if(mapOpen||dialogueOpen||devOpen){sx=0;sy=0;}
+ const forwardX=-Math.sin(cameraState.yaw),forwardZ=-Math.cos(cameraState.yaw);
+ const rightX=Math.cos(cameraState.yaw),rightZ=-Math.sin(cameraState.yaw);
+ dx=rightX*sx+forwardX*(-sy);
+ dz=rightZ*sx+forwardZ*(-sy);
+}
 const oldPX=player.x,oldPZ=player.z;
 let nx=player.x+dx*player.speed*dt,nz=player.z+dz*player.speed*dt;if(can(nx,player.z))player.x=nx;if(can(player.x,nz))player.z=nz;const currentRoom=roomAt(player.x,player.z);
 roomEl.textContent=currentRoom;
@@ -1904,19 +1965,28 @@ updateInteractionPrompt();
 refreshMaps();
 resize();gl.viewport(0,0,c.width,c.height);
 const mood=atmosphereLevel();gl.clearColor(.025-mood*.010,.035-mood*.014,.03-mood*.010,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);
-cameraState.x=smoothTo(cameraState.x,player.x,7.5,dt);
-cameraState.z=smoothTo(cameraState.z,player.z,7.5,dt);
-
-const proj=persp(55*Math.PI/180,c.width/c.height,.1,60);
-const yaw=cameraState.yaw;
-
-// Stable follow: fixed distance. Occlusion is handled by lowering walls,
-// avoiding sudden zoom-in / zoom-out when crossing doorways.
-const camX=cameraState.x+Math.sin(yaw)*cameraState.dist;
-const camZ=cameraState.z+Math.cos(yaw)*cameraState.dist;
-const targetX=cameraState.x-Math.sin(yaw)*cameraState.lookAhead;
-const targetZ=cameraState.z-Math.cos(yaw)*cameraState.lookAhead;
-const view=look(camX,cameraState.height,camZ,targetX,.72,targetZ);
+let proj,yaw,camX,camZ,targetX,targetZ,view;
+if(viewMode==="fp"){
+ // True eye-level camera: camera and collision body occupy the same position.
+ cameraState.x=player.x;cameraState.z=player.z;
+ proj=persp(62*Math.PI/180,c.width/c.height,.075,60);
+ yaw=cameraState.yaw;camX=player.x;camZ=player.z;
+ const forwardCamX=-Math.sin(yaw),forwardCamZ=-Math.cos(yaw);
+ targetX=camX+forwardCamX*cameraState.lookAhead;
+ targetZ=camZ+forwardCamZ*cameraState.lookAhead;
+ view=look(camX,cameraState.height,camZ,targetX,cameraState.height-.03,targetZ);
+}else{
+ // Original stable 3/4 development camera.
+ cameraState.x=smoothTo(cameraState.x,player.x,7.5,dt);
+ cameraState.z=smoothTo(cameraState.z,player.z,7.5,dt);
+ proj=persp(55*Math.PI/180,c.width/c.height,.1,60);
+ yaw=cameraState.yaw;
+ camX=cameraState.x+Math.sin(yaw)*cameraState.dist;
+ camZ=cameraState.z+Math.cos(yaw)*cameraState.dist;
+ targetX=cameraState.x-Math.sin(yaw)*cameraState.lookAhead;
+ targetZ=cameraState.z-Math.cos(yaw)*cameraState.lookAhead;
+ view=look(camX,cameraState.height,camZ,targetX,.72,targetZ);
+}
 const vp=mul(proj,view);
 gl.bindBuffer(gl.ARRAY_BUFFER,buf);
 gl.vertexAttribPointer(aP,3,gl.FLOAT,false,24,0);
@@ -1927,14 +1997,20 @@ gl.bufferData(gl.ARRAY_BUFFER,staticV,gl.STATIC_DRAW);
 gl.uniformMatrix4fv(uM,false,vp);
 gl.drawArrays(gl.TRIANGLES,0,staticV.length/6);
 
+if(viewMode==="fp"){
+ gl.bufferData(gl.ARRAY_BUFFER,ceilingV,gl.STATIC_DRAW);
+ gl.uniformMatrix4fv(uM,false,vp);
+ gl.drawArrays(gl.TRIANGLES,0,ceilingV.length/6);
+}
+
 // M3.0 live-office layer: device screens, light states, phones and dynamic doors.
 const liveV=buildOfficeLiveMesh(now);
 gl.bufferData(gl.ARRAY_BUFFER,liveV,gl.DYNAMIC_DRAW);
 gl.uniformMatrix4fv(uM,false,vp);
 gl.drawArrays(gl.TRIANGLES,0,liveV.length/6);
 
-// Walls: any wall between camera and player is lowered to a parapet.
-const wallV=buildWallMesh(camX,camZ);
+// M3.3-FP // full-height walls: no development cutaway in this branch.
+const wallV=buildWallMesh(camX,camZ,viewMode==="fp");
 gl.bufferData(gl.ARRAY_BUFFER,wallV,gl.DYNAMIC_DRAW);
 gl.uniformMatrix4fv(uM,false,vp);
 gl.drawArrays(gl.TRIANGLES,0,wallV.length/6);
@@ -1942,8 +2018,8 @@ gl.drawArrays(gl.TRIANGLES,0,wallV.length/6);
 // M2.9 NPC billboard layer: depth-tested against the world, transparent pixels discarded.
 renderNpcSprites(vp,camX,camZ);
 
-// Player // M2.9 scale test: same 32x48 PSX billboard and world height as NPCs.
-renderPlayerSprite(vp,camX,camZ);
+// Player is visible only in the 3/4 development camera.
+if(viewMode==="dev")renderPlayerSprite(vp,camX,camZ);
 
 requestAnimationFrame(frame)}requestAnimationFrame(frame);
 })();

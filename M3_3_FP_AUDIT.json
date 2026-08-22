@@ -1,0 +1,14 @@
+{
+  "version": "M3.3-FP",
+  "type": "early first-person comparison branch",
+  "base": "M3.3 WEEK SYSTEM",
+  "changes": [
+    "eye-level first-person camera",
+    "PSX tank controls without required mouse",
+    "full-height walls",
+    "continuous ceiling",
+    "player billboard hidden in POV",
+    "NPC billboards, collision, missions and week checkpoints preserved"
+  ],
+  "status": "experimental; M3.3 remains canonical stable branch"
+}

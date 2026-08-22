@@ -1,0 +1,11 @@
+{
+  "version": "M3.3.2",
+  "focus": "FP rotation direction fix",
+  "changes": [
+    "Q now rotates left",
+    "E now rotates right",
+    "left/right arrow rotation matches the same direction",
+    "mobile Q/E rotation buttons corrected"
+  ],
+  "base": "M3.3.1 DUAL CAMERA + FP CONTROLS"
+}

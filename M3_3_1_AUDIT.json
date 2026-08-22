@@ -1,0 +1,17 @@
+{
+  "version": "M3.3.1",
+  "name": "DUAL CAMERA + FP CONTROLS",
+  "base": "M3.3 WEEK SYSTEM + M3.3-FP prototype",
+  "changes": [
+    "first person is the default gameplay camera",
+    "F3 toggles first person and 3/4 development camera",
+    "W/S forward-back, A/D strafe, diagonal movement supported",
+    "Q/E rotate view; SPACE interacts",
+    "arrow keys remain available for movement/rotation",
+    "ceiling and full-height walls render only in first person",
+    "3/4 retains cutaway walls and visible player sprite",
+    "mobile receives separate Q/E rotate buttons"
+  ],
+  "architecture_changed": false,
+  "story_changed": false
+}

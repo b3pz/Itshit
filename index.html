@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>IT SHIFT PSX // M3.3 WEEK SYSTEM</title>
+<title>IT SHIFT PSX // M3.3.2 DUAL CAMERA + FP CONTROLS</title>
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;color:#dce5df;font-family:Consolas,monospace}
 #app{position:fixed;inset:0} canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
@@ -21,7 +21,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 #stick{position:absolute;left:18px;bottom:18px;width:108px;height:108px;border:2px solid #83a86d80;border-radius:50%;background:#071009aa;pointer-events:auto;touch-action:none}
 #stick i{position:absolute;left:33px;top:33px;width:40px;height:40px;border-radius:50%;background:#b7ff4aaa}
 #act{position:absolute;right:22px;bottom:28px;width:76px;height:76px;border-radius:50%;border:3px solid #ffc857;background:#171005dc;color:#ffc857;font:bold 24px Consolas;pointer-events:auto}
-#act small{display:block;font-size:7px}
+#act small{display:block;font-size:7px}.turnBtn{position:absolute;right:112px;bottom:32px;width:48px;height:48px;border-radius:10px;border:2px solid #79d7ff;background:#07100ddd;color:#79d7ff;font:bold 18px Consolas;pointer-events:auto;touch-action:none}.turnBtn#turnL{right:166px}.turnBtn#turnR{right:112px}
 @media(hover:none),(pointer:coarse){#mobile{display:block}#help{display:none}}
 
 #miniWrap{
@@ -98,12 +98,16 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 .devFoot{display:flex;justify-content:space-between;gap:10px;margin-top:13px;color:#718278;font-size:8px}
 @media(hover:none),(pointer:coarse){#devButton{right:6px;top:184px}#devStatus{display:none}.devWeekGrid{grid-template-columns:1fr}.devGrid{grid-template-columns:1fr}.devMenuCard{max-height:90vh;overflow:auto}}
 
+
+/* M3.3.2 dual camera / FP gameplay branch */
+#fpCrosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:12;color:#c7d6c9;font:900 13px Consolas,monospace;opacity:.48;pointer-events:none;text-shadow:1px 1px #000}#fpCrosshair.hidden{display:none}
+#fpBadge{position:absolute;left:12px;top:104px;z-index:10;padding:4px 7px;background:#07100dcc;border:1px solid #536a59;color:#d5a8ff;font:900 8px Consolas,monospace;letter-spacing:1px;pointer-events:none}#fpBadge.dev{color:#79d7ff;border-color:#47788b}
 </style>
 </head>
 <body>
 <div id="app">
 <canvas id="c"></canvas>
-<div id="atmoOverlay"></div><div id="psxNoise"></div><div id="flickerOverlay"></div>
+<div id="atmoOverlay"></div><div id="psxNoise"></div><div id="flickerOverlay"></div><div id="fpCrosshair">+</div><div id="fpBadge">GAME // FIRST PERSON</div>
 <div id="hud">
 <div class="card"><b>IT SHIFT // PSX PROTOTYPE</b><span id="room">INGRESSO / SEGRETERIA</span></div>
 <div id="objective" class="card"><b>OBIETTIVO M3.3</b><span id="objText">PARLA CON ZIA ALE</span></div>
@@ -113,8 +117,8 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <div id="toast"></div>
 <div id="dayBanner"><strong>LUNEDI</strong><span>PRIMO TURNO</span></div>
 <div id="interactionPrompt"></div>
-<div id="dialogue"><div class="dialogueBox"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">E / INVIO / TOCCA — CONTINUA</div></div></div>
-<div id="help">WASD / FRECCE — MUOVITI · E — INTERAGISCI · M — AUDIO · F2 — DEV MENU</div>
+<div id="dialogue"><div class="dialogueBox"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">SPAZIO / INVIO / TOCCA — CONTINUA</div></div></div>
+<div id="help">W/S — AVANTI/INDIETRO · A/D — STRAFE/DIAGONALE · Q/E — RUOTA · SPAZIO — INTERAGISCI · F3 — 3/4 DEV · TAB — MAPPA</div>
 <div id="miniWrap"><canvas id="miniMap" width="240" height="170"></canvas><span>● PLAYER ↑ &nbsp; ◎ OBIETTIVO &nbsp; ○ PORTA · TAB: NPC</span></div>
 <div id="bigMap" class="hidden">
   <div class="bigMapCard">
@@ -147,11 +151,11 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
       <button class="devCheckpoint" data-cp="m32_start"><strong>13:32 — M3.2 INIZIO</strong><span>Ticket BIM 02</span></button>
       <button class="devCheckpoint" data-cp="manifestation"><strong>13:52 — APPARIZIONE</strong><span>Test diretto figura nel corridoio</span></button>
     </div>
-    <div class="devFoot"><span>F2 / DEV — riapri menu</span><span>M3.3 DEVELOPMENT ONLY</span></div>
+    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M3.3.2 DEVELOPMENT</span></div>
   </div>
 </div>
-<div id="version">PSX M3.3 // WEEK SYSTEM</div>
-<div id="mobile"><div id="stick"><i></i></div><button id="act">E<small>INTERAGISCI</small></button></div>
+<div id="version">PSX M3.3.2 // DUAL CAMERA + FP CONTROLS</div>
+<div id="mobile"><div id="stick"><i></i></div><button id="turnL" class="turnBtn">Q</button><button id="turnR" class="turnBtn">E</button><button id="act">␣<small>INTERAGISCI</small></button></div>
 </div>
 <script src="game.js"></script>
 </body></html>
