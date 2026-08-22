@@ -1,0 +1,20 @@
+{
+  "version": "M3.3",
+  "name": "WEEK SYSTEM",
+  "base": "M3.2 FIRST MANIFESTATION",
+  "architecture_changed": false,
+  "stable_monday_gameplay_changed": false,
+  "changes": [
+    "weekday runtime with Monday-Friday chapter metadata",
+    "five main DEV weekday checkpoints",
+    "preserved Monday fine-grained checkpoints",
+    "weekday HUD card and chapter banner",
+    "future-day clean runtime snapshots to avoid inheriting Monday device/light states",
+    "future weekday placeholder story entry steps for M3.4-M3.7",
+    "canonical HR display name changed from HR 01 to BETTY",
+    "narrative role metadata reserved for Zia Ale, Betty, IT Manager, Capo, Lorenzo and DON"
+  ],
+  "future_day_content": "scaffold only; missions intentionally deferred",
+  "fixed_staff": 17,
+  "player": 1
+}

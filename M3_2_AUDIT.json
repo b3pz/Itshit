@@ -1,0 +1,15 @@
+{
+  "version": "M3.2",
+  "base": "M3.1.1 FULL OFFICE POPULATION",
+  "focus": "first visible manifestation after a normal post-lunch IT task",
+  "architecture_changed": false,
+  "fixed_staff": 17,
+  "features": [
+    "BIM 02 Desktop Connector ticket",
+    "BIM 02 and BIM PC interaction",
+    "dynamic non-staff corridor apparition",
+    "proximity-based apparition disappearance",
+    "apparition excluded from development map and fixed NPC count",
+    "M3.2 dev checkpoints"
+  ]
+}

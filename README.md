@@ -1,3 +1,29 @@
+# IT SHIFT // PSX M3.3 — WEEK SYSTEM
+
+## M3.3
+
+La M3.2 stabile viene estesa con la struttura di sviluppo settimanale senza modificare architettura, collisioni, scala sprite, popolazione fissa o missioni del lunedi.
+
+### Week system
+- DEV select: **LUNEDI / MARTEDI / MERCOLEDI / GIOVEDI / VENERDI**.
+- Il lunedi resta completamente giocabile con tutti i checkpoint rapidi M3.2.
+- Martedi–Venerdi sono snapshot strutturali pronti per i capitoli M3.4–M3.7.
+- HUD aggiunge il giorno corrente e banner capitolo al caricamento.
+- Ogni giorno futuro parte da uno stato ufficio pulito e indipendente dagli stati runtime del lunedi.
+- Il DEV status mostra giorno, capitolo, step, ora, popolazione e anomalie pregresse.
+
+### Lore registry preparato
+- Zia Ale: neutro positivo.
+- Betty / HR: adepta in conflitto.
+- IT Manager: adepto puro.
+- Capo: leader/demone, NPC dinamico futuro.
+- Lorenzo: alleato/elettricista, NPC dinamico futuro.
+- DON: alleato/manutentore, NPC dinamico futuro.
+
+> M3.3 non implementa ancora le missioni dei giorni successivi: crea intenzionalmente lo scheletro per svilupparli e testarli separatamente.
+
+---
+
 # IT SHIFT // PSX PROTOTYPE — M3.1 DEV CHECKPOINT + PRANZO
 
 Build di sviluppo sopra la M3.0 stabile. L'architettura M2.9.2 resta congelata.
@@ -344,3 +370,16 @@ Player and NPCs remain on the same PSX billboard scale, so furniture and room ca
 - Dopo pranzo tornano alle postazioni canoniche.
 - Il conteggio fisso resta separato dai futuri NPC dinamici (Capo, manutentori, tecnici esterni, visitatori).
 - Nessuna modifica a mappa, collisioni, porte o architettura M2.9.2.
+
+
+## M3.2 — FIRST MANIFESTATION
+
+Continua dalla base stabile M3.1.1 senza modificare architettura, collisioni o popolazione fissa.
+
+- Nuovo blocco post-pranzo 13:32–14:02.
+- Ticket IT normale su BIM 02 / Desktop Connector.
+- BIM 02 e PC BIM 02 diventano interagibili.
+- Prima manifestazione visibile: una figura dinamica compare nel corridoio dopo il ticket e scompare quando il player si avvicina.
+- La figura non ha collisione, non compare sulla mappa e non conta nei 17 NPC fissi.
+- Il Manager reagisce senza trasformare ancora il gioco in un inseguimento/horror esplicito.
+- DEV checkpoint aggiunti per 13:32 e per il test diretto dell'apparizione alle 13:52.
