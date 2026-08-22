@@ -1,0 +1,16 @@
+{
+  "version": "M2.8",
+  "base": "M2.7.3 stable",
+  "focus": "atmosphere and tension without touching stable gameplay",
+  "geometry_changed": false,
+  "collision_changed": false,
+  "story_route_changed": false,
+  "features": [
+    "progressive visual darkening/cold tint after anomalies",
+    "subtle PSX scanline overlay",
+    "restrained fluorescent flicker",
+    "localized server/printer/PBX ambient audio",
+    "rare relay clicks after anomaly escalation",
+    "visual reaction to impossible phone/knock sequence"
+  ]
+}

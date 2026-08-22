@@ -1,0 +1,11 @@
+{
+  "version": "M3.1.1",
+  "focus": "full fixed office population and lunch relocation",
+  "fixed_npcs": 17,
+  "player": 1,
+  "peak_people": 18,
+  "capacity": {"HR":1,"BIM":2,"CENTRALE":6,"INTERIOR":2,"EDITORIA":2,"RENDERISTI":2},
+  "lunch_distribution": {"CUCINA":6,"SPAZIO A":6,"SALA MEET":5},
+  "dynamic_npcs_reserved": ["CAPO","MANUTENTORI","TECNICI ESTERNI","VISITATORI"],
+  "architecture_changed": false
+}

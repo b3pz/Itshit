@@ -1,0 +1,15 @@
+{
+  "version": "M2.9",
+  "focus": "NPC / PSX billboard sprite system",
+  "base": "M2.8",
+  "preserved": ["walkable map", "collisions", "doors", "missions", "camera", "audio", "atmosphere"],
+  "added": [
+    "runtime pixel-art NPC textures",
+    "camera-facing billboard renderer",
+    "idle/talk sprite state",
+    "story-step visibility windows",
+    "hidden-NPC interaction filtering",
+    "NPC markers on development big map"
+  ],
+  "npc_test_cast": ["Zia Ale", "IT Manager", "Alice", "Marino"]
+}

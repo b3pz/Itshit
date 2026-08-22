@@ -1,0 +1,24 @@
+{
+  "version": "M3.0",
+  "name": "UFFICIO VIVO",
+  "base": "M2.9.2 FLOOR STABILITY FIX",
+  "architecture_frozen": true,
+  "it_workstations": 2,
+  "features": [
+    "stateful room lights",
+    "stateful doors with optional collision",
+    "stateful workstation monitors",
+    "stateful rack/printer/phones",
+    "story-driven device status",
+    "ambient office phones"
+  ],
+  "preserved": [
+    "room geometry",
+    "continuous floor",
+    "walkability",
+    "mission chain",
+    "NPC billboard system",
+    "player sprite scale",
+    "audio"
+  ]
+}

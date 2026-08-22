@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>IT SHIFT PSX // M2.7 LIGHT ESCALATION</title>
+<title>IT SHIFT PSX // M3.1 DEV CHECKPOINT + PRANZO</title>
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;color:#dce5df;font-family:Consolas,monospace}
 #app{position:fixed;inset:0} canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
@@ -73,28 +73,67 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
  .dialogueBox{padding:11px}
 }
 
+
+/* M2.8 atmosphere overlays: visual-only, never intercept input. */
+#atmoOverlay,#psxNoise,#flickerOverlay{position:absolute;inset:0;z-index:3;pointer-events:none}
+#atmoOverlay{background:radial-gradient(circle at 50% 45%,transparent 34%,rgba(0,0,0,.10) 100%);transition:background .45s linear}
+#psxNoise{opacity:.025;background:repeating-linear-gradient(0deg,rgba(205,235,218,.08) 0,rgba(205,235,218,.08) 1px,transparent 1px,transparent 4px);mix-blend-mode:soft-light}
+#flickerOverlay{z-index:4;background:#07100b;opacity:0;transition:opacity .045s linear}
+
+/* M3.1 development checkpoint system */
+#devButton{position:absolute;right:12px;top:208px;z-index:28;padding:7px 10px;background:#10140f;border:2px solid #788b65;color:#b7ff4a;font:900 9px Consolas,monospace;cursor:pointer;box-shadow:3px 3px #000}
+#devStatus{position:absolute;left:12px;bottom:34px;z-index:6;min-width:255px;padding:7px 9px;background:#07100dcf;border:1px solid #3f5748;color:#90a398;font:8px/1.45 Consolas,monospace;pointer-events:none}
+#devStatus b{color:#b7ff4a}
+#devMenu{position:absolute;inset:0;z-index:80;background:#010201ef;display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
+#devMenu.hidden{display:none}
+.devMenuCard{width:min(720px,94vw);background:#07100df7;border:3px solid #526a5b;box-shadow:10px 10px #000;padding:18px}
+.devTitle{color:#b7ff4a;font:900 17px Consolas,monospace;letter-spacing:2px}.devSub{margin-top:6px;color:#9bad9e;font:9px/1.45 Consolas,monospace}
+.devGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:16px}
+.devCheckpoint{padding:11px 12px;text-align:left;background:#0d1711;border:2px solid #536a59;color:#dce8df;font:900 10px Consolas,monospace;cursor:pointer}.devCheckpoint:hover{border-color:#b7ff4a;background:#122019}.devCheckpoint strong{display:block;color:#ffc857;font-size:12px;margin-bottom:3px}.devCheckpoint span{font-size:8px;color:#9bad9e}
+.devFoot{display:flex;justify-content:space-between;gap:10px;margin-top:13px;color:#718278;font-size:8px}
+@media(hover:none),(pointer:coarse){#devButton{right:6px;top:184px}#devStatus{display:none}.devGrid{grid-template-columns:1fr}.devMenuCard{max-height:90vh;overflow:auto}}
+
 </style>
 </head>
 <body>
 <div id="app">
 <canvas id="c"></canvas>
+<div id="atmoOverlay"></div><div id="psxNoise"></div><div id="flickerOverlay"></div>
 <div id="hud">
 <div class="card"><b>IT SHIFT // PSX PROTOTYPE</b><span id="room">INGRESSO / SEGRETERIA</span></div>
-<div id="objective" class="card"><b>OBIETTIVO M2.7</b><span id="objText">PARLA CON ZIA ALE</span></div>
+<div id="objective" class="card"><b>OBIETTIVO M3.1</b><span id="objText">PARLA CON ZIA ALE</span></div>
 <div id="clockCard" class="card"><b>ORARIO</b><span id="clock">09:00</span></div>
 </div>
 <div id="toast"></div>
 <div id="interactionPrompt"></div>
 <div id="dialogue"><div class="dialogueBox"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">E / INVIO / TOCCA — CONTINUA</div></div></div>
-<div id="help">WASD / FRECCE — MUOVITI · E — INTERAGISCI</div>
-<div id="miniWrap"><canvas id="miniMap" width="240" height="170"></canvas><span>● PLAYER ↑ &nbsp; ◎ OBIETTIVO &nbsp; ○ PORTA</span></div>
+<div id="help">WASD / FRECCE — MUOVITI · E — INTERAGISCI · M — AUDIO · F2 — DEV MENU</div>
+<div id="miniWrap"><canvas id="miniMap" width="240" height="170"></canvas><span>● PLAYER ↑ &nbsp; ◎ OBIETTIVO &nbsp; ○ PORTA · TAB: NPC</span></div>
 <div id="bigMap" class="hidden">
   <div class="bigMapCard">
     <div class="bigMapHead"><b>MAPPA STUDIO // IT SHIFT</b><span>TAB — CHIUDI</span></div>
     <canvas id="bigMapCanvas" width="900" height="620"></canvas>
   </div>
 </div>
-<div id="version">PSX M2.7 // LIGHT ESCALATION</div>
+
+<button id="devButton" type="button">DEV</button>
+<div id="devStatus"><b>DEV STATE</b><div id="devStatusText">BOOT...</div></div>
+<div id="devMenu">
+  <div class="devMenuCard">
+    <div class="devTitle">IT SHIFT // DEV CHECKPOINT</div>
+    <div class="devSub">Carica uno stato coerente della giornata senza rifare tutto il turno. Il gioco finale non mostrerà questo menu.</div>
+    <div class="devGrid">
+      <button class="devCheckpoint" data-cp="start"><strong>09:00 — INIZIO TURNO</strong><span>Segreteria · Zia Ale · stato pulito</span></button>
+      <button class="devCheckpoint" data-cp="first_done"><strong>09:22 — PRIMO INTERVENTO</strong><span>Rack risolto · prossima richiesta Editoria</span></button>
+      <button class="devCheckpoint" data-cp="first_anomaly"><strong>10:10 — PRIMA ANOMALIA</strong><span>Render_04 già verificato · torna dal Manager</span></button>
+      <button class="devCheckpoint" data-cp="morning_end"><strong>10:58 — FINE MATTINA</strong><span>Evento PBX già avvenuto · verso il pranzo</span></button>
+      <button class="devCheckpoint" data-cp="lunch"><strong>13:00 — PRANZO</strong><span>Cucina popolata · pausa con i colleghi</span></button>
+      <button class="devCheckpoint" data-cp="post_lunch"><strong>13:30 — POST PRANZO</strong><span>Rientro in IT · base pronta per M3.2</span></button>
+    </div>
+    <div class="devFoot"><span>F2 / DEV — riapri menu</span><span>M3.1 DEVELOPMENT ONLY</span></div>
+  </div>
+</div>
+<div id="version">PSX M3.1.1 // FULL OFFICE POPULATION</div>
 <div id="mobile"><div id="stick"><i></i></div><button id="act">E<small>INTERAGISCI</small></button></div>
 </div>
 <script src="game.js"></script>

@@ -1,0 +1,15 @@
+{
+  "version": "M2.7.2",
+  "focus": "first self-contained audio pass",
+  "changes": [
+    "subtle office electrical ambience",
+    "distance-based server rack hum",
+    "player footsteps",
+    "dialogue and objective UI cues",
+    "device interaction sounds",
+    "PBX ring retained",
+    "three audible knocks during anomaly",
+    "desktop M key audio mute toggle"
+  ],
+  "external_audio_assets": false
+}

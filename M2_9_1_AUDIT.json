@@ -1,0 +1,27 @@
+{
+  "version": "M2.9.1",
+  "focus": "room scale + continuous office floor",
+  "preserved": [
+    "M2.9 gameplay",
+    "mission chain",
+    "NPC sprite system",
+    "player sprite scale",
+    "audio",
+    "camera"
+  ],
+  "capacity": {
+    "HR": 1,
+    "BIM": 2,
+    "CENTRALE": 6,
+    "INTERIOR": 2,
+    "EDITORIA": 2,
+    "RENDERISTI": 2
+  },
+  "changes": [
+    "enlarged Centrale, Cucina, Spazio A, Sala Meet, Sala Meet Capo and Segreteria",
+    "repositioned east room column/corridor to create real workstation capacity",
+    "added continuous walkable floor plates under internal seams",
+    "updated doors, furniture, devices, NPCs and minimap to the new architecture",
+    "kept exterior void black"
+  ]
+}

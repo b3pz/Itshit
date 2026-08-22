@@ -1,0 +1,32 @@
+{
+  "version": "M3.1",
+  "name": "DEV CHECKPOINT + PRANZO",
+  "base": "M3.0 UFFICIO VIVO",
+  "architecture_frozen": true,
+  "features": [
+    "startup dev checkpoint selector",
+    "checkpoints at 09:00, 09:22, 10:10, 10:58, 13:00 and 13:30",
+    "coherent story/device/light/NPC state restoration",
+    "DEV button and F2 menu recall",
+    "DEV status panel",
+    "13:00 lunch scene in enlarged kitchen",
+    "NPC repositioning for lunch",
+    "two lunch-only generic Central colleagues",
+    "post-lunch environment change",
+    "13:30 post-lunch IT checkpoint"
+  ],
+  "preserved": [
+    "M2.9.2 frozen architecture",
+    "two canonical IT workstations",
+    "walkability and collisions",
+    "M3.0 office systems",
+    "existing morning mission chain",
+    "NPC/player PSX billboard scale",
+    "audio and atmosphere systems"
+  ],
+  "validation": [
+    "node --check passed",
+    "startup smoke test passed",
+    "all six checkpoint state smoke tests passed"
+  ]
+}

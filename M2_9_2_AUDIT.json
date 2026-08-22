@@ -1,0 +1,10 @@
+{
+  "version": "M2.9.2",
+  "focus": "floor visual stability / z-fighting removal",
+  "base": "M2.9.1 ROOM SCALE + CONTINUOUS FLOOR",
+  "changes": [
+    "added optional Y coordinate to floor rendering only",
+    "separated continuous floor, room, corridor, door-link and door-threshold visual layers",
+    "kept all walkable areas, collisions, room dimensions, walls, doors, NPCs and mission logic unchanged"
+  ]
+}

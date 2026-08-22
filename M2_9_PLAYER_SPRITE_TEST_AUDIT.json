@@ -1,0 +1,9 @@
+{
+  "version": "M2.9 PLAYER SPRITE TEST",
+  "base": "M2.9 NPC / SPRITE SYSTEM",
+  "changes": [
+    "replaced low-poly player visual with 32x48 PSX billboard",
+    "matched player visual size to NPC base scale: 0.72 x 1.36 world units",
+    "left player collision radius, movement, missions, map and NPC logic untouched"
+  ]
+}

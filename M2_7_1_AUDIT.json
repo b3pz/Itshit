@@ -1,0 +1,11 @@
+{
+  "version": "M2.7.1",
+  "focus": "fix M2.6-to-M2.7 progression and make PBX event observable",
+  "fixes": [
+    "removed dead completion step at 10:10",
+    "10:10 now explicitly targets the IT Manager for the next assignment",
+    "added generated phone ringing cue while the impossible PBX call is active",
+    "phone continues ringing until answered",
+    "kept M2.6 map, collisions and interaction foundations unchanged"
+  ]
+}

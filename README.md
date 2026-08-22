@@ -1,4 +1,51 @@
-# IT SHIFT // PSX PROTOTYPE — M2.7 LIGHT ESCALATION
+# IT SHIFT // PSX PROTOTYPE — M3.1 DEV CHECKPOINT + PRANZO
+
+Build di sviluppo sopra la M3.0 stabile. L'architettura M2.9.2 resta congelata.
+
+## DEV CHECKPOINT SYSTEM
+All'avvio compare un selettore che carica uno snapshot coerente della giornata:
+- 09:00 — Inizio turno
+- 09:22 — Primo intervento concluso
+- 10:10 — Prima anomalia
+- 10:58 — Fine mattina
+- 13:00 — Pranzo
+- 13:30 — Post pranzo
+
+Ogni checkpoint imposta step narrativo, orario, spawn, stato dispositivi/luci/porte, NPC e anomalie pregresse. F2 o il pulsante DEV riaprono il menu.
+
+## PRANZO / CAMBIO ATMOSFERA
+- alle 10:58 il Manager manda il protagonista in pausa;
+- la Cucina viene popolata realmente con più sprite NPC;
+- Zia Ale, Alice e Marino si spostano nella scena pranzo;
+- due colleghi placeholder di Centrale riempiono la capienza senza introdurre missioni;
+- il Manager resta in IT;
+- breve dialogo di pausa con riferimento sottile ai tre colpi;
+- dopo pranzo Sala Meet e Stampa 3D restano spente per dare un primo senso di studio meno pieno;
+- 13:30: ritorno alla postazione IT e checkpoint pronto per M3.2.
+
+## DEV STATUS
+Pannello discreto con step, orario, NPC attivi ed eventi anomali già attivati.
+
+---
+
+# IT SHIFT // PSX PROTOTYPE — M3.0 UFFICIO VIVO
+
+M2.9 nasce dalla build M2.8 e mantiene invariati mappa, collisioni, missioni e camera.
+
+Novità:
+- NPC convertiti da placeholder low-poly a veri billboard PSX;
+- sprite 32x48 generati localmente, pixel-perfect e senza asset esterni;
+- ogni sprite guarda sempre la camera;
+- stato IDLE / TALK legato automaticamente ai dialoghi;
+- visibilità programmabile per step narrativo/orario;
+- gli NPC nascosti non risultano interagibili;
+- Alice appare quando parte il blocco Editoria; Marino quando parte Interior;
+- la mappa grande TAB mostra i marker degli NPC visibili per facilitare lo sviluppo;
+- pipeline pronta per sostituire in futuro i placeholder con PNG/sprite sheet definitivi senza cambiare gameplay.
+
+---
+
+# IT SHIFT // PSX PROTOTYPE — M2.7.1 LIGHT ESCALATION
 
 ## M2.5
 La build M2.5 estende la base stabile M2.4 senza modificare la pianta calpestabile M2.3.2.
@@ -198,7 +245,7 @@ La prima anomalia resta volutamente sottile: il ticket RENDER_04 risulta aperto 
 La geometria della mappa, le porte e la pianta calpestabile M2.3.2 non sono state modificate.
 
 
-## M2.7 // LIGHT ESCALATION
+## M2.7.1 // LIGHT ESCALATION
 
 Continua la base stabile M2.6 senza modificare pianta, porte, collisioni o camera.
 
@@ -212,3 +259,88 @@ Sequenza aggiunta:
 - ritorno dal Manager: l'anomalia non viene piu liquidata come semplice bug
 
 Orario narrativo finale: 10:58.
+
+
+## M2.7.3 — AUDIO BOOT FIX
+- Ambiente ufficio elettrico/HVAC molto leggero.
+- Ronzio server dinamico in base alla distanza dal rack.
+- Passi del player durante il movimento.
+- Blip UI/dialoghi e chime cambio obiettivo.
+- Feedback sonoro per PC, rack e stampante.
+- Squillo PBX mantenuto e aggiunti tre colpi reali sul TOC TOC TOC.
+- Nessun file audio esterno: tutto sintetizzato via WebAudio.
+- M disattiva/riattiva l'audio su desktop.
+
+
+## M2.8 // ATMOSPHERE & TENSION
+- Built directly on the verified M2.7.3 stable base.
+- No geometry, collision, doorway or walkable-floor changes.
+- Added a gradual visual mood layer after the first impossible ticket.
+- Added subtle PSX scanline/noise overlay and restrained fluorescent flicker.
+- Added local ambient tones for server rack, printer and PBX/meeting-room side.
+- Added rare electrical relay clicks only after the narrative anomalies begin.
+- Phone/knock event now also produces a small visual light response.
+- Existing story progression through 10:58 is unchanged.
+
+
+## M2.9 // PLAYER SPRITE SCALE TEST
+- Il protagonista non usa più il placeholder 3D a capsula.
+- Ora usa lo stesso billboard PSX 32x48 degli NPC.
+- Altezza visuale protagonista: 1.36 unità, identica alla scala base NPC.
+- Collisione e gameplay non sono stati modificati.
+- Scopo: valutare correttamente capienza, postazioni e dimensioni delle stanze prima del Room Scale Pass.
+
+
+## M2.9.1 // ROOM SCALE + CONTINUOUS FLOOR
+
+Architecture pass performed before M3.0. The current gameplay, mission chain, NPC sprite system, audio and camera are preserved.
+
+### Capacity anchors
+- HR: 1 workstation / NPC
+- BIM: 2
+- CENTRALE: 6
+- INTERIOR: 2
+- EDITORIA: 2
+- RENDERISTI: 2
+- Shared rooms (Cucina, Spazio A and meeting rooms) enlarged for groups and future props.
+
+### Floor / circulation
+- Black internal seams are replaced by a continuous office-floor footprint.
+- Room access is defined by walls and door openings instead of missing floor.
+- Exterior void remains black outside the office footprint.
+- Main circulation and doorway clear zones preserve the stable M2.9 movement/collision model.
+
+### Development scale
+Player and NPCs remain on the same PSX billboard scale, so furniture and room capacity can be judged consistently before M3.0.
+
+
+## M2.9.2 // FLOOR STABILITY FIX
+
+- Architecture, room sizes, doors, NPC positions, missions and collision data are unchanged from M2.9.1.
+- Removes floor z-fighting/shimmer by rendering the continuous base, rooms, corridors and doorway plates on tiny fixed Y offsets.
+- The offsets are visual only and remain below gameplay geometry, so movement and interaction are unaffected.
+- M2.9.1 room-scale layout remains the architectural reference.
+
+
+## M3.0 // UFFICIO VIVO
+
+- Architecture remains frozen from the stable M2.9.2 build.
+- REPARTO IT is now canonical at exactly **2 workstations**. The third spare desk was removed.
+- Added reusable room-light state registry (`on`, `off`, `flicker`).
+- Added reusable door state registry (`open`, `closed`) with visual leaves and collision support when closed.
+- Added reusable device states for PCs, rack, printer and phones.
+- Workstation monitors now visually reflect device state.
+- Current room capacities are represented by monitor footprints, including 6 in Centrale, 2 BIM, 2 Interior, 2 Editoria, 2 Renderisti and 1 HR.
+- Added ambient desk phones ready for future calls/events.
+- Existing story automatically drives rack/printer/Interior/Render/phone status without changing mission logic.
+- Existing M2.9.2 floor, movement, doors, collisions, NPC sprites, player sprite, missions and audio remain preserved.
+
+
+## M3.1.1 — FULL OFFICE POPULATION
+- Popolazione fissa canonica: **17 NPC + protagonista = 18 persone** al picco della giornata.
+- Tutti gli NPC fissi esistono dalle 09:00: le missioni attivano le interazioni, non fanno comparire i personaggi dal nulla.
+- Capienze rispettate: HR 1, BIM 2, Centrale 6, Interior 2, Editoria 2, Renderisti 2, Segreteria 1, IT Manager 1.
+- Alle 13:00 gli stessi 17 NPC vengono ridistribuiti: 6 in Cucina, 6 in Spazio A, 5 in Sala Meet.
+- Dopo pranzo tornano alle postazioni canoniche.
+- Il conteggio fisso resta separato dai futuri NPC dinamici (Capo, manutentori, tecnici esterni, visitatori).
+- Nessuna modifica a mappa, collisioni, porte o architettura M2.9.2.

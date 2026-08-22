@@ -1,0 +1,8 @@
+{
+  "version": "M2.7.3",
+  "focus": "audio startup crash hotfix",
+  "base": "M2.7.2",
+  "fix": "Moved WebAudio state declarations before the initial setStoryStep(0) call, preventing the temporal-dead-zone ReferenceError that stopped the render loop and left a black screen.",
+  "gameplay_changes": "none",
+  "map_changes": "none"
+}
