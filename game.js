@@ -597,6 +597,10 @@ for(const z of [6.4,2.0,-2.4,-6.3])psxCeilingStrip(8.9,z,1.00,.22);
 // Meeting areas: corridor-facing dark-glass panels distinguish them immediately.
 psxGlassPanelX(2.76,6.18,.92);psxGlassPanelX(2.76,9.24,.92);
 psxGlassPanelX(9.88,6.22,.90);psxGlassPanelX(9.88,9.20,.90);
+// extra office-style glazed frames so Meet / Direzione stop reading as dark caves
+psxGlassPanelZ(3.02,6.58,.58);psxGlassPanelZ(3.02,8.82,.58);
+psxGlassPanelZ(10.16,6.60,.56);psxGlassPanelZ(10.16,8.80,.56);
+psxGlassPanelX(2.98,7.70,.46);psxGlassPanelX(10.10,7.70,.44);
 psxLowCabinet(4.00,9.25,1.05,.32,[.29,.28,.24]);psxLowCabinet(12.90,9.20,.86,.32,[.24,.24,.22]);
 psxDeskClutter(5.10,7.70);psxDeskClutter(11.65,7.70);
 
@@ -931,15 +935,15 @@ function spriteTexture(pal,state="idle",features={}){
 const npcSprites=[
  {id:"zia_ale",name:"ZIA ALE",role:"SEGRETERIA",kind:"staff",x:-1.55,z:10.55,w:.72,h:1.36,from:0,to:999,pal:{body:"#65465f",accent:"#ba8aaf",legs:"#34303a",skin:"#c88f70",hair:"#d7bf68",light:"#f3df9b"}},
  {id:"it_manager",name:"IT MANAGER",role:"IT",kind:"staff",x:-4.05,z:4.00,w:.74,h:1.40,from:0,to:999,features:{glasses:true},pal:{body:"#36546b",accent:"#7394a5",legs:"#252d35",skin:"#bd856a",hair:"#44362f",light:"#8ab5ca"}},
- {id:"hr_01",name:"BETTY",role:"HR",kind:"staff",x:-5.10,z:6.35,w:.70,h:1.35,from:0,to:999,features:{stripes:true},pal:{body:"#5b4a51",accent:"#d7c9bd",legs:"#332b30",skin:"#cb9475",hair:"#49332f",light:"#c79aa4"}},
+ {id:"hr_01",name:"BETTY",role:"HR",kind:"staff",x:-5.22,z:6.08,w:.70,h:1.35,from:0,to:999,features:{stripes:true},pal:{body:"#5b4a51",accent:"#d7c9bd",legs:"#332b30",skin:"#cb9475",hair:"#49332f",light:"#c79aa4"}},
  {id:"bim_01",name:"BIM 01",role:"BIM",kind:"staff",x:-5.55,z:-5.05,w:.72,h:1.36,from:0,to:999,pal:{body:"#435f68",accent:"#7999a1",legs:"#293239",skin:"#c89072",hair:"#3c322e",light:"#94adb3"}},
  {id:"bim_02",name:"BIM 02",role:"BIM",kind:"staff",x:-4.15,z:-5.05,w:.72,h:1.36,from:0,to:999,pal:{body:"#5c4f72",accent:"#8d7ba7",legs:"#302c3d",skin:"#c68d70",hair:"#3f3028",light:"#aa97bd"}},
- {id:"central_01",name:"CENTRALE 01",role:"CENTRALE",kind:"staff",x:3.75,z:3.48,w:.70,h:1.35,from:0,to:999,pal:{body:"#4d5668",accent:"#8b97a9",legs:"#2b3038",skin:"#c58e70",hair:"#49372d",light:"#aab4c2"}},
- {id:"central_02",name:"CENTRALE 02",role:"CENTRALE",kind:"staff",x:5.35,z:3.48,w:.70,h:1.35,from:0,to:999,pal:{body:"#665b43",accent:"#a18d63",legs:"#332f27",skin:"#c99173",hair:"#3c3028",light:"#b9a476"}},
- {id:"central_03",name:"CENTRALE 03",role:"CENTRALE",kind:"staff",x:6.95,z:3.48,w:.70,h:1.35,from:0,to:999,pal:{body:"#4b6254",accent:"#7f9b87",legs:"#29342d",skin:"#c58d70",hair:"#342c28",light:"#96b19c"}},
- {id:"central_04",name:"CENTRALE 04",role:"CENTRALE",kind:"staff",x:3.75,z:.72,w:.70,h:1.35,from:0,to:999,pal:{body:"#66505b",accent:"#9d7b88",legs:"#352d32",skin:"#d09a78",hair:"#53382c",light:"#b8939e"}},
- {id:"central_05",name:"CENTRALE 05",role:"CENTRALE",kind:"staff",x:5.35,z:.72,w:.70,h:1.35,from:0,to:999,pal:{body:"#4d5f72",accent:"#8199ac",legs:"#2b323d",skin:"#c88f70",hair:"#3e332e",light:"#98afc0"}},
- {id:"central_06",name:"CENTRALE 06",role:"CENTRALE",kind:"staff",x:6.95,z:.72,w:.70,h:1.35,from:0,to:999,pal:{body:"#625747",accent:"#9f8e6f",legs:"#342f28",skin:"#c88e70",hair:"#453429",light:"#b4a17d"}},
+ {id:"central_01",name:"CENTRALE 01",role:"CENTRALE",kind:"staff",x:3.55,z:3.18,w:.70,h:1.35,from:0,to:999,pal:{body:"#4d5668",accent:"#8b97a9",legs:"#2b3038",skin:"#c58e70",hair:"#49372d",light:"#aab4c2"}},
+ {id:"central_02",name:"CENTRALE 02",role:"CENTRALE",kind:"staff",x:5.15,z:3.18,w:.70,h:1.35,from:0,to:999,pal:{body:"#665b43",accent:"#a18d63",legs:"#332f27",skin:"#c99173",hair:"#3c3028",light:"#b9a476"}},
+ {id:"central_03",name:"CENTRALE 03",role:"CENTRALE",kind:"staff",x:6.75,z:3.18,w:.70,h:1.35,from:0,to:999,pal:{body:"#4b6254",accent:"#7f9b87",legs:"#29342d",skin:"#c58d70",hair:"#342c28",light:"#96b19c"}},
+ {id:"central_04",name:"CENTRALE 04",role:"CENTRALE",kind:"staff",x:3.55,z:.42,w:.70,h:1.35,from:0,to:999,pal:{body:"#66505b",accent:"#9d7b88",legs:"#352d32",skin:"#d09a78",hair:"#53382c",light:"#b8939e"}},
+ {id:"central_05",name:"CENTRALE 05",role:"CENTRALE",kind:"staff",x:5.15,z:.42,w:.70,h:1.35,from:0,to:999,pal:{body:"#4d5f72",accent:"#8199ac",legs:"#2b323d",skin:"#c88f70",hair:"#3e332e",light:"#98afc0"}},
+ {id:"central_06",name:"CENTRALE 06",role:"CENTRALE",kind:"staff",x:6.75,z:.42,w:.70,h:1.35,from:0,to:999,pal:{body:"#625747",accent:"#9f8e6f",legs:"#342f28",skin:"#c88e70",hair:"#453429",light:"#b4a17d"}},
  {id:"alice_editoria",name:"ALICE",role:"EDITORIA",kind:"staff",x:4.55,z:-4.45,w:.70,h:1.35,from:0,to:999,pal:{body:"#72563d",accent:"#bf9564",legs:"#393026",skin:"#d09a77",hair:"#553727",light:"#d9ad78"}},
  {id:"editoria_02",name:"EDITORIA 02",role:"EDITORIA",kind:"staff",x:6.35,z:-4.45,w:.70,h:1.35,from:0,to:999,pal:{body:"#5f5268",accent:"#9784a1",legs:"#322d38",skin:"#c99172",hair:"#49342d",light:"#ad9ab6"}},
  {id:"marino_interior",name:"MARINO",role:"INTERIOR",kind:"staff",x:10.55,z:3.25,w:.73,h:1.39,from:0,to:999,pal:{body:"#4b5942",accent:"#84926f",legs:"#2d3229",skin:"#c28b6d",hair:"#3f332c",light:"#9fad88"}},
@@ -1414,10 +1418,11 @@ function currentDayDef(){return WEEK_DAYS[currentDay]||WEEK_DAYS[0];}
 function showDayBanner(){
  if(!dayBannerEl)return;
  const d=currentDayDef();
- dayBannerEl.innerHTML=`<strong>${d.label}</strong><span>${d.chapter}</span>`;
+ const t=(storySteps[storyStep]?.time)||"09:00";
+ dayBannerEl.innerHTML=`<strong>${d.label}</strong><span>INIZIO TURNO // ORE ${t} // ${d.chapter}</span>`;
  dayBannerEl.classList.add("on");
  clearTimeout(dayBannerTimer);
- dayBannerTimer=setTimeout(()=>dayBannerEl.classList.remove("on"),1250);
+ dayBannerTimer=setTimeout(()=>dayBannerEl.classList.remove("on"),1450);
 }
 function setWeekDay(index,announce=false){
  currentDay=Math.max(0,Math.min(WEEK_DAYS.length-1,index|0));
@@ -1545,16 +1550,20 @@ function minsOf(t){const m=/^(\d{2}):(\d{2})$/.exec(t||"");return m?(+m[1]*60 + 
 function showTimeJump(time,label="DOPO QUALCHE ORA"){if(!timeJumpEl)return;const s=timeJumpEl.querySelector("strong"),l=timeJumpEl.querySelector("span");if(s)s.textContent=time;if(l)l.textContent=label;timeJumpEl.classList.add("on");clearTimeout(timeJumpTimer);timeJumpTimer=setTimeout(()=>timeJumpEl.classList.remove("on"),850);}
 function pathPoint(path,t){t=Math.max(0,Math.min(1,t));const scaled=t*(path.length-1),i=Math.min(path.length-2,Math.floor(scaled)),u=scaled-i;return{x:path[i].x+(path[i+1].x-path[i].x)*u,z:path[i].z+(path[i+1].z-path[i].z)*u};}
 function startLorenzoDirezioneWalk(){
- cutsceneActive=true;cinematicBarsEl?.classList.add("on");
- cutscene={start:performance.now(),duration:4800,path:[{x:-.75,z:9.95},{x:1.1,z:9.25},{x:3.9,z:8.65},{x:6.5,z:8.55},{x:8.45,z:8.55}]};
- toast("LORENZO // VIENI");tone(160,.08,.012,'triangle',120);
+ // M4.8.1 HOTFIX: mai trascinare il protagonista dentro la geometria.
+ // Lorenzo si porta avanti; il giocatore mantiene sempre il controllo.
+ cutscene=null;cutsceneActive=false;cinematicBarsEl?.classList.remove("on");
+ setNpcWorldPosition("lorenzo",8.45,7.70);
+ toast("LORENZO // VIENI, E DA QUESTA PARTE");
+ tone(160,.08,.012,'triangle',120);
+ showTimeJump("10:52","LORENZO SI AVVIA VERSO DIREZIONE");
+ setStoryStep(52,"SEGUI LORENZO // PORTA DIREZIONE");
+ saveProgress();
 }
 function updateCutscene(now){
- if(!cutscene)return;const t=Math.min(1,(now-cutscene.start)/cutscene.duration),lead=pathPoint(cutscene.path,t),follow=pathPoint(cutscene.path,Math.max(0,t-.09));
- setNpcWorldPosition("lorenzo",lead.x,lead.z);player.x=follow.x;player.z=follow.z;
- const ahead=pathPoint(cutscene.path,Math.min(1,t+.02)),fx=ahead.x-follow.x,fz=ahead.z-follow.z;if(Math.hypot(fx,fz)>.01){cameraState.yaw=Math.atan2(-fx,-fz);savedFpYaw=cameraState.yaw;}
- if(audioCtx&&!audioMuted&&now-cutsceneFootLast>430){cutsceneFootLast=now;footstepSound();}
- if(t>=1){cutscene=null;cutsceneActive=false;cinematicBarsEl?.classList.remove("on");player.x=8.05;player.z=8.90;setNpcWorldPosition("lorenzo",8.45,8.55);setStoryStep(52,"DIREZIONE // PORTA RISERVATA");}
+ // Riservato a future cinematiche sicure. Nessun movimento forzato del player.
+ if(!cutscene)return;
+ cutscene=null;cutsceneActive=false;cinematicBarsEl?.classList.remove("on");
 }
 function safeRead(key){try{return JSON.parse(localStorage.getItem(key)||"null")}catch(_){return null}}
 function safeWrite(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(_){}}
@@ -1973,8 +1982,8 @@ addEventListener("keydown",e=>{
  if(["w","a","s","d","q","e","arrowup","arrowdown","arrowleft","arrowright","enter"," "].includes(k))ensureAudio();
  if(k==="m"&&!e.repeat){e.preventDefault();setAudioMuted(!audioMuted);return;}
  if(k==="f5"&&!e.repeat&&gameStarted){e.preventDefault();manualSave("SALVATAGGIO RAPIDO");return;}
- if(pauseOpen){if(k==="escape"&&!e.repeat){e.preventDefault();closePause();}else e.preventDefault();return;}
- if(k==="escape"&&!e.repeat&&gameStarted){e.preventDefault();openPause();return;}
+ if(pauseOpen){if((k==="p"||k==="escape")&&!e.repeat){e.preventDefault();closePause();}else e.preventDefault();return;}
+ if(k==="p"&&!e.repeat&&gameStarted){e.preventDefault();openPause();return;}
  if(k==="f2"&&!e.repeat){e.preventDefault();openDevMenu();return;}
  if(k==="f3"&&!e.repeat){e.preventDefault();toggleCameraMode();return;}
  if(optionsScreenEl&&!optionsScreenEl.classList.contains("hidden")){
@@ -2103,7 +2112,7 @@ function updateInteractionPrompt(){
  const step=storySteps[storyStep];
  const active=step.targetInteractable===it.id;
  const verb=it.type==="npc"?"PARLA CON":(active?"USA":"GUARDA");
- promptEl.innerHTML=`<b>SPAZIO</b><span>${verb} ${promptLabelFor(it)}</span>`;
+ promptEl.innerHTML=`<b>SPAZIO</b><span>${verb} — ${promptLabelFor(it)}</span>`;
  promptEl.classList.add("on");
 }
 const tuesdayAmbientDialogue={
@@ -2120,7 +2129,7 @@ const tuesdayAmbientDialogue={
  editoria_02:["Alice parla troppo. Pero sul vecchio stagista non si inventa tutto."],
  marino_interior:["Oggi il server va. Segnatelo sul calendario."],
  interior_02:["La Sala Meet Capo? Io ci entro solo se mi chiamano per nome."],
- render_01:["Render_04 stamattina si e acceso per qualche secondo. Nessuno ha fatto login."],
+ render_01:["Render_04 stamattina si e acceso per qualche secondo. Nessuno si e collegato."],
  render_02:["Quello prima di te restava spesso fino a tardi. Almeno credo. Qui gli orari si confondono."],
  hr_01:["Sei venuto a trovare HR senza che ti abbia chiamato? Cosi mi abitui male."],
  it_manager:["Se non hai un ticket aperto, goditi il momento. Dura poco."],
@@ -2539,7 +2548,7 @@ function interact(){
  if(it.id==="pc_it"){
    if(storyStep===3){deviceBeep();
      openDialogue("PC REPARTO IT",[
-       "LOGIN ARCHEA // SESSIONE APERTA.",
+       "ACCESSO STUDIO // SESSIONE APERTA.",
        "TICKET PRIORITARIO: SERVER RACK 02 NON RAGGIUNGIBILE.",
        "VERIFICA DIRETTAMENTE NEL SERVER / MAGAZZINO IT."
      ],()=>setStoryStep(4,"NUOVO TICKET // SERVER RACK 02"));
