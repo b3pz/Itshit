@@ -381,23 +381,7 @@ function corridorDoorPlaque(d){
    box(d.x,1.90,pz,1.28,.055,.04,[.55,.55,.43]);
  }
 }
-// M5.1: niente bacheche davanti ai varchi. Solo targhette piccole, salde al muro laterale.
-function corridorSideSign(d){
- const r=rooms.find(x=>x.name===d.room);if(!r)return;
- const col=d.room==="REPARTO IT"?[.38,.55,.31]:d.room.includes("MEET")?[.45,.38,.25]:[.30,.40,.34];
- if(d.axis==="x"){
-   const side=(d.z<=r.z?1:-1);
-   const z=Math.max(r.z-r.d/2+.38,Math.min(r.z+r.d/2-.38,d.z+side*.95));
-   const x=d.x+(d.x<r.x?.07:-.07);
-   box(x,1.18,z,.035,.24,.34,[.13,.16,.14]);box(x+(d.x<r.x?.020:-.020),1.23,z,.018,.12,.25,col);
- }else{
-   const side=(d.x<=r.x?1:-1);
-   const x=Math.max(r.x-r.w/2+.38,Math.min(r.x+r.w/2-.38,d.x+side*.95));
-   const z=d.z+(d.z<r.z?.07:-.07);
-   box(x,1.18,z,.34,.24,.035,[.13,.16,.14]);box(x,1.23,z+(d.z<r.z?.020:-.020),.25,.12,.018,col);
- }
-}
-doors.forEach(corridorSideSign);
+doors.forEach(corridorDoorPlaque);
 
 // M2.9.1 // ROOM SCALE BLOCKOUT
 // Furniture is deliberately simple but now represents the intended capacity.
@@ -512,11 +496,11 @@ psxWhiteboardZ(-5.00,-7.58,1.65);psxShelf(-6.52,-6.55,.72,1.30,.28,[.28,.30,.31]
 // Centrale — six recognizable workstations + central pinboard / plants
 for(const sc of [{x:3.75,z:4.15},{x:5.35,z:4.15},{x:6.95,z:4.15},{x:3.75,z:.05},{x:5.35,z:.05},{x:6.95,z:.05}])psxCrtShell(sc.x,sc.z,.38);
 for(const sc of [{x:3.75,z:3.48},{x:5.35,z:3.48},{x:6.95,z:3.48},{x:3.75,z:.72},{x:5.35,z:.72},{x:6.95,z:.72}])psxChair(sc.x,sc.z,0,[.21,.23,.21]);
-psxPinboardX(2.66,4.38,.86);psxPlant(7.55,4.55);psxPlant(7.55,-.25);box(5.35,.02,2.10,.70,.34,.42,[.29,.31,.28]);
+psxPinboardX(2.66,2.10,1.45);psxPlant(7.55,4.55);psxPlant(7.55,-.25);box(5.35,.02,2.10,.70,.34,.42,[.29,.31,.28]);
 
 // Editoria — proofs, shelves and paired workstation dressing
 psxCrtShell(4.25,-3.55,.44);psxCrtShell(6.35,-3.55,.44);psxChair(4.25,-4.20,0,[.28,.23,.19]);psxChair(6.35,-4.20,0,[.24,.21,.27]);
-psxShelf(7.55,-4.55,.65,1.40,.28,[.31,.29,.26]);psxPinboardX(2.67,-2.18,.86);box(5.30,.765,-3.38,.58,.025,.30,[.72,.68,.58]);
+psxShelf(7.55,-4.55,.65,1.40,.28,[.31,.29,.26]);psxPinboardX(2.67,-3.20,1.40);box(5.30,.765,-3.38,.58,.025,.30,[.72,.68,.58]);
 
 // Interior — material samples + whiteboard
 psxCrtShell(11.65,3.75,.43);psxCrtShell(11.65,.45,.43);psxChair(11.05,3.75,1,[.25,.23,.20]);psxChair(11.05,.45,1,[.24,.22,.20]);
@@ -609,24 +593,14 @@ function psxCeilingStrip(x,z,w=1.2,d=.26){box(x,2.105,z,w,.035,d,[.34,.35,.31]);
 for(const z of [8.3,5.5,2.5,-.5,-3.5,-6.5])psxCeilingStrip(0,z,1.35,.24);
 for(const z of [6.4,2.0,-2.4,-6.3])psxCeilingStrip(8.9,z,1.00,.22);
 
-// M5.1 // Corridoi vivi senza ostacoli: solo elementi fissati alle pareti.
-for(const z of [6.8,3.8,.8,-2.2,-5.2]){
-  psxWallFrameX(-1.66,z,.52,[.34,.43,.34]);
-}
-for(const z of [5.3,1.2,-3.0,-6.0]){
-  psxWallFrameX(8.10,z,.46,[.40,.36,.28]);
-}
-// piccoli estintori/cassette tecniche addossati alla parete, non nel passaggio
-for(const z of [4.9,-.8,-5.8]){box(1.60,.34,z,.18,.58,.16,[.39,.11,.08]);box(1.60,.88,z,.12,.10,.12,[.55,.22,.12]);}
-for(const z of [3.5,-2.0,-6.2]){box(9.66,.36,z,.16,.54,.14,[.20,.25,.22]);box(9.66,.84,z,.10,.08,.10,[.48,.44,.22]);}
-
 
 // Meeting areas: corridor-facing dark-glass panels distinguish them immediately.
 psxGlassPanelX(2.76,6.18,.92);psxGlassPanelX(2.76,9.24,.92);
 psxGlassPanelX(9.88,6.22,.90);psxGlassPanelX(9.88,9.20,.90);
-// M5.1: vetri solo ai lati del varco. L'anta vera viene renderizzata dal sistema porte.
-psxGlassPanelZ(3.08,6.58,.46);psxGlassPanelZ(3.08,8.82,.46);
-psxGlassPanelZ(10.22,6.60,.44);psxGlassPanelZ(10.22,8.80,.44);
+// extra office-style glazed frames so Meet / Direzione stop reading as dark caves
+psxGlassPanelZ(3.02,6.58,.58);psxGlassPanelZ(3.02,8.82,.58);
+psxGlassPanelZ(10.16,6.60,.56);psxGlassPanelZ(10.16,8.80,.56);
+psxGlassPanelX(2.98,7.70,.46);psxGlassPanelX(10.10,7.70,.44);
 psxLowCabinet(4.00,9.25,1.05,.32,[.29,.28,.24]);psxLowCabinet(12.90,9.20,.86,.32,[.24,.24,.22]);
 psxDeskClutter(5.10,7.70);psxDeskClutter(11.65,7.70);
 
@@ -872,31 +846,11 @@ function buildOfficeLiveMesh(now,showDevLightProxies=true){
    const col=st==="ringing"?[.72,.56,.12]:(st==="offline"?[.42,.09,.08]:[.11,.34,.18]);
    box(ph.x+.10,.805,ph.z-.115,.055,.04,.018,col);
  }
- // M5.1 // Porte coerenti: stessa anta, cambia solo lo stato. Meet/Direzione = vetro fumé.
- function liveDoorLeaf(d,closed){
-   const glass=d.room==="SALA MEET"||d.room==="SALA MEET CAPO";
-   const frame=glass?[.24,.16,.10]:[.30,.19,.11];
-   const pane=d.room==="SALA MEET CAPO"?[.07,.12,.12]:[.11,.19,.18];
-   if(d.axis==="x"){
-     const x=closed?d.x:(d.x+(d.x<0?-.18:.18));
-     const z=closed?d.z:(d.z+(d.x<0?-.92:.92));
-     const dw=closed?.10:1.02,dd=closed?1.62:.10;
-     box(x,0,z,dw,1.74,dd,frame);
-     if(glass){box(x+(closed?(d.x<0?.012:-.012):0),.24,z,closed?.045:.78,1.22,closed?1.30:.045,pane);}
-     box(x,.78,z+(closed?.72:0),closed?.14:.06,.10,closed?.08:.14,[.68,.55,.26]);
-   }else{
-     const z=closed?d.z:(d.z+(d.z<0?-.18:.18));
-     const x=closed?d.x:(d.x+(d.z<0?.92:-.92));
-     const dw=closed?1.62:.10,dd=closed?.10:1.02;
-     box(x,0,z,dw,1.74,dd,frame);
-     if(glass){box(x,.24,z+(closed?(d.z<0?.012:-.012):0),closed?1.30:.045,1.22,closed?.045:.78,pane);}
-     box(x+(closed?.72:0),.78,z,closed?.08:.14,.10,closed?.14:.06,[.68,.55,.26]);
-   }
- }
+ // Closed doors are rendered as real leaves. Current story keeps them open.
  for(const d of doors){
-   const isMeet=d.room==="SALA MEET"||d.room==="SALA MEET CAPO";
-   const closed=officeState.doors[d.room]==="closed";
-   if(closed||isMeet)liveDoorLeaf(d,closed);
+   if(officeState.doors[d.room]!=="closed")continue;
+   if(d.axis==="x")box(d.x,0,d.z,.10,1.72,1.10,[.30,.19,.11]);
+   else box(d.x,0,d.z,1.10,1.72,.10,[.30,.19,.11]);
  }
  const arr=new Float32Array(V);restoreV(saved);return arr;
 }
@@ -1099,26 +1053,26 @@ for(const [id,pos] of Object.entries({
 // Reserved for later: Capo, manutentori and visitors will use kind="dynamic"
 // and will NOT change the canonical 17-person fixed staff count.
 const npcHomePositions={
- zia_ale:{x:-.62,z:11.12},
+ zia_ale:{x:-1.55,z:10.55},
  it_manager:{x:-4.05,z:4.00},
- hr_01:{x:-5.10,z:6.25},
- bim_01:{x:-5.55,z:-5.12},bim_02:{x:-4.15,z:-5.12},
+ hr_01:{x:-5.10,z:6.35},
+ bim_01:{x:-5.55,z:-5.05},bim_02:{x:-4.15,z:-5.05},
  central_01:{x:3.75,z:3.48},central_02:{x:5.35,z:3.48},central_03:{x:6.95,z:3.48},
  central_04:{x:3.75,z:.72},central_05:{x:5.35,z:.72},central_06:{x:6.95,z:.72},
- alice_editoria:{x:4.25,z:-4.20},editoria_02:{x:6.35,z:-4.20},
+ alice_editoria:{x:4.55,z:-4.45},editoria_02:{x:6.35,z:-4.45},
  marino_interior:{x:10.55,z:3.25},interior_02:{x:10.85,z:.45},
- render_01:{x:10.95,z:-2.75},render_02:{x:11.70,z:-4.45}
+ render_01:{x:10.85,z:-2.75},render_02:{x:11.55,z:-5.00}
 };
 const npcLunchPositions={
- // CUCINA // 6 — tutti realmente sulle sedie
- zia_ale:{x:-10.90,z:-10.35},alice_editoria:{x:-9.65,z:-10.25},marino_interior:{x:-8.45,z:-10.35},
- hr_01:{x:-10.90,z:-11.90},bim_01:{x:-9.65,z:-12.00},bim_02:{x:-8.45,z:-11.90},
- // SPAZIO A // 6
- central_01:{x:2.25,z:-10.25},central_02:{x:3.70,z:-10.25},central_03:{x:5.15,z:-10.25},
- central_04:{x:2.25,z:-11.85},central_05:{x:3.70,z:-11.85},central_06:{x:5.15,z:-11.85},
+ // CUCINA // 6
+ zia_ale:{x:-11.35,z:-9.80},alice_editoria:{x:-10.15,z:-9.75},marino_interior:{x:-8.85,z:-9.80},
+ hr_01:{x:-11.25,z:-12.05},bim_01:{x:-10.05,z:-12.10},bim_02:{x:-8.80,z:-12.05},
+ // SPAZIO A // 6 — all six Centrale colleagues
+ central_01:{x:2.10,z:-9.75},central_02:{x:3.70,z:-9.70},central_03:{x:5.25,z:-9.75},
+ central_04:{x:2.10,z:-12.10},central_05:{x:3.70,z:-12.15},central_06:{x:5.25,z:-12.10},
  // SALA MEET // 5
- it_manager:{x:4.05,z:6.90},editoria_02:{x:5.35,z:6.90},interior_02:{x:6.65,z:6.90},
- render_01:{x:4.05,z:8.48},render_02:{x:6.65,z:8.48}
+ it_manager:{x:3.65,z:6.55},editoria_02:{x:5.30,z:6.50},interior_02:{x:7.00,z:6.55},
+ render_01:{x:4.35,z:8.85},render_02:{x:6.45,z:8.85}
 };
 function setNpcWorldPosition(id,x,z){
  const n=npcById(id);if(n){n.x=x;n.z=z;}
@@ -1182,71 +1136,6 @@ function npcRightVector(n,camX,camZ){
  const yaw=lunch?0:(npcFacingYaw[n.id]??0);
  return {x:Math.cos(yaw),z:-Math.sin(yaw)};
 }
-// M5.1 // TRUE LOW-POLY 3D NPC RENDERER -----------------------------------------
-const NPC3D=[];
-function nTri(a,b,c,col){for(const v of[a,b,c])NPC3D.push(v[0],v[1],v[2],...col)}
-function nQuad(a,b,c,d,col){nTri(a,b,c,col);nTri(a,c,d,col)}
-function nBox(cx,y,cz,w,h,d,col,yaw=0){
- const c=Math.cos(yaw),sn=Math.sin(yaw),x0=-w/2,x1=w/2,z0=-d/2,z1=d/2,y0=y,y1=y+h;
- const P=(x,yy,z)=>[cx+x*c-z*sn,yy,cz+x*sn+z*c];
- const a=P(x0,y0,z0),b=P(x1,y0,z0),cc=P(x1,y1,z0),dd=P(x0,y1,z0);
- const e=P(x0,y0,z1),f=P(x1,y0,z1),g=P(x1,y1,z1),hh=P(x0,y1,z1);
- nQuad(a,b,cc,dd,col);nQuad(f,e,hh,g,col);nQuad(e,a,dd,hh,col);nQuad(b,f,g,cc,col);nQuad(dd,cc,g,hh,col);
-}
-function nPart(n,yaw,lx,y,lz,w,h,d,col){
- const c=Math.cos(yaw),sn=Math.sin(yaw);
- const x=n.x+lx*c-lz*sn,z=n.z+lx*sn+lz*c;nBox(x,y,z,w,h,d,col,yaw);
-}
-const seatedHome=new Set(["zia_ale","hr_01","bim_01","bim_02","central_01","central_02","central_03","central_04","central_05","central_06","alice_editoria","editoria_02","interior_02","render_01","render_02"]);
-function npcIsLunchPose(n){return n.kind==="staff"&&n.z<-8.7}
-function npcIsSeated3D(n){return npcIsLunchPose(n)||seatedHome.has(n.id)}
-function npcYaw3D(n,camX,camZ){
- if(npcShouldTrackCamera(n)){const dx=camX-n.x,dz=camZ-n.z;return Math.atan2(dx,dz);}
- return npcFacingYaw[n.id]??0;
-}
-function drawHuman3D(n,camX,camZ){
- const yaw=npcYaw3D(n,camX,camZ),pal=n.pal,feat=n.features||{},talk=activeTalkingNpcId===n.id,seated=npcIsSeated3D(n);
- // supernatural figures remain deliberately tall and faceless
- if(n.id==="corridor_figure"||n.id==="other_office_figure"){
-   nPart(n,yaw,0,.06,0,.40,1.18,.28,pal.body);nPart(n,yaw,0,1.22,0,.34,.28,.30,pal.skin);return;
- }
- if(n.id==="capo"&&currentDay===4&&storyStep>=81){
-   const hover=.40+Math.sin(performance.now()/420)*.06;
-   nPart(n,yaw,0,hover,0,.62,.78,.42,[.10,.055,.09]);
-   nPart(n,yaw,0,hover+.78,-.01,.42,.34,.36,[.38,.15,.20]);
-   nPart(n,yaw,-.22,hover+1.05,0,.12,.26,.12,[.08,.03,.06]);nPart(n,yaw,.22,hover+1.05,0,.12,.26,.12,[.08,.03,.06]);
-   nPart(n,yaw,-.38,hover+.48,0,.13,.62,.16,[.12,.06,.10]);nPart(n,yaw,.38,hover+.48,0,.13,.62,.16,[.12,.06,.10]);return;
- }
- if(seated){
-   // torso on chair, thighs forward, shins down
-   nPart(n,yaw,-.11,.08,-.28,.12,.38,.13,pal.legs);nPart(n,yaw,.11,.08,-.28,.12,.38,.13,pal.legs);
-   nPart(n,yaw,-.12,.43,-.16,.14,.12,.40,pal.legs);nPart(n,yaw,.12,.43,-.16,.14,.12,.40,pal.legs);
-   nPart(n,yaw,0,.52,0,.46,.42,.30,pal.body);
-   nPart(n,yaw,-.30,.55,0,.12,.37,.14,pal.body);nPart(n,yaw,.30,.55,0,.12,.37,.14,pal.body);
-   nPart(n,yaw,0,.96,-.01,.32,.30,.30,pal.skin);nPart(n,yaw,0,1.20,.02,.34,.10,.32,pal.hair);
- }else{
-   nPart(n,yaw,-.12,.08,0,.13,.55,.15,pal.legs);nPart(n,yaw,.12,.08,0,.13,.55,.15,pal.legs);
-   nPart(n,yaw,-.12,.01,-.015,.18,.09,.28,[.08,.08,.075]);nPart(n,yaw,.12,.01,-.015,.18,.09,.28,[.08,.08,.075]);
-   nPart(n,yaw,0,.63,0,.48,.47,.31,pal.body);
-   if(talk){nPart(n,yaw,-.31,.72,-.05,.12,.40,.14,pal.body);nPart(n,yaw,.31,.86,-.12,.12,.38,.14,pal.body);}
-   else{nPart(n,yaw,-.31,.66,0,.12,.42,.14,pal.body);nPart(n,yaw,.31,.66,0,.12,.42,.14,pal.body);}
-   nPart(n,yaw,0,1.10,-.01,.33,.31,.31,pal.skin);nPart(n,yaw,0,1.34,.02,.35,.10,.33,pal.hair);
- }
- // face/hair traits on front of the head
- const headBase=seated?.96:1.10;
- nPart(n,yaw,-.07,headBase+.14,-.165,.045,.045,.025,[.045,.05,.045]);nPart(n,yaw,.07,headBase+.14,-.165,.045,.045,.025,[.045,.05,.045]);
- if(feat.glasses){nPart(n,yaw,-.075,headBase+.13,-.184,.12,.055,.025,[.025,.03,.025]);nPart(n,yaw,.075,headBase+.13,-.184,.12,.055,.025,[.025,.03,.025]);}
- if(feat.stripes){const y0=seated?.59:.70;for(let i=0;i<3;i++)nPart(n,yaw,0,y0+i*.11,-.165,.46,.045,.018,pal.accent);}
- if(feat.longHair){const hb=seated?1.02:1.16;nPart(n,yaw,-.16,hb,.10,.10,.42,.14,pal.hair);nPart(n,yaw,.16,hb,.10,.10,.42,.14,pal.hair);}
-}
-function renderNpc3D(vp,camX,camZ){
- NPC3D.length=0;for(const n of npcSprites){if(isNpcVisible(n.id))drawHuman3D(n,camX,camZ)}
- if(!NPC3D.length)return;
- gl.useProgram(pr);gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.enableVertexAttribArray(aP);gl.enableVertexAttribArray(aC);
- gl.vertexAttribPointer(aP,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(aC,3,gl.FLOAT,false,24,12);
- gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(NPC3D),gl.DYNAMIC_DRAW);gl.uniformMatrix4fv(uM,false,vp);gl.drawArrays(gl.TRIANGLES,0,NPC3D.length/6);
-}
-
 function renderNpcSprites(vp,camX,camZ){
  gl.useProgram(spritePr);gl.bindBuffer(gl.ARRAY_BUFFER,spriteBuf);
  gl.enableVertexAttribArray(spPos);gl.enableVertexAttribArray(spUV);
@@ -1533,7 +1422,7 @@ function showDayBanner(){
  dayBannerEl.innerHTML=`<strong>${d.label}</strong><span>INIZIO TURNO // ORE ${t} // ${d.chapter}</span>`;
  dayBannerEl.classList.add("on");
  clearTimeout(dayBannerTimer);
- dayBannerTimer=setTimeout(()=>dayBannerEl.classList.remove("on"),2300);
+ dayBannerTimer=setTimeout(()=>dayBannerEl.classList.remove("on"),1450);
 }
 function setWeekDay(index,announce=false){
  currentDay=Math.max(0,Math.min(WEEK_DAYS.length-1,index|0));
@@ -1693,7 +1582,7 @@ function applySettings(){
 function setCrtEnabled(v){saveSettings({crt:!!v});applySettings();toast(v?"CRT // ON":"CRT // OFF");}
 function saveProgress(){
  if(!gameStarted||gameEnded)return;
- safeWrite(SAVE_KEY,{version:"M5.1",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
+ safeWrite(SAVE_KEY,{version:"M4.7",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
  refreshTitleMeta();
 }
 function refreshTitleMeta(){
@@ -3369,8 +3258,8 @@ gl.bufferData(gl.ARRAY_BUFFER,wallV,gl.DYNAMIC_DRAW);
 gl.uniformMatrix4fv(uM,false,vp);
 gl.drawArrays(gl.TRIANGLES,0,wallV.length/6);
 
-// M5.1 // Veri NPC 3D low-poly, depth-tested nel mondo.
-renderNpc3D(vp,camX,camZ);
+// M2.9 NPC billboard layer: depth-tested against the world, transparent pixels discarded.
+renderNpcSprites(vp,camX,camZ);
 
 // Player is visible only in the 3/4 development camera.
 if(viewMode==="dev")renderPlayerSprite(vp,camX,camZ);
