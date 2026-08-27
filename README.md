@@ -1,6 +1,20 @@
-# IT SHIFT — M4.0 COMPLETE WEEK PLAYTEST
+# IT SHIFT — M4.2 STAGING & POLISH
 
-Build giocabile completa LUNEDI–VENERDI, pensata come vertical slice della versione finale.
+Build root-ready basata sulla M4.0 completa. Mantiene storia e tre finali, ma rifinisce regia, ritmo e NPC speciali.
+
+## Fix M4.2
+- balloon/dialoghi piu grandi e coerenti con l'estetica PSX
+- giornate distribuite meglio nell'orario, con stacchi temporali automatici
+- secondo pranzo il mercoledi
+- micro-cinematic: Lorenzo accompagna il protagonista verso Direzione il martedi
+- Capo nel climax reso demoniaco e fluttuante, non piu incastrato nella scrivania
+- Lorenzo nel reveal finale aspetta dietro/in Direzione, non in Segreteria
+- DON compare martedi, mercoledi e giovedi; payoff ampliato
+- identita visive canoniche: DON cingalese; Lorenzo capelli biondi lunghi; Betty maglia a righe; IT Manager occhiali
+- LED del rack server riallineati fisicamente al rack
+- audio ambiente arricchito con piccoli suoni d'ufficio; venerdi il paesaggio sonoro si svuota
+- Galleria Digitale resta il nome definitivo
+- LMN_01 resta volutamente discreto
 
 ## Controlli
 - W / S — avanti / indietro
@@ -11,17 +25,5 @@ Build giocabile completa LUNEDI–VENERDI, pensata come vertical slice della ver
 - M — audio on/off
 - F3 — camera 3/4 di sviluppo
 
-## M4.0
-- settimana con progressione automatica
-- Giovedi e Venerdi giocabili
-- tre finali distinti
-- menu Nuovo turno / Continua
-- salvataggio locale
-- primo collegamento nascosto con l'antologia
-- Galleria Digitale come nome definitivo
-
-### Test rapido
-La build normale nasconde il menu DEV. Per abilitarlo, aggiungi `?dev=1` alla fine dell'URL della pagina.
-
-### Nota grafica
-Questa M4.0 chiude prima il gameplay e la struttura narrativa. Gli NPC usano ancora il sistema billboard PSX della build precedente; il pass con veri personaggi 3D low-poly resta il prossimo art pass.
+## DEV
+Aggiungi `?dev=1` all'URL per mostrare checkpoint e menu DEV.

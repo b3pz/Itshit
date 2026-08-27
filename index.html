@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>IT SHIFT // M4.0 PLAYTEST</title>
+<title>IT SHIFT // M4.2 STAGING & POLISH</title>
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;color:#dce5df;font-family:Consolas,monospace}
 #app{position:fixed;inset:0} canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
@@ -62,12 +62,15 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 }
 #interactionPrompt.on{opacity:1}
 #interactionPrompt b{color:#ffc857}
-#dialogue{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);z-index:40;width:min(760px,88vw);display:none;pointer-events:auto}
+#dialogue{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);z-index:40;width:min(940px,92vw);display:none;pointer-events:auto}
 #dialogue.on{display:block}
-.dialogueBox{background:#06100bf4;border:3px solid #526a5b;box-shadow:7px 7px #000;padding:12px 14px;cursor:pointer;user-select:none}
-#dialogueName{color:#b7ff4a;font:900 11px Consolas,monospace;letter-spacing:1px;margin-bottom:7px}
-#dialogueText{color:#e0e8e2;font:12px/1.45 Consolas,monospace;min-height:36px}
-#dialogueHint{text-align:right;color:#87978c;font:8px Consolas,monospace;margin-top:8px}
+.dialogueBox{background:#050907f5;border:3px solid #657469;box-shadow:9px 9px #000;padding:18px 20px;cursor:pointer;user-select:none}
+#dialogueName{color:#b7ff4a;font:900 13px Consolas,monospace;letter-spacing:1.8px;margin-bottom:10px;border-bottom:1px solid #33483b;padding-bottom:7px}
+#dialogueText{color:#edf2ee;font:15px/1.5 Consolas,monospace;min-height:50px;max-width:860px}
+#dialogueHint{text-align:right;color:#87978c;font:9px Consolas,monospace;margin-top:10px}
+#timeJump{position:absolute;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;background:#020302e8;opacity:0;pointer-events:none;transition:opacity .18s}
+#timeJump.on{opacity:1}#timeJump strong{font:900 30px Consolas,monospace;letter-spacing:5px;color:#dce8df}#timeJump span{display:block;margin-top:8px;text-align:center;color:#8fa196;font:900 9px Consolas,monospace;letter-spacing:2px}
+#cinematicBars{position:absolute;inset:0;z-index:36;pointer-events:none;opacity:0;transition:opacity .2s}#cinematicBars.on{opacity:1}#cinematicBars:before,#cinematicBars:after{content:"";position:absolute;left:0;right:0;height:9vh;background:#000}#cinematicBars:before{top:0}#cinematicBars:after{bottom:0}
 @media(hover:none),(pointer:coarse){
  #interactionPrompt{bottom:120px;max-width:58vw;white-space:normal;text-align:center}
  #dialogue{bottom:126px;width:88vw}
@@ -120,13 +123,13 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <canvas id="c"></canvas>
 <div id="atmoOverlay"></div><div id="psxNoise"></div><div id="flickerOverlay"></div><div id="fpCrosshair">+</div><div id="fpBadge">GAME // FIRST PERSON</div>
 <div id="hud">
-<div class="card"><b>IT SHIFT // M4.0</b><span id="room">INGRESSO / SEGRETERIA</span></div>
+<div class="card"><b>IT SHIFT // M4.2</b><span id="room">INGRESSO / SEGRETERIA</span></div>
 <div id="objective" class="card"><b>OBIETTIVO</b><span id="objText">PARLA CON ZIA ALE</span></div>
 <div id="clockCard" class="card"><b>ORARIO</b><span id="clock">09:00</span></div>
 <div id="dayCard" class="card"><b>GIORNO</b><span id="day">LUNEDI</span></div>
 </div>
 <div id="toast"></div>
-<div id="dayBanner"><strong>LUNEDI</strong><span>PRIMO TURNO</span></div>
+<div id="dayBanner"><strong>LUNEDI</strong><span>PRIMO TURNO</span></div><div id="timeJump"><div><strong>13:00</strong><span>DOPO QUALCHE ORA</span></div></div><div id="cinematicBars"></div>
 <div id="interactionPrompt"></div>
 <div id="dialogue"><div class="dialogueBox"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">SPAZIO / INVIO / TOCCA — CONTINUA</div></div></div>
 <div id="help">W/S — AVANTI/INDIETRO · A/D — STRAFE/DIAGONALE · Q/E — RUOTA · SPAZIO — INTERAGISCI · F3 — 3/4 DEV · TAB — MAPPA</div>
@@ -142,7 +145,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <div id="titleScreen">
   <div class="releaseCard">
     <div class="releaseLogo">IT SHIFT</div>
-    <div class="releaseSub">M4.0 // COMPLETE WEEK PLAYTEST<br>LUNEDI — VENERDI // 3 FINALI</div>
+    <div class="releaseSub">M4.2 // STAGING & POLISH<br>LUNEDI — VENERDI // 3 FINALI</div>
     <button id="newGameBtn" class="releaseBtn" type="button">&gt; NUOVO TURNO</button>
     <button id="continueBtn" class="releaseBtn" type="button">&gt; CONTINUA</button>
     <button id="resetSaveBtn" class="releaseBtn" type="button">&gt; CANCELLA SALVATAGGIO</button>
@@ -152,7 +155,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <div id="choiceScreen" class="hidden">
   <div class="releaseCard">
     <div class="choiceTitle">LORENZO // UNA SOLA SCELTA</div>
-    <div class="choiceText">Il Capo non c'è più. Lorenzo ti offre un posto dall'altra parte del sistema.</div>
+    <div class="choiceText">Il Capo non c'è più. Lorenzo era già lì, dietro la Direzione. Ti offre un posto dall'altra parte del sistema.</div>
     <button class="releaseBtn endingChoice" data-ending="good" type="button">SPEZZA IL COLLEGAMENTO</button>
     <button class="releaseBtn endingChoice" data-ending="normal" type="button">VOGLIO SOLO USCIRE</button>
     <button class="releaseBtn endingChoice" data-ending="evil" type="button">ACCETTA L'OFFERTA</button>
@@ -173,7 +176,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <div id="devMenu">
   <div class="devMenuCard">
     <div class="devTitle">IT SHIFT // WEEK SYSTEM</div>
-    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.0 playtest completo. I checkpoint DEV sono disattivati nella build release.</div>
+    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.2 staging/polish. I checkpoint DEV sono disattivati nella build release.</div>
     <div class="devWeekGrid">
       <button class="devCheckpoint" data-cp="monday"><strong>LUNEDI</strong><span>09:00<br>Primo turno</span></button>
       <button class="devCheckpoint" data-cp="tuesday"><strong>MARTEDI</strong><span>09:05<br>Voci di corridoio</span></button>
@@ -185,10 +188,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
     <div class="devGrid"><button class="devCheckpoint" data-cp="visual_slice"><strong>IT + HR — ART TEST</strong><span>CRT, pavimento, props, luci e palette PSX quasi-definitiva</span></button></div>
     <div class="devDivider">MARTEDI // CHECKPOINT RAPIDI LORE + NPC</div>
     <div class="devGrid">
-      <button class="devCheckpoint" data-cp="tue_betty"><strong>09:12 — BETTY</strong><span>Badge temporaneo · primo accenno allo stagista precedente</span></button>
-      <button class="devCheckpoint" data-cp="tue_lorenzo"><strong>09:18 — LORENZO</strong><span>Arrivo elettricista · primo alleato</span></button>
-      <button class="devCheckpoint" data-cp="tue_direzione"><strong>09:23 — PORTA DIREZIONE</strong><span>Badge negato · quadro Q-DIR</span></button>
-      <button class="devCheckpoint" data-cp="tue_capo"><strong>09:33 — CAPO</strong><span>Prima apparizione del Capo</span></button>
+      <button class="devCheckpoint" data-cp="tue_betty"><strong>10:10 — BETTY</strong><span>Badge temporaneo · primo accenno allo stagista precedente</span></button>
+      <button class="devCheckpoint" data-cp="tue_lorenzo"><strong>10:45 — LORENZO</strong><span>Arrivo elettricista · primo alleato</span></button>
+      <button class="devCheckpoint" data-cp="tue_direzione"><strong>10:52 — PORTA DIREZIONE</strong><span>Badge negato · quadro Q-DIR</span></button>
+      <button class="devCheckpoint" data-cp="tue_capo"><strong>11:10 — CAPO</strong><span>Prima apparizione del Capo</span></button>
     </div>
     <div class="devDivider">LUNEDI // CHECKPOINT RAPIDI PER TEST MISSIONI</div>
     <div class="devGrid">
@@ -201,10 +204,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
       <button class="devCheckpoint" data-cp="m32_start"><strong>13:32 — M3.2 INIZIO</strong><span>Ticket BIM 02</span></button>
       <button class="devCheckpoint" data-cp="manifestation"><strong>13:52 — APPARIZIONE</strong><span>Test diretto figura nel corridoio</span></button>
     </div>
-    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.0 COMPLETE WEEK</span></div>
+    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.2 STAGING & POLISH</span></div>
   </div>
 </div>
-<div id="version">M4.0 // COMPLETE WEEK PLAYTEST</div>
+<div id="version">M4.2 // STAGING & POLISH</div>
 <div id="mobile"><div id="stick"><i></i></div><button id="turnL" class="turnBtn">Q</button><button id="turnR" class="turnBtn">E</button><button id="act">␣<small>INTERAGISCI</small></button></div>
 </div>
 <script src="game.js"></script>
