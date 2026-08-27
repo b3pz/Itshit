@@ -755,7 +755,7 @@ function syncOfficeStateFromStory(){
    setDeviceState("server_rack_02","online");setDeviceState("printer_main","ready");
    setDeviceState("render_04","off");setDeviceState("interior_pc_03","ready");setDeviceState("bim_pc_02","ready");
    // Direzione is deliberately inaccessible until the Capo opens it himself.
-   setDoorState("SALA MEET CAPO",storyStep===55?"open":"closed");
+   setDoorState("SALA MEET CAPO",storyStep>=55?"open":"closed");
    if(storyStep>=53&&storyStep<=55)setRoomLight("SALA MEET CAPO","flicker");
    return;
  }
@@ -2223,7 +2223,13 @@ function handleTuesdayInteraction(it){
        "Benvenuto. Spero che il primo giorno non ti abbia spaventato.",
        "Qui all'inizio sembra tutto piu complicato di quanto sia.",
        "Venerdi facciamo sempre un piccolo punto con i nuovi. Ci vediamo allora."
-     ],()=>setStoryStep(56,"PASSA DA BETTY"));
+     ],()=>{
+       // 11:10 -> 14:15 is a real time skip: resume safely outside Direzione.
+       // This prevents the player from being trapped inside the room when state sync runs.
+       player.x=8.82;player.z=7.70;player._lastRoom=roomAt(player.x,player.z);
+       if(typeof cameraState!=="undefined"){cameraState.x=player.x;cameraState.z=player.z;}
+       setStoryStep(56,"14:15 // PIU TARDI");
+     });
    }
    return true;
  }
