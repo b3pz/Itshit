@@ -1,4 +1,4 @@
-# IT SHIFT — M4.7 UI / PAUSE / SAVE / ENVIRONMENT FIX
+# IT SHIFT — M4.8 PRESENTATION PASS
 
 Build root-ready per GitHub Pages.
 
@@ -8,41 +8,21 @@ Build root-ready per GitHub Pages.
 - `itshift_menu.png`
 - `README.md`
 
-## M4.7
+## Focus M4.8
+- HUD più integrato e meno da prototipo
+- task/obiettivo centrato meglio nella UI
+- dialoghi grandi ma più sobri e coerenti con il gioco
+- pausa spostata su `P`
+- minimappa permanente rimossa (resta la mappa su `TAB`)
+- rimozione del riferimento reale `Archea` nei testi
 
-### Testi e font
-- dialoghi molto più grandi
-- nuovo font `Courier New` / monospace di fallback
-- nome NPC più grande
-- hint di avanzamento più leggibile
-- HUD, obiettivo, prompt e toast ingranditi
-- menu iniziale statico M4.6 mantenuto invariato
+## Controlli
+- `WASD` muovi
+- `Q / E` ruota
+- `SPAZIO` interagisci
+- `TAB` mappa
+- `P` pausa
+- `F5` salvataggio rapido
 
-### Pausa e salvataggio
-- `ESC` apre il menu **PAUSA**
-- PAUSA contiene:
-  - Riprendi
-  - Salva partita
-  - Opzioni
-  - Salva e torna al menu
-- `F5` = salvataggio rapido
-- il salvataggio conserva giorno, step narrativo, posizione e orientamento
-- feedback visivo `PARTITA SALVATA`
-- a ogni cambio giorno compare `CHECKPOINT SALVATO`
-
-### Porte
-- corretta la misura dei telai: ora coprono realmente il vano da 1.80 unità
-- i montanti arrivano fino ai bordi del muro e non devono più apparire sospesi/staccati
-
-### Corridoi
-- rimossi i pochi cestini/oggetti a pavimento usati come riempitivo
-- aggiunte targhette e piccole luci integrate ai muri/telai delle porte
-- nessun nuovo arredo viene messo nel percorso di passaggio
-
-### Conservato dalla M4.6
-- menu statico cliccabile a 3 hotspot
-- NPC normali con orientamento stabile; sguardo inquietante solo nelle fasi horror
-- postazioni accessibili dal lato corretto
-- Stampa 3D open-frame
-- Server/Magazzino IT
-- tre finali e LMN_01
+## Note
+Questa build è una passata di presentation/UI. Non sostituisce ancora gli NPC 2D con modelli 3D low-poly: quello resta il prossimo step grosso.

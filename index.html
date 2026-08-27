@@ -293,6 +293,44 @@ html,body{font-family:"Courier New",Courier,monospace}
  .pauseTitle{font-size:28px}.pauseBtn{font-size:14px}
 }
 
+
+/* ------------------------------------------------------------------
+   M4.8 // PRESENTATION PASS
+-------------------------------------------------------------------*/
+#fpBadge{display:none!important}
+#miniWrap{display:none!important}
+#help{opacity:.56;padding:4px 8px!important;font-size:8px!important;background:rgba(5,8,6,.56)!important;border:1px solid #223026!important;box-shadow:none!important}
+#hud{left:12px!important;top:12px!important;width:min(460px,calc(100vw - 24px))!important;display:grid!important;grid-template-columns:1fr auto!important;gap:0!important;background:rgba(2,7,5,.78)!important;border:1px solid rgba(138,163,145,.55)!important;box-shadow:2px 2px 0 #000!important;backdrop-filter:blur(1px)}
+#hud .card{padding:7px 10px!important;background:transparent!important;border:0!important;box-shadow:none!important;min-width:0!important;width:auto!important}
+#hud .card:first-child{grid-column:1/3!important;display:flex!important;justify-content:space-between!important;align-items:baseline!important;border-bottom:1px solid rgba(75,96,84,.75)!important;padding-bottom:6px!important}
+#hud .card:first-child b{font:900 13px/1 "Courier New",Courier,monospace!important;letter-spacing:2.4px!important;color:#b9ff52!important}
+#hud .card:first-child span{font:700 9px/1.1 "Courier New",Courier,monospace!important;color:#9eb0a2!important;text-transform:uppercase;letter-spacing:1px!important;margin-top:0!important}
+#objective{grid-column:1/3!important;padding:10px 12px 9px!important;border-bottom:1px solid rgba(75,96,84,.75)!important;text-align:center!important}
+#objective b{display:block!important;font:700 8px/1 "Courier New",Courier,monospace!important;color:#d2b54e!important;letter-spacing:2px!important;margin-bottom:6px!important}
+#objective span{display:block!important;margin:0!important;font:900 14px/1.25 "Courier New",Courier,monospace!important;color:#eef3ef!important;letter-spacing:.2px!important;text-wrap:balance!important}
+#objective span:before{content:none!important}
+#clockCard,#dayCard{padding-top:7px!important;padding-bottom:7px!important}
+#clockCard b,#dayCard b{font-size:8px!important;letter-spacing:1.6px!important;color:#84978c!important}
+#clockCard span,#dayCard span{font:900 12px/1 "Courier New",Courier,monospace!important;color:#edf2ee!important;letter-spacing:1px!important}
+#clockCard{border-right:1px solid rgba(75,96,84,.75)!important}
+#clockCard span{font-size:13px!important}
+#dayCard{text-align:right!important}
+#dayCard b,#dayCard span{display:block!important}
+#interactionPrompt{bottom:18px!important;background:rgba(4,9,6,.9)!important;border:1px solid rgba(104,126,111,.9)!important;padding:5px 10px!important;font:900 12px/1 "Courier New",Courier,monospace!important;box-shadow:2px 2px 0 #000!important}
+#dialogue{width:min(1080px,94vw)!important;bottom:18px!important}
+.dialogueFrame{grid-template-columns:1fr!important;border:1px solid rgba(120,140,128,.9)!important;box-shadow:3px 3px 0 #000!important;background:rgba(4,8,6,.94)!important}
+.dialogueAccent{display:none!important}
+.dialogueInner{padding:16px 18px 12px 18px!important;border-left:0!important;background:transparent!important}
+#dialogueName{font:900 18px/1 "Courier New",Courier,monospace!important;color:#b9ff52!important;letter-spacing:2px!important;border-bottom:1px solid rgba(62,78,69,.9)!important;margin-bottom:12px!important;min-width:unset!important}
+#dialogueText{font:700 24px/1.38 "Courier New",Courier,monospace!important;color:#f1f5f1!important;max-width:100%!important;min-height:84px!important}
+#dialogueHint{font:700 11px/1 "Courier New",Courier,monospace!important;color:#8da094!important}
+.pauseCard{width:min(520px,90vw)!important;background:rgba(2,7,5,.92)!important;border:1px solid rgba(138,163,145,.55)!important;box-shadow:5px 5px 0 #000!important;padding:22px!important}
+.pauseTitle{font-size:28px!important;letter-spacing:5px!important}
+.pauseMeta{font-size:12px!important}
+.pauseBtn{padding:13px 14px!important;font-size:14px!important;border-width:1px!important}
+.pauseHint{font-size:10px!important}
+@media(max-width:760px){#hud{width:calc(100vw - 20px)!important}#dialogue{bottom:112px!important;width:94vw!important}#dialogueName{font-size:15px!important}#dialogueText{font-size:18px!important;min-height:72px!important}#interactionPrompt{bottom:114px!important;font-size:11px!important}.pauseTitle{font-size:24px!important}}
+
 </style>
 </head>
 <body>
@@ -309,7 +347,7 @@ html,body{font-family:"Courier New",Courier,monospace}
 <div id="dayBanner"><strong>LUNEDI</strong><span>PRIMO TURNO</span></div><div id="timeJump"><div><strong>13:00</strong><span>DOPO QUALCHE ORA</span></div></div><div id="cinematicBars"></div>
 <div id="interactionPrompt"></div>
 <div id="dialogue"><div class="dialogueFrame"><div class="dialogueAccent"></div><div class="dialogueInner"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">SPAZIO / INVIO / TOCCA — CONTINUA</div></div></div></div>
-<div id="help">WASD — MUOVI · Q/E — RUOTA · SPAZIO — INTERAGISCI · TAB — MAPPA · ESC — PAUSA · F5 — SALVA</div>
+<div id="help">WASD — MUOVI · Q/E — RUOTA · SPAZIO — INTERAGISCI · TAB — MAPPA · P — PAUSA · F5 — SALVA</div>
 <div id="miniWrap"><canvas id="miniMap" width="240" height="170"></canvas><span>● PLAYER ↑ &nbsp; ◎ OBIETTIVO &nbsp; ○ PORTA · TAB: NPC</span></div>
 <div id="bigMap" class="hidden">
   <div class="bigMapCard">
@@ -375,7 +413,7 @@ html,body{font-family:"Courier New",Courier,monospace}
     <button id="manualSaveBtn" class="pauseBtn" type="button">&gt; SALVA PARTITA</button>
     <button id="pauseOptionsBtn" class="pauseBtn" type="button">&gt; OPZIONI</button>
     <button id="saveMenuBtn" class="pauseBtn" type="button">&gt; SALVA E TORNA AL MENU</button>
-    <div class="pauseHint">ESC — RIPRENDI &nbsp; // &nbsp; F5 — SALVATAGGIO RAPIDO</div>
+    <div class="pauseHint">P — RIPRENDI &nbsp; // &nbsp; F5 — SALVATAGGIO RAPIDO</div>
   </div>
 </div>
 <div id="saveFlash">PARTITA SALVATA</div>
