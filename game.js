@@ -38,7 +38,7 @@ function rack(x,z){solids.push({x,z,w:.7,d:.65});box(x,0,z,.7,1.75,.65,[.1,.15,.
 
 
 // -----------------------------------------------------------------------------
-// M3.5 // PSX VISUAL BASE + THE OTHER OFFICE
+// M4.0 // COMPLETE WEEK PLAYTEST
 // A small near-release art-language test covering REPARTO IT + HR + their corridor.
 // IMPORTANT: these are visual-only props; no new solids/collisions are introduced.
 // The frozen M2.9.2 architecture and all M3.4 gameplay remain unchanged.
@@ -120,7 +120,7 @@ const rooms=[
  // SOUTH // larger shared / social rooms before M3.0 props are mounted
  {name:"CUCINA",x:-9.65,z:-11.0,w:5.0,d:4.6,col:[.25,.22,.18],capacity:6},
  {name:"BAGNI",x:-5.45,z:-11.0,w:2.6,d:4.6,col:[.18,.22,.21],capacity:2},
- {name:"RIFUGIO DIGITALE",x:-1.6,z:-11.0,w:4.4,d:4.6,col:[.18,.20,.26],capacity:3},
+ {name:"GALLERIA DIGITALE",x:-1.6,z:-11.0,w:4.4,d:4.6,col:[.18,.20,.26],capacity:3},
  {name:"SPAZIO A",x:3.7,z:-11.0,w:5.2,d:4.6,col:[.20,.25,.22],capacity:6},
  {name:"STAMPANTI",x:8.1,z:-11.0,w:2.6,d:4.6,col:[.23,.23,.20],capacity:2},
  {name:"STAMPA 3D",x:11.1,z:-11.0,w:2.8,d:4.6,col:[.19,.23,.23],capacity:2}
@@ -148,7 +148,7 @@ const doors=[
  {room:"RENDERISTI",x:9.7,z:-3.6,axis:"x"},
  {room:"CUCINA",x:-9.65,z:-8.7,axis:"z"},
  {room:"BAGNI",x:-5.45,z:-8.7,axis:"z"},
- {room:"RIFUGIO DIGITALE",x:-1.6,z:-8.7,axis:"z"},
+ {room:"GALLERIA DIGITALE",x:-1.6,z:-8.7,axis:"z"},
  {room:"SPAZIO A",x:3.7,z:-8.7,axis:"z"},
  {room:"STAMPANTI",x:8.1,z:-8.7,axis:"z"},
  {room:"STAMPA 3D",x:11.1,z:-8.7,axis:"z"}
@@ -334,7 +334,7 @@ desk(5.45,7.70,3.25,1.05); desk(11.90,7.70,2.60,.95);
 
 // Shared south rooms: intentionally generous before M3.0 props/NPC population.
 desk(-9.65,-11.10,2.80,.85);               // cucina table / island
- desk(-1.60,-11.00,2.00,.65);               // rifugio digitale
+ desk(-1.60,-11.00,2.00,.65);               // galleria digitale
  desk(3.70,-11.00,2.80,.82);                 // spazio A main table
 
 // M3.4.2 // FINAL-STYLE SAMPLE: REPARTO IT + HR + short central corridor.
@@ -390,6 +390,11 @@ box(8.10,.80,-11.00,.44,.08,.40,[.49,.50,.45]);
 box(9.58,.90,7.05,.06,.24,.15,[.14,.18,.15]);
 box(9.55,.58,8.72,.08,.72,.46,[.22,.24,.21]);
 box(9.50,.76,8.72,.025,.10,.28,[.50,.42,.16]);
+// M4.0 // Main exit visual + badge reader. Interaction stays inside the room,
+// so the north wall remains a deliberate boundary until the story allows exit.
+box(0,0,12.53,1.45,1.88,.055,[.24,.20,.15]);
+box(.73,.86,12.49,.055,.24,.14,[.13,.18,.15]);
+box(.72,.94,12.455,.025,.055,.09,[.58,.48,.17]);
 
 
 const interactables=[
@@ -413,7 +418,9 @@ const interactables=[
  {id:"direzione_panel",label:"QUADRO ELETTRICO DIREZIONE",x:9.28,z:8.72,range:1.35,type:"device"},
  // M3.5 // Wednesday lore devices
  {id:"legacy_terminal",label:"TERMINALE INVENTARIO LEGACY",x:-4.22,z:-2.22,range:1.42,type:"device"},
- {id:"hr_archive_box",label:"ARCHIVIO HR",x:-6.48,z:8.20,range:1.28,type:"device"}
+ {id:"hr_archive_box",label:"ARCHIVIO HR",x:-6.48,z:8.20,range:1.28,type:"device"},
+ {id:"don",label:"DON",x:-5.72,z:-2.38,range:1.45,type:"npc"},
+ {id:"main_exit",label:"USCITA PRINCIPALE",x:0,z:12.15,range:1.75,type:"device"}
 ];
 
 // -----------------------------------------------------------------------------
@@ -503,13 +510,29 @@ function syncOfficeStateFromStory(){
    }
    return;
  }
- if(currentDay>=3){
+ if(currentDay===3){
    for(const r of rooms)setRoomLight(r.name,"on");
    for(const d of doors)setDoorState(d.room,"open");
    for(const sc of officeScreens)setDeviceState(sc.id,"on");
    for(const ph of officePhones)setDeviceState(ph.id,"idle");
    setDeviceState("server_rack_02","online");setDeviceState("printer_main","ready");
    setDeviceState("render_04","off");setDeviceState("interior_pc_03","ready");setDeviceState("bim_pc_02","ready");
+   setDoorState("SALA MEET CAPO","closed");
+   return;
+ }
+ if(currentDay===4){
+   for(const r of rooms)setRoomLight(r.name,"on");
+   for(const d of doors)setDoorState(d.room,"open");
+   for(const sc of officeScreens)setDeviceState(sc.id,"on");
+   for(const ph of officePhones)setDeviceState(ph.id,"idle");
+   setDeviceState("server_rack_02","online");setDeviceState("printer_main","ready");
+   setDeviceState("render_04","off");setDeviceState("interior_pc_03","ready");setDeviceState("bim_pc_02","ready");
+   setDoorState("SALA MEET CAPO",storyStep>=80?"open":"closed");
+   if(storyStep>=82){
+     for(const r of rooms)setRoomLight(r.name,((Math.floor(Math.abs(r.x*2+r.z*3))%3)===0)?"flicker":"off");
+     for(const sc of officeScreens)setDeviceState(sc.id,sc.id==="legacy_terminal"?"error":"off");
+     for(const ph of officePhones)setDeviceState(ph.id,"offline");
+   }
    return;
  }
  // Monday story drives visible device state, but never changes geometry.
@@ -660,6 +683,7 @@ const npcSprites=[
  // M3.4 // Tuesday dynamic cast. These do not change the canonical 17 fixed staff.
  {id:"lorenzo",name:"LORENZO",role:"ELETTRICISTA",kind:"dynamic",day:1,x:-.75,z:9.95,w:.74,h:1.40,from:51,to:55,pal:{body:"#7a6335",accent:"#d3a84c",legs:"#333127",skin:"#c99170",hair:"#3b3029",light:"#e0bd67"}},
  {id:"capo",name:"CAPO",role:"DIREZIONE",kind:"dynamic",day:1,x:9.05,z:7.70,w:.76,h:1.44,from:55,to:55,pal:{body:"#282d35",accent:"#6c7280",legs:"#171a1f",skin:"#d0a083",hair:"#5a5149",light:"#a5acb8"}},
+ {id:"don",name:"DON",role:"MANUTENTORE",kind:"dynamic",day:3,x:-5.72,z:-2.38,w:.73,h:1.39,from:73,to:73,pal:{body:"#445b4d",accent:"#8ba58e",legs:"#29332d",skin:"#b98265",hair:"#292521",light:"#a5b9a8"}},
  // M3.2 // first visible manifestation. Dynamic: never counted as office staff,
  // never shown on the development map and never directly interactable.
  {id:"corridor_figure",name:"...",role:"ANOMALIA",kind:"dynamic",x:-.25,z:.65,w:.70,h:1.52,from:43,to:43,pal:{body:"#141715",accent:"#252a26",legs:"#0c0e0d",skin:"#6f756d",hair:"#080908",light:"#384039"}},
@@ -696,7 +720,10 @@ function isNpcVisible(id){
  const n=npcById(id);if(!n)return false;
  // Lorenzo is a recurring dynamic character: Tuesday's electrical visit and a
  // short Wednesday maintenance stop use the same sprite/entity.
- if(id==="lorenzo")return (currentDay===1&&storyStep>=51&&storyStep<=55)||(currentDay===2&&storyStep===65);
+ if(id==="lorenzo")return (currentDay===1&&storyStep>=51&&storyStep<=55)||(currentDay===2&&storyStep===65)||(currentDay===4&&storyStep>=87&&storyStep<=88);
+ if(id==="capo")return (currentDay===1&&storyStep===55)||(currentDay===4&&storyStep>=81&&storyStep<=83);
+ if(id==="don")return currentDay===3&&storyStep===73;
+ if(currentDay===4&&storyStep>=77&&n.kind==="staff"&&!['it_manager','hr_01','zia_ale'].includes(id))return false;
  if(id==="other_office_figure"&&otherOfficeFigureGone)return false;
  // The shock of the first reality shift is that the populated office is suddenly empty.
  if(currentDay===2&&storyStep===63&&n.kind==="staff")return false;
@@ -755,6 +782,11 @@ function applyNpcSceneFromStory(){
    if(storyStep===55)setNpcWorldPosition("capo",9.05,7.70);
  }
  if(currentDay===2&&storyStep===65)setNpcWorldPosition("lorenzo",-.65,10.05);
+ if(currentDay===3&&storyStep===73)setNpcWorldPosition("don",-5.72,-2.38);
+ if(currentDay===4){
+   if(storyStep>=81&&storyStep<=83)setNpcWorldPosition("capo",11.35,7.70);
+   if(storyStep>=87&&storyStep<=88)setNpcWorldPosition("lorenzo",-.55,10.30);
+ }
 }
 function renderNpcSprites(vp,camX,camZ){
  gl.useProgram(spritePr);gl.bindBuffer(gl.ARRAY_BUFFER,spriteBuf);
@@ -889,6 +921,10 @@ function realityMode(now=performance.now()){
    if(now<realityGlitchUntil)return (Math.floor(now/72)%2)?"glitch":"decayed";
    return "decayed";
  }
+ if(currentDay===4&&storyStep>=82){
+   if(now<realityGlitchUntil)return (Math.floor(now/64)%2)?"glitch":"decayed";
+   return "decayed";
+ }
  return "normal";
 }
 function beginOtherOfficeShift(){
@@ -982,11 +1018,32 @@ const storySteps=[
  {id:"wednesday_manager_end",time:"09:31",objective:"TORNA DALL'IT MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
  {id:"wednesday_complete",time:"09:36",objective:"MERCOLEDI // HAI VISTO L'ALTRO UFFICIO",targetRoom:null},
 
- // Future weekday chapter entry snapshots.
- {id:"thursday_start",time:"09:05",objective:"GIOVEDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT",devOnly:true},
- {id:"friday_start",time:"09:05",objective:"VENERDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT",devOnly:true}
+ // M4.0 // GIOVEDI — I PRECEDENTI STAGISTI
+ {id:"thursday_start",time:"09:05",objective:"GIOVEDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT"},
+ {id:"thursday_manager",time:"09:07",objective:"PARLA CON L'IT MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
+ {id:"thursday_pc",time:"09:11",objective:"CONTROLLA LA SEGNALAZIONE SUL PC IT",targetRoom:"REPARTO IT",targetInteractable:"pc_it"},
+ {id:"thursday_archive",time:"09:15",objective:"CONTROLLA L'ARCHIVIO HR",targetRoom:"HR",targetInteractable:"hr_archive_box"},
+ {id:"thursday_betty",time:"09:18",objective:"PARLA CON BETTY",targetRoom:"HR",targetInteractable:"hr_01"},
+ {id:"thursday_don",time:"09:23",objective:"TROVA DON NEL SERVER / MAGAZZINO IT",targetRoom:"SERVER / MAGAZZINO IT",targetInteractable:"don"},
+ {id:"thursday_exit",time:"09:30",objective:"PROVA A USCIRE DALLO STUDIO",targetRoom:"INGRESSO / SEGRETERIA",targetInteractable:"main_exit"},
+ {id:"thursday_betty_after",time:"09:34",objective:"TORNA DA BETTY",targetRoom:"HR",targetInteractable:"hr_01"},
+ {id:"thursday_complete",time:"09:40",objective:"GIOVEDI // NON PUOI PIU USCIRE",targetRoom:null},
+
+ // M4.0 // VENERDI — THE LAST DAY
+ {id:"friday_start",time:"09:05",objective:"VENERDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT"},
+ {id:"friday_manager",time:"09:07",objective:"PARLA CON L'IT MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
+ {id:"friday_betty",time:"09:12",objective:"PASSA DA BETTY PRIMA DEL COLLOQUIO",targetRoom:"HR",targetInteractable:"hr_01"},
+ {id:"friday_direzione",time:"18:27",objective:"VAI ALLA PORTA DIREZIONE",targetRoom:"CORRIDOIO",targetInteractable:"direzione_door"},
+ {id:"friday_capo",time:"18:30",objective:"ENTRA // PARLA CON IL CAPO",targetRoom:"SALA MEET CAPO",targetInteractable:"capo"},
+ {id:"friday_panel",time:"18:36",objective:"STACCA LA LINEA 4 DAL QUADRO DIREZIONE",targetRoom:"CORRIDOIO",targetInteractable:"direzione_panel"},
+ {id:"friday_capo_after",time:"18:37",objective:"TORNA DAL CAPO",targetRoom:"SALA MEET CAPO",targetInteractable:"capo"},
+ {id:"friday_manager_reveal",time:"18:41",objective:"TORNA IN IT // TROVA IL MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
+ {id:"friday_betty_escape",time:"18:45",objective:"RAGGIUNGI BETTY",targetRoom:"HR",targetInteractable:"hr_01"},
+ {id:"friday_legacy",time:"18:49",objective:"SERVER // TERMINALE LEGACY",targetRoom:"SERVER / MAGAZZINO IT",targetInteractable:"legacy_terminal"},
+ {id:"friday_lorenzo",time:"18:55",objective:"VAI ALL'INGRESSO",targetRoom:"INGRESSO / SEGRETERIA",targetInteractable:"lorenzo"},
+ {id:"friday_choice",time:"18:58",objective:"LORENZO // DECIDI",targetRoom:"INGRESSO / SEGRETERIA",targetInteractable:"lorenzo"}
 ];
-const TUESDAY_START_STEP=48,TUESDAY_END_STEP=58,WEDNESDAY_START_STEP=59,WEDNESDAY_END_STEP=67,THURSDAY_START_STEP=68,FRIDAY_START_STEP=69;
+const TUESDAY_START_STEP=48,TUESDAY_END_STEP=58,WEDNESDAY_START_STEP=59,WEDNESDAY_END_STEP=67,THURSDAY_START_STEP=68,THURSDAY_END_STEP=76,FRIDAY_START_STEP=77,FRIDAY_END_STEP=88;
 
 // M3.3 // WEEK / CHAPTER RUNTIME
 const WEEK_DAYS=[
@@ -1020,6 +1077,7 @@ function setWeekDay(index,announce=false){
 // M2.8 // ATMOSPHERE & TENSION
 // Visual mood is layered over the stable renderer so geometry/collisions remain untouched.
 function atmosphereLevel(){
+ if(currentDay===4&&storyStep>=82)return 1.85;
  if(currentDay===2&&storyStep===63)return 1.58;
  if(currentDay>0 && storyStep>=48)return currentDayDef().baseAtmosphere||0;
  if(storyStep>=29)return 1.0;
@@ -1077,6 +1135,7 @@ function setStoryStep(i,msg){
  syncOfficeStateFromStory();
  applyNpcSceneFromStory();
  updateDevStatus();
+ if(typeof saveProgress==="function")saveProgress();
 }
 // M3.3.2 // GAME MODE defaults to first person; F3 instantly switches to the
 // original 3/4 development camera without changing story/player state.
@@ -1119,11 +1178,75 @@ function smoothTo(a,b,k,dt){
 }
 
 // -----------------------------------------------------------------------------
+// M4.0 // RELEASE FLOW + LOCAL SAVE + ENDINGS
+// -----------------------------------------------------------------------------
+const SAVE_KEY="ITSHIFT_M4_SAVE",LIMEN_KEY="LIMEN_SESSION_01";
+let gameStarted=false,gameEnded=false,choiceOpen=false;
+function safeRead(key){try{return JSON.parse(localStorage.getItem(key)||"null")}catch(_){return null}}
+function safeWrite(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(_){}}
+function safeRemove(key){try{localStorage.removeItem(key)}catch(_){}}
+function saveProgress(){
+ if(!gameStarted||gameEnded)return;
+ safeWrite(SAVE_KEY,{version:"M4.0",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
+ refreshTitleMeta();
+}
+function refreshTitleMeta(){
+ const meta=document.getElementById("titleMeta"),cont=document.getElementById("continueBtn"),s=safeRead(SAVE_KEY),lm=safeRead(LIMEN_KEY);
+ if(cont)cont.disabled=!s;
+ if(meta){
+   const endings=Array.isArray(lm?.endings)?lm.endings:[];
+   meta.innerHTML=s?`SALVATAGGIO // ${WEEK_DAYS[s.day]?.label||"?"} · ${storySteps[s.step]?.time||"--:--"}<br><b>FINALI TROVATI ${endings.length}/3</b>`:`SESSIONE LOCALE // NESSUN SALVATAGGIO<br><b>FINALI TROVATI ${endings.length}/3</b>`;
+ }
+}
+function resetRunState(){
+ gameEnded=false;choiceOpen=false;closeDialogueForCheckpoint();resetOfficeForCheckpoint();
+ setWeekDay(0,false);storyStep=0;player.x=0;player.z=9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
+ setStoryStep(0);applyNpcSceneFromStory();sceneTint=0;realityGlitchUntil=0;otherOfficeFigureGone=false;
+}
+function startNewGame(){
+ safeRemove(SAVE_KEY);resetRunState();gameStarted=true;
+ document.getElementById("titleScreen")?.classList.add("hidden");document.getElementById("endingScreen")?.classList.add("hidden");document.getElementById("choiceScreen")?.classList.add("hidden");
+ showDayBanner();saveProgress();ensureAudio();
+}
+function continueGame(){
+ const s=safeRead(SAVE_KEY);if(!s){startNewGame();return}
+ gameEnded=false;choiceOpen=false;gameStarted=false;closeDialogueForCheckpoint();resetOfficeForCheckpoint();
+ setWeekDay(s.day||0,false);storyStep=0;setStoryStep(Math.max(0,Math.min(storySteps.length-1,s.step||0)));applyWeekStartProfile();applyNpcSceneFromStory();
+ player.x=Number.isFinite(s.x)?s.x:0;player.z=Number.isFinite(s.z)?s.z:9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=Number.isFinite(s.yaw)?s.yaw:FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
+ gameStarted=true;document.getElementById("titleScreen")?.classList.add("hidden");document.getElementById("endingScreen")?.classList.add("hidden");document.getElementById("choiceScreen")?.classList.add("hidden");showDayBanner();ensureAudio();saveProgress();
+}
+function goToTitle(){gameStarted=false;gameEnded=false;choiceOpen=false;document.getElementById("endingScreen")?.classList.add("hidden");document.getElementById("choiceScreen")?.classList.add("hidden");document.getElementById("titleScreen")?.classList.remove("hidden");refreshTitleMeta()}
+function completeDay(dayIndex){
+ const next=dayIndex+1;if(next>=WEEK_DAYS.length)return;
+ resetOfficeForCheckpoint();setWeekDay(next,true);player.x=0;player.z=9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
+ const starts=[0,TUESDAY_START_STEP,WEDNESDAY_START_STEP,THURSDAY_START_STEP,FRIDAY_START_STEP];setStoryStep(starts[next]);applyWeekStartProfile();applyNpcSceneFromStory();toast("FINE GIORNATA // "+WEEK_DAYS[next].label);saveProgress();
+}
+function openEndingChoice(){choiceOpen=true;document.getElementById("choiceScreen")?.classList.remove("hidden");}
+function showEnding(kind){
+ const data={
+   good:{title:"LOGOUT",body:"Rifiuti Lorenzo. Torni al nodo legacy, spezzi il badge e interrompi la sessione.\n\nPer un istante lo studio torna normale. La porta d'ingresso si apre. Nessuno ti ferma.\n\nSul CRT resta una sola riga:",axis:"rebellion"},
+   normal:{title:"CONTRATTO RINNOVATO",body:"Non vuoi sapere altro. Attraversi l'uscita e torni a casa.\n\nLunedi, alle 09:00, il badge funziona di nuovo. Il Manager ti saluta come se nulla fosse successo.\n\nSulla scrivania c'e un contratto gia firmato.",axis:"compliance"},
+   evil:{title:"PROMOZIONE",body:"Accetti l'offerta di Lorenzo. Non ti chiede fedelta: ti chiede soltanto di mantenere aperta la porta.\n\nLunedi arriva un nuovo stagista. Questa volta sei tu dall'altra parte della scrivania.",axis:"control"}
+ }[kind]||null;if(!data)return;
+ choiceOpen=false;gameEnded=true;gameStarted=false;document.getElementById("choiceScreen")?.classList.add("hidden");safeRemove(SAVE_KEY);
+ const lm=safeRead(LIMEN_KEY)||{session:"LMN_01",endings:[],profile:{rebellion:0,compliance:0,control:0}};if(!lm.endings.includes(kind))lm.endings.push(kind);lm.lastEnding=kind;lm.profile=lm.profile||{rebellion:0,compliance:0,control:0};lm.profile[data.axis]=(lm.profile[data.axis]||0)+1;safeWrite(LIMEN_KEY,lm);
+ const title=document.getElementById("endingTitle"),body=document.getElementById("endingBody"),code=document.getElementById("endingCode");if(title)title.textContent=data.title;if(body)body.textContent=data.body;if(code)code.textContent=`LMN_01 // SESSION CLOSED // ${kind.toUpperCase()}`;
+ document.getElementById("endingScreen")?.classList.remove("hidden");refreshTitleMeta();
+}
+function bindReleaseUi(){
+ document.getElementById("newGameBtn")?.addEventListener("click",startNewGame);document.getElementById("continueBtn")?.addEventListener("click",continueGame);
+ document.getElementById("resetSaveBtn")?.addEventListener("click",()=>{safeRemove(SAVE_KEY);refreshTitleMeta();toast("SALVATAGGIO CANCELLATO")});
+ document.getElementById("endingRestartBtn")?.addEventListener("click",startNewGame);document.getElementById("endingMenuBtn")?.addEventListener("click",goToTitle);
+ document.querySelectorAll(".endingChoice").forEach(b=>b.addEventListener("click",()=>showEnding(b.dataset.ending)));
+ refreshTitleMeta();
+}
+
+// -----------------------------------------------------------------------------
 // M3.1 // DEVELOPMENT CHECKPOINT SYSTEM
 // Loads a coherent story snapshot: step, player spawn, devices, lights, NPC scene
 // and previously-triggered anomalies are all derived from the selected story step.
 // ----------------------------------------------------------------------------
-const DEV_MODE=true;
+const DEV_MODE=new URLSearchParams(location.search).get("dev")==="1";
 const devCheckpoints={
  // WEEK STARTS // the main M3.3 development entry points
  monday:{label:"LUNEDI — 09:00",day:0,step:0,x:-.45,z:10.35,kind:"week"},
@@ -1229,6 +1352,8 @@ else{
 setWeekDay(0,false);
 setStoryStep(0);
 applyCameraMode(false);
+bindReleaseUi();
+goToTitle();
 
 function insideZone(x,z,r,pad=.03){
  return Math.abs(x-r.x)<=r.w/2+pad&&Math.abs(z-r.z)<=r.d/2+pad;
@@ -1544,6 +1669,7 @@ function nearestInteractable(){
  return best;
 }
 function updateInteractionPrompt(){
+ if(!gameStarted||gameEnded||choiceOpen){promptEl.classList.remove("on");return;}
  if(dialogueOpen){promptEl.classList.remove("on");return;}
  const it=nearestInteractable();
  if(!it){promptEl.classList.remove("on");return;}
@@ -1587,7 +1713,7 @@ function handleTuesdayInteraction(it){
        "Se Direzione dice che e a posto, e a posto.",
        "Un consiglio: qui non serve capire tutto. Serve che funzioni.",
        "E non perdere quel badge. Venerdi potresti averne ancora bisogno."
-     ],()=>setStoryStep(58,"MARTEDI COMPLETATO // VOCI DI CORRIDOIO"));
+     ],()=>completeDay(1));
    }else openDialogue("IT MANAGER",tuesdayAmbientDialogue.it_manager,null);
    return true;
  }
@@ -1709,7 +1835,7 @@ function handleWednesdayInteraction(it){
        "Quel terminale non dovrebbe neanche essere alimentato. Lo faccio rimuovere.",
        "E se Betty ti ha raccontato altre storie, ignorale. Qui la gente adora creare misteri.",
        "Chiudiamo questa cosa e lavoriamo."
-     ],()=>setStoryStep(67,"MERCOLEDI COMPLETATO // THE OTHER OFFICE"));
+     ],()=>completeDay(2));
    }else openDialogue("IT MANAGER",wednesdayAmbientDialogue.it_manager,null);
    return true;
  }
@@ -1771,21 +1897,117 @@ function handleWednesdayInteraction(it){
  return false;
 }
 
+const thursdayAmbientDialogue={
+ zia_ale:["Oggi siete tutti strani. Piu del solito.","Se hai bisogno di uscire cinque minuti, fallo prima di sera."],
+ it_manager:["Hai una segnalazione aperta. Occupati di quella."],
+ hr_01:["Non qui. Non ancora."],
+ central_01:["Stamattina hanno tolto un nome dall'elenco interno. Pensavo fosse un errore."],
+ render_02:["Quello prima di te? Non ricordo il nome. E questa e la cosa strana."]
+};
+function handleThursdayInteraction(it){
+ if(currentDay!==3||storyStep<THURSDAY_START_STEP||storyStep>THURSDAY_END_STEP)return false;
+ if(it.id==="it_manager"&&storyStep===69){openDialogue("IT MANAGER",[
+   "C'e una segnalazione automatica su quattro account IT dismessi.",
+   "Il sistema li vede ancora attivi. Apri il PC, verifica e poi passa da HR: e roba amministrativa.",
+   "Non perdere tempo sui nomi. Sono vecchie utenze."
+ ],()=>setStoryStep(70,"ACCOUNT DISMESSI // PC IT"));return true;}
+ if(it.id==="pc_it"&&storyStep===70){deviceBeep();openDialogue("PC REPARTO IT",[
+   "SECURITY AUDIT // ACCOUNT ORFANI.",
+   "IT_TRAINEE_04 // SESSIONE: ATTIVA.","IT_TRAINEE_05 // SESSIONE: ATTIVA.","IT_TRAINEE_06 // SESSIONE: ATTIVA.","IT_TRAINEE_07 // SESSIONE: ATTIVA.",
+   "ULTIMO ACCESSO COMUNE: DIREZIONE.","PROFILO ARCHIVIO: HR\\TIROCINANTI.","LMN // TRACE DISABLED."
+ ],()=>setStoryStep(71,"HR // ARCHIVIO TIROCINANTI"));return true;}
+ if(it.id==="hr_archive_box"&&storyStep===71){openDialogue("ARCHIVIO HR",[
+   "TIROCINANTI IT // 2022–2026.","04 // NESSUNA DATA DI USCITA.","05 // NESSUNA DATA DI USCITA.","06 // NESSUNA DATA DI USCITA.","07 // CARTELLA INCOMPLETA.",
+   "NOTA A MATITA: IL BADGE RESTA ATTIVO FINO ALLA CHIUSURA DELLA SESSIONE."
+ ],()=>setStoryStep(72,"PARLA CON BETTY"));return true;}
+ if(it.id==="hr_01"&&storyStep===72){openDialogue("BETTY",[
+   "Adesso capisci perche non volevo dirtelo il secondo giorno.","Non si sono licenziati. Almeno non nel modo normale.",
+   "DON sta lavorando nel server. Conosce la struttura vecchia meglio di chiunque altro.","Parlagli. Poi prova una cosa: prova davvero ad andartene."
+ ],()=>setStoryStep(73,"TROVA DON // SERVER"));return true;}
+ if(it.id==="don"&&storyStep===73){openDialogue("DON",[
+   "Io riparo muri, tubi, serrature. Non faccio domande.","Ma questa stanza ha due muri dove sulla pianta vecchia ce n'era uno solo.",
+   "Dietro passa una canalina che va a Direzione e torna qui. Sempre alimentata.","Gli altri ragazzi IT la seguivano tutti. Poi smettevo di vederli.",
+   "Se il badge non ti lascia uscire, non forzare la porta. Torna da Betty."
+ ],()=>setStoryStep(74,"PROVA A USCIRE"));return true;}
+ if(it.id==="main_exit"&&storyStep===74){deviceBeep();visualFlicker(.16,110);openDialogue("USCITA PRINCIPALE",[
+   "BADGE LETTO // IT_TRAINEE_CURRENT.","RICHIESTA USCITA...","NEGATA.","TURNO NON COMPLETATO.","SESSIONE VINCOLATA // DIREZIONE.","PROSSIMA VERIFICA: VENERDI 18:30."
+ ],()=>setStoryStep(75,"TORNA DA BETTY"));return true;}
+ if(it.id==="hr_01"&&storyStep===75){openDialogue("BETTY",[
+   "Quindi e successo anche a te.","Domani ti chiameranno alle 18:30. Non puoi evitare il colloquio, ma puoi arrivarci preparato.",
+   "Ti lascio un badge modificato. Una sola apertura su Direzione.","Quando sara il momento, non fidarti di chi arriva a salvarti. Di nessuno."
+ ],()=>completeDay(3));return true;}
+ if(it.type==="npc"&&thursdayAmbientDialogue[it.id]){openDialogue(it.label,thursdayAmbientDialogue[it.id],null);return true;}
+ if(it.type==="device"){openDialogue(it.label,["GIOVEDI // NESSUN INTERVENTO ASSEGNATO."],null);return true;}
+ return false;
+}
+function handleFridayInteraction(it){
+ if(currentDay!==4||storyStep<FRIDAY_START_STEP||storyStep>FRIDAY_END_STEP)return false;
+ if(it.id==="it_manager"){
+   if(storyStep===78){openDialogue("IT MANAGER",[
+     "Oggi niente ticket. Sistemi tutto il necessario e alle 18:30 vai in Direzione.","Il Capo vuole chiudere la tua settimana di inserimento.",
+     "Betty ti sta cercando. Passa da lei, poi torna al tuo posto e aspetta l'orario.","E non fare altre ricerche sugli account vecchi."
+   ],()=>setStoryStep(79,"PASSA DA BETTY"));return true;}
+   if(storyStep===84){openDialogue("IT MANAGER",[
+     "Hai staccato la linea.","Non dovevi vedere questo posto senza il filtro.","Io non sono qui per fermarlo. Sono qui per mantenerlo stabile.",
+     "Ogni stagista pensa di essere il primo a capire. Nessuno lo e.","Betty ha gia scelto da che parte stare. Vai da lei, se vuoi continuare a fingere di avere una scelta."
+   ],()=>setStoryStep(85,"RAGGIUNGI BETTY"));return true;}
+ }
+ if(it.id==="hr_01"){
+   if(storyStep===79){openDialogue("BETTY",[
+     "Questo badge apre Direzione una volta. Dopo non vale piu niente.","Quando il Capo ti mostrera cosa c'e sotto, cerca la LINEA 4.",
+     "Se la stacchi vedrai lo studio com'e davvero.","E ricordati quello che ti ho detto ieri: chi arriva alla fine potrebbe non essere venuto a salvarti."
+   ],()=>setStoryStep(80,"18:27 // DIREZIONE"));return true;}
+   if(storyStep===85){openDialogue("BETTY",[
+     "Il Capo perde il controllo se il nodo legacy smette di rispondere.","Il terminale nel server non e un inventario. E un ponte.",
+     "Vai li. Chiudi la sessione IT_TRAINEE_07. Qualunque cosa succeda dopo, corri all'ingresso."
+   ],()=>setStoryStep(86,"SERVER // TERMINALE LEGACY"));return true;}
+ }
+ if(it.id==="direzione_door"&&storyStep===80){deviceBeep();openDialogue("PORTA DIREZIONE",[
+   "BADGE HR MODIFICATO // LETTURA...","OVERRIDE ACCETTATO // 1 ACCESSO RESIDUO.","SESSIONE: IT_TRAINEE_CURRENT.","PORTA SBLOCCATA."
+ ],()=>setStoryStep(81,"ENTRA // IL CAPO TI ASPETTA"));return true;}
+ if(it.id==="capo"){
+   if(storyStep===81){openDialogue("CAPO",[
+     "Puntuale. E una qualita rara.","Hai passato la settimana a riparare piccoli guasti senza capire quale fosse il sistema vero.",
+     "Questo studio funziona perche qualcuno resta quando gli altri vanno via.","Gli stagisti sono perfetti: accessi temporanei, ruoli temporanei, persone che nessuno cerca subito.",
+     "Vuoi vedere per cosa hai lavorato davvero? Stacca la LINEA 4."
+   ],()=>setStoryStep(82,"QUADRO DIREZIONE // LINEA 4"));return true;}
+   if(storyStep===83){openDialogue("CAPO",[
+     "Eccolo. Il posto che gli altri vedono soltanto per pochi secondi.","Non e un altro ufficio. E questo ufficio senza la parte che vi serve per continuare a lavorare.",
+     "Gli altri stagisti sono ancora qui. In un modo utile.","Puoi odiarmi quanto vuoi. Ma il sistema deve avere un amministratore."
+   ],()=>setStoryStep(84,"TORNA IN IT // IL MANAGER SA TUTTO"));return true;}
+ }
+ if(it.id==="direzione_panel"&&storyStep===82){deviceBeep();realityGlitchUntil=performance.now()+1100;visualFlicker(.65,140);tone(43,.55,.040,'triangle',24);openDialogue("QUADRO DIREZIONE",[
+   "Q-DIR // LINEA 4.","COMANDO: OFF.","PROTEZIONE BYPASS...","ERRORE // NODO REMOTO NON RAGGIUNGIBILE.","LMN RELAY // VISUAL FILTER LOST."
+ ],()=>setStoryStep(83,"... LO STUDIO NON E PIU LO STESSO"));return true;}
+ if(it.id==="legacy_terminal"&&storyStep===86){deviceBeep();visualFlicker(.44,120);openDialogue("TERMINALE LEGACY",[
+   "LMN // SESSION_01.","SUBJECT: ACTIVE.","IT_TRAINEE_04 // RETAINED.","IT_TRAINEE_05 // RETAINED.","IT_TRAINEE_06 // RETAINED.","IT_TRAINEE_07 // RETAINED.",
+   "CURRENT SUBJECT // CLASSIFICATION PENDING.","COMMAND: TERMINATE RELAY.","...","RELAY TERMINATED."
+ ],()=>{tone(38,.7,.035,'triangle',20);setStoryStep(87,"INGRESSO // QUALCUNO TI ASPETTA");});return true;}
+ if(it.id==="lorenzo"){
+   if(storyStep===87){openDialogue("LORENZO",[
+     "Bravo. Davvero.","Il Capo non era il padrone di questa cosa. Era il custode. E tu l'hai appena tolto di mezzo.",
+     "Ti avevo detto che le luci possono mentire. Non ti ho detto chi le stava guardando.","Io non lavoro per lui. E non sono venuto qui per salvarti.",
+     "Ero qui prima che lui diventasse Capo. I nomi cambiano. Quello che siamo, no.",
+     "Adesso il posto e vuoto. E qualcuno deve prenderlo. Potresti uscire... oppure potresti smettere di essere quello che obbedisce."
+   ],()=>{setStoryStep(88,"LORENZO // DECIDI");openEndingChoice();});return true;}
+   if(storyStep===88){openEndingChoice();return true;}
+ }
+ if(it.type==="npc")openDialogue(it.label,["VENERDI // NON RISPONDE.","Per un momento sembra guardare oltre la tua spalla."],null);
+ else openDialogue(it.label,["VENERDI // IL DISPOSITIVO NON RISPONDE COME DOVREBBE."],null);
+ return true;
+}
+
 function interact(){
+ if(!gameStarted||gameEnded||choiceOpen)return;
  if(dialogueOpen){advanceDialogue();return;}
  const it=nearestInteractable();
  if(!it){toast(roomAt(player.x,player.z)+" // NIENTE DA INTERAGIRE");return;}
 
  if(handleTuesdayInteraction(it))return;
  if(handleWednesdayInteraction(it))return;
+ if(handleThursdayInteraction(it))return;
+ if(handleFridayInteraction(it))return;
 
- // Thursday/Friday remain structural checkpoints until their chapters are authored.
- if(currentDay>=3 && storyStep>=THURSDAY_START_STEP){
-   const d=currentDayDef();
-   if(it.type==="npc")openDialogue(it.label,[`${d.label} // ${d.chapter}.`,`CAPITOLO PRONTO PER LO SVILUPPO NEL PROSSIMO MILESTONE.`],null);
-   else openDialogue(it.label,[`${d.label} // STATO DI TEST.`,`QUESTO OGGETTO E PRONTO PER LE MISSIONI DEL CAPITOLO.`],null);
-   return;
- }
 
  if(it.id==="zia_ale"){
    if(storyStep===0){
@@ -1858,7 +2080,7 @@ function interact(){
        "No. Non ho mandato nessuno e da qui non e passato nessuno.",
        "Se era uno dei ragazzi lo ritrovi alla sua postazione.",
        "Lascia stare per adesso. Se la rivedi, non seguirla."
-     ],()=>setStoryStep(47,"M3.2 COMPLETATO // QUALCOSA ERA NEL CORRIDOIO"));
+     ],()=>completeDay(0));
    }else if(storyStep>32){
      openDialogue("IT MANAGER",["Per ora niente di nuovo. Tieni d'occhio i ticket."],null);
    }else{
@@ -2370,7 +2592,7 @@ function cameraSafeDistance(targetX,targetZ,yaw,wantedDist){
 }
 
 function resize(){const d=Math.min(1.25,devicePixelRatio||1),w=Math.max(320,Math.floor(innerWidth*d*.64)),h=Math.max(180,Math.floor(innerHeight*d*.64));if(c.width!==w||c.height!==h){c.width=w;c.height=h}}
-let last=performance.now();function frame(now){const dt=Math.min(.04,(now-last)/1000);last=now;dtForAtmosphere=dt;const mapOpen=bigMap&&!bigMap.classList.contains("hidden");const devOpen=devMenu&&!devMenu.classList.contains("hidden");
+let last=performance.now();function frame(now){const dt=Math.min(.04,(now-last)/1000);last=now;dtForAtmosphere=dt;const mapOpen=bigMap&&!bigMap.classList.contains("hidden");const devOpen=devMenu&&!devMenu.classList.contains("hidden");const releasePaused=!gameStarted||gameEnded||choiceOpen;
 
 // M3.3.2 // Dual controls.
 // FP GAME: W/S forward-back, A/D strafe, diagonals work naturally, Q/E rotate.
@@ -2383,7 +2605,7 @@ if(viewMode==="fp"){
  let turn=((keys.q||keys.arrowleft)?1:0)-((keys.e||keys.arrowright)?1:0)+mobileTurn;
  const ml=Math.hypot(strafe,move);if(ml>1){strafe/=ml;move/=ml;}
  turn=Math.max(-1,Math.min(1,turn));
- if(mapOpen||dialogueOpen||devOpen){turn=0;move=0;strafe=0;}
+ if(mapOpen||dialogueOpen||devOpen||releasePaused){turn=0;move=0;strafe=0;}
  cameraState.yaw+=turn*FP_TURN_SPEED*dt;savedFpYaw=cameraState.yaw;
  const forwardX=-Math.sin(cameraState.yaw),forwardZ=-Math.cos(cameraState.yaw);
  const rightX=Math.cos(cameraState.yaw),rightZ=-Math.sin(cameraState.yaw);
@@ -2393,7 +2615,7 @@ if(viewMode==="fp"){
  let sx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+jx;
  let sy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+jy;
  let sl=Math.hypot(sx,sy);if(sl>1){sx/=sl;sy/=sl;}
- if(mapOpen||dialogueOpen||devOpen){sx=0;sy=0;}
+ if(mapOpen||dialogueOpen||devOpen||releasePaused){sx=0;sy=0;}
  const forwardX=-Math.sin(cameraState.yaw),forwardZ=-Math.cos(cameraState.yaw);
  const rightX=Math.cos(cameraState.yaw),rightZ=-Math.sin(cameraState.yaw);
  dx=rightX*sx+forwardX*(-sy);
@@ -2438,7 +2660,13 @@ if(currentRoom!==player._lastRoom){
 
  // Story triggers only advance a travel step into its explicit interaction.
  // No mission is ever solved merely by crossing a room threshold.
- if(currentDay===2&&currentRoom==="REPARTO IT"&&storyStep===59){
+ if(currentDay===4&&currentRoom==="REPARTO IT"&&storyStep===77){
+   setStoryStep(78,"VENERDI // PARLA CON IL MANAGER");
+ }
+ else if(currentDay===3&&currentRoom==="REPARTO IT"&&storyStep===68){
+   setStoryStep(69,"GIOVEDI // PARLA CON IL MANAGER");
+ }
+ else if(currentDay===2&&currentRoom==="REPARTO IT"&&storyStep===59){
    setStoryStep(60,"MERCOLEDI // PARLA CON IL MANAGER");
  }
  else if(currentDay===2&&currentRoom==="SERVER / MAGAZZINO IT"&&storyStep===61){
