@@ -14,6 +14,7 @@ const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attac
 const aP=gl.getAttribLocation(pr,"aPos"),aC=gl.getAttribLocation(pr,"aCol"),uM=gl.getUniformLocation(pr,"uMVP"),buf=gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.enableVertexAttribArray(aP);gl.enableVertexAttribArray(aC);gl.vertexAttribPointer(aP,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(aC,3,gl.FLOAT,false,24,12);
 const V=[];
+function restoreV(saved){V.length=0;for(let i=0;i<saved.length;i++)V.push(saved[i]);}
 function tri(a,b,c,col){for(const v of[a,b,c])V.push(v[0],v[1],v[2],...col)}
 function quad(a,b,c,d,col){tri(a,b,c,col);tri(a,c,d,col)}
 function box(x,y,z,w,h,d,col){const x0=x-w/2,x1=x+w/2,y0=y,y1=y+h,z0=z-d/2,z1=z+d/2;
@@ -822,7 +823,7 @@ function buildOfficeLiveMesh(now,showDevLightProxies=true){
    if(d.axis==="x")box(d.x,0,d.z,.10,1.72,1.10,[.30,.19,.11]);
    else box(d.x,0,d.z,1.10,1.72,.10,[.30,.19,.11]);
  }
- const arr=new Float32Array(V);V.length=0;V.push(...saved);return arr;
+ const arr=new Float32Array(V);restoreV(saved);return arr;
 }
 
 function closedDoorBarrier(d){
@@ -1144,7 +1145,7 @@ const staticV=new Float32Array(V);
 const FP_CEILING_Y=2.20;
 const _ceilingSaved=V.slice();V.length=0;
 quad([-12.55,FP_CEILING_Y,-13.65],[14.55,FP_CEILING_Y,-13.65],[14.55,FP_CEILING_Y,12.75],[-12.55,FP_CEILING_Y,12.75],[.145,.165,.145]);
-const ceilingV=new Float32Array(V);V.length=0;V.push(..._ceilingSaved);
+const ceilingV=new Float32Array(V);restoreV(_ceilingSaved);
 
 function segPointDist(ax,az,bx,bz,px,pz){
  const abx=bx-ax,abz=bz-az;
@@ -1184,7 +1185,7 @@ function buildRealityOverlayMesh(now,mode){
  box(10.9,1.90,2.6,1.10,.05,.32,[.16,.14,.12]);
  // A darker skin immediately below the normal ceiling.
  quad([-12.54,2.192,-13.64],[14.54,2.192,-13.64],[14.54,2.192,12.74],[-12.54,2.192,12.74],glitch?[.18,.18,.15]:[.095,.092,.080]);
- const arr=new Float32Array(V);V.length=0;V.push(...saved);return arr;
+ const arr=new Float32Array(V);restoreV(saved);return arr;
 }
 
 function buildWallMesh(cx,cz,fullHeight=false,mode="normal"){
@@ -1207,7 +1208,7 @@ function buildWallMesh(cx,cz,fullHeight=false,mode="normal"){
  }
 
  const arr=new Float32Array(V);
- V.length=0;V.push(...saved);
+ restoreV(saved);
  return arr;
 }
 
@@ -1524,7 +1525,7 @@ function applySettings(){
 function setCrtEnabled(v){saveSettings({crt:!!v});applySettings();toast(v?"CRT // ON":"CRT // OFF");}
 function saveProgress(){
  if(!gameStarted||gameEnded)return;
- safeWrite(SAVE_KEY,{version:"M4.5",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
+ safeWrite(SAVE_KEY,{version:"M4.5.1",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
  refreshTitleMeta();
 }
 function refreshTitleMeta(){
@@ -2798,7 +2799,7 @@ function trans(x,y,z){
  o[12]=x;o[13]=y;o[14]=z;
  return o;
 }
-const saved=V.slice();V.length=0;box(0,0,0,.42,.78,.38,[.34,.41,.33]);box(0,.78,0,.38,.34,.35,[.68,.51,.38]);const pV=new Float32Array(V);V.length=0;V.push(...saved);
+const saved=V.slice();V.length=0;box(0,0,0,.42,.78,.38,[.34,.41,.33]);box(0,.78,0,.38,.34,.35,[.68,.51,.38]);const pV=new Float32Array(V);restoreV(saved);
 
 
 const miniMap=document.getElementById("miniMap");

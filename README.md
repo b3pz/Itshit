@@ -1,62 +1,37 @@
-# IT SHIFT — M4.5 DENSITY & PSX ENVIRONMENT PASS
+# IT SHIFT — M4.5.1 HOTFIX
 
-Build root-ready per GitHub Pages.
+Hotfix della M4.5 DENSITY & PSX ENVIRONMENT PASS.
 
-## File
+## Per GitHub Pages
 Carica direttamente nella root del repository:
 
 - `index.html`
 - `game.js`
 - `README.md`
 
-## Base mantenuta dalla M4.4
+## Fix critico
+La M4.5 poteva fermarsi sulla schermata iniziale perché il nuovo pass di densità ha aumentato molto il numero di vertici della scena. Alcuni ripristini del buffer usavano `V.push(...saved)`: con un array così grande il browser genera `RangeError: Maximum call stack size exceeded` prima di collegare i pulsanti del menu e prima di nascondere il menu DEV.
 
-- postazioni raggiungibili dal lato corretto
-- stampante e dispositivi accessibili frontalmente
-- postazioni secondarie esaminabili
+M4.5.1 sostituisce tutti quei ripristini con una copia iterativa sicura (`restoreV`).
+
+## Verifiche eseguite
+- controllo sintattico JavaScript: OK
+- boot senza eccezioni runtime: OK
+- menu DEV nascosto in release: OK
+- pulsante `NUOVO TURNO`: OK
+- schermata iniziale si chiude correttamente: OK
+- gioco entra su `INGRESSO / SEGRETERIA` con obiettivo `PARLA CON ZIA ALE`: OK
+
+## Tutto il resto
+Restano invariati i contenuti M4.5:
+- densità ambientale
 - geometrie Server / Magazzino IT
-- fix NPC durante dialoghi e pranzo
-- menu release e salvataggio
-- trama completa Lunedi–Venerdi + tre finali
+- postazioni raggiungibili
+- sale meeting caratterizzate
+- subfloor continuo
+- HUD minimale PSX
+- minimappa permanente rimossa
+- prompt contestuali
+- trama Lunedi–Venerdi e tre finali
 
-## M4.5 — cambiamenti principali
-
-### Densita ambientale
-- aggiunti mobili bassi, cassettiere, cestini, faldoni, plan rack, divani, pannelli e clutter da scrivania
-- ogni reparto ha elementi più grandi e leggibili, non solo piccoli cubetti decorativi
-- Centrale resa più densa come vero open space
-- BIM / Editoria / Interior / Renderisti differenziati tramite materiali e arredi
-- cucina, Galleria Digitale e Spazio A più pieni
-- Server mantiene la geometria M4.4 e riceve solo ulteriore dettaglio
-
-### Sale meeting
-- pannelli scuri tipo vetrata sul lato corridoio
-- arredo e mobili aggiuntivi
-- tavoli e sedute M4.4 mantenuti
-- Sala Meet e Sala Meet Capo ora hanno linguaggi visivi più distinti
-
-### Corridoi
-- pannelli/tavole a parete
-- mobili bassi e cestini
-- ritmo di plafoniere più evidente
-- variazioni cromatiche leggere delle pareti per ala dello studio
-- soglie delle porte meno gialle e meno da blockout
-
-### Pavimento
-- aggiunto un unico **subfloor di sicurezza** sotto l'intera pianta
-- serve a impedire che micro-gap tra zone mostrino il vuoto nero
-- sopra rimangono i pavimenti differenziati della M4.4
-
-### HUD PSX
-- minimappa permanente rimossa: la mappa grande resta su `TAB`
-- `GAME // FIRST PERSON` nascosto nella release
-- HUD sinistro ridotto a un unico pannello molto più piccolo
-- stanza, obiettivo, ora e giorno restano leggibili senza quattro box separati
-- barra controlli iniziale svanisce dopo alcuni secondi
-- prompt di interazione più semplice: `PARLA CON`, `USA`, `GUARDA`
-
-### Camera
-- FOV leggermente ampliato per rendere stanze e corridoi meno claustrofobici/tubolari
-
-## DEV
-I checkpoint restano disponibili con `?dev=1`.
+I checkpoint DEV restano disponibili con `?dev=1`.
