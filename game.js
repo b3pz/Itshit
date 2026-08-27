@@ -38,7 +38,7 @@ function rack(x,z){solids.push({x,z,w:.7,d:.65});box(x,0,z,.7,1.75,.65,[.1,.15,.
 
 
 // -----------------------------------------------------------------------------
-// M4.4 // ENVIRONMENT & GAMEPLAY POLISH
+// M4.5 // DENSITY & PSX ENVIRONMENT PASS
 // A small near-release art-language test covering REPARTO IT + HR + their corridor.
 // IMPORTANT: these are visual-only props; no new solids/collisions are introduced.
 // The frozen M2.9.2 architecture and all M3.4 gameplay remain unchanged.
@@ -140,7 +140,7 @@ function psxBathroomSet(x,z){
  box(x+.75,.82,z+.16,.42,.58,.035,[.34,.40,.38]);
 }
 
-function doorFrame(x,z,axis="z",col=[.34,.22,.12]){
+function doorFrame(x,z,axis="z",col=[.25,.19,.14]){
  if(axis==="z"){
    box(x-.52,0,z,.12,1.9,.14,col);
    box(x+.52,0,z,.12,1.9,.14,col);
@@ -296,6 +296,10 @@ const commonFloorZones=[
  {name:"AREA COMUNE SUD",x:.2,z:-11.0,w:24.7,d:4.6,col:[.255,.285,.26]}
 ];
 
+// M4.5 // MASTER SUBFLOOR: a single dark foundation under the complete footprint.
+// It never changes collision; it only guarantees that tiny seams can no longer reveal the void.
+floorR(1.0,-.45,27.35,26.65,[.105,.115,.105],-.072);
+
 // M2.9.2 // FLOOR STABILITY
 // Visual floor layers use tiny, fixed vertical offsets. Collision data is unchanged.
 // This removes coplanar polygons (z-fighting / shimmering) while preserving the
@@ -347,8 +351,8 @@ wall(1.0,12.85,27.4,.15); wall(1.0,-13.75,27.4,.15);
 // Door visualization derived from the SAME door data.
 doors.forEach(d=>{
  doorFrame(d.x,d.z,d.axis);
- if(d.axis==="x")box(d.x,.012,d.z,.72,.024,1.45,[.72,.58,.18]);
- else box(d.x,.012,d.z,1.45,.024,.72,[.72,.58,.18]);
+ if(d.axis==="x")box(d.x,.012,d.z,.72,.024,1.45,[.31,.30,.23]);
+ else box(d.x,.012,d.z,1.45,.024,.72,[.31,.30,.23]);
 });
 
 // M2.9.1 // ROOM SCALE BLOCKOUT
@@ -514,6 +518,88 @@ psx3DPrinter(10.55,-10.55);psx3DPrinter(11.65,-11.75);psxShelf(12.10,-9.75,.55,1
 for(const z of [7.0,3.5,0,-3.5,-7.0])psxFluorescent(0,z,1.20);
 for(const z of [7.0,2.5,-2.5,-7.0])psxFluorescent(8.9,z,.95);
 psxPlant(1.15,6.85);psxPlant(7.95,-6.65);psxFilingCabinet(1.05,-6.85,.52,.34,.78);
+
+
+// M4.5 // DENSITY PASS -------------------------------------------------------
+// Larger silhouettes and wall dressing. These stay visual-only so the proven
+// M4.4 navigation/interactions remain intact.
+function psxLowCabinet(x,z,w=1.15,d=.38,col=[.31,.30,.27]){
+ box(x,0,z,w,.72,d,col);box(x,.70,z,w,.045,d,[.18,.19,.17]);
+ box(x-.28,.18,z-d/2-.014,.08,.035,.018,[.12,.13,.12]);box(x+.28,.18,z-d/2-.014,.08,.035,.018,[.12,.13,.12]);
+}
+function psxBin(x,z,col=[.18,.20,.18]){box(x,0,z,.32,.43,.28,col);box(x,.40,z,.36,.035,.32,[.10,.11,.10]);}
+function psxPlanRack(x,z,w=.78){
+ box(x,0,z,w,1.18,.28,[.28,.25,.21]);
+ for(let i=0;i<4;i++)box(x,.20+i*.23,z-.16,w*.84,.045,.06,[.58-i*.035,.55-i*.03,.45-i*.02]);
+}
+function psxSofa(x,z,w=1.55,col=[.25,.30,.27]){
+ box(x,0,z,w,.38,.62,col);box(x,.36,z+.25,w,.48,.14,col.map(v=>v*.86));
+ box(x-w/2+.10,.18,z,.18,.34,.62,col.map(v=>v*.92));box(x+w/2-.10,.18,z,.18,.34,.62,col.map(v=>v*.92));
+}
+function psxWallFrameX(x,z,w=1.05,accent=[.52,.44,.28]){
+ box(x,.78,z,.025,.78,w,[.24,.22,.19]);box(x-.014,.88,z,.012,.48,w*.75,accent);
+ box(x-.015,1.24,z-.22,.012,.055,w*.20,[.72,.69,.56]);
+}
+function psxWallFrameZ(x,z,w=1.05,accent=[.45,.52,.44]){
+ box(x,.78,z,w,.78,.025,[.24,.22,.19]);box(x,.88,z-.014,w*.75,.48,.012,accent);
+ box(x-.22,1.24,z-.015,w*.20,.055,.012,[.72,.69,.56]);
+}
+function psxGlassPanelX(x,z,d=1.0){
+ box(x,.42,z,.028,1.22,d,[.10,.16,.15]);box(x-.018,.47,z,.012,1.08,d*.90,[.16,.24,.22]);
+ box(x-.020,1.03,z,.014,.045,d*.90,[.32,.37,.34]);
+}
+function psxGlassPanelZ(x,z,w=1.0){
+ box(x,.42,z,w,1.22,.028,[.10,.16,.15]);box(x,.47,z-.018,w*.90,1.08,.012,[.16,.24,.22]);
+ box(x,1.03,z-.020,w*.90,.045,.014,[.32,.37,.34]);
+}
+function psxDeskClutter(x,z){
+ box(x,.765,z,.34,.025,.23,[.69,.66,.55]);box(x+.24,.765,z+.03,.12,.10,.12,[.38,.34,.27]);
+ box(x-.26,.765,z-.04,.18,.055,.14,[.18,.20,.18]);
+}
+function psxCeilingStrip(x,z,w=1.2,d=.26){box(x,2.105,z,w,.035,d,[.34,.35,.31]);box(x,2.14,z,w*.82,.014,d*.52,[.70,.70,.58]);}
+
+// Corridors: break the tunnel effect with repeated architectural rhythm.
+for(const z of [8.0,5.2,2.2,-.8,-3.8,-6.7]){
+ psxWallFrameX(-1.73,z,.72,(Math.round(z*10)&1)?[.40,.48,.42]:[.50,.40,.29]);
+ if(z<7.5)psxWallFrameX(1.73,z,.72,[.35,.46,.40]);
+}
+for(const z of [6.0,1.5,-3.0,-6.2]){psxWallFrameX(8.08,z,.68,[.44,.42,.31]);}
+psxLowCabinet(-1.15,-6.85,.92,.32,[.27,.29,.27]);psxBin(1.20,3.15);psxBin(7.95,4.85);
+for(const z of [8.3,5.5,2.5,-.5,-3.5,-6.5])psxCeilingStrip(0,z,1.35,.24);
+for(const z of [6.4,2.0,-2.4,-6.3])psxCeilingStrip(8.9,z,1.00,.22);
+
+// Meeting areas: corridor-facing dark-glass panels distinguish them immediately.
+psxGlassPanelX(2.515,6.18,1.05);psxGlassPanelX(2.515,9.24,1.05);
+psxGlassPanelX(9.615,6.22,1.00);psxGlassPanelX(9.615,9.20,1.00);
+psxLowCabinet(4.00,9.25,1.05,.32,[.29,.28,.24]);psxLowCabinet(12.90,9.20,.86,.32,[.24,.24,.22]);
+psxDeskClutter(5.10,7.70);psxDeskClutter(11.65,7.70);
+
+// IT + Server: preserve the successful M4.4 geometry, add readable work clutter.
+psxLowCabinet(-6.42,3.58,.72,.30,[.25,.28,.25]);psxBin(-3.55,3.82);psxDeskClutter(-5.25,2.78);psxDeskClutter(-4.05,1.82);
+psxPlanRack(-6.45,-1.45,.68);psxBin(-3.62,-.82);box(-3.55,.02,-2.78,.46,.54,.34,[.35,.29,.22]);
+box(-5.70,.18,-1.02,.50,.04,.05,[.70,.52,.18]);box(-4.80,.18,-1.02,.50,.04,.05,[.70,.52,.18]);
+
+// HR / Segreteria: more office identity and storage.
+psxLowCabinet(-4.12,8.45,.86,.34,[.30,.29,.28]);psxBin(-3.55,5.70);psxWallFrameX(-6.90,7.70,.72,[.54,.44,.47]);
+psxLowCabinet(1.45,11.85,.90,.34,[.30,.28,.24]);psxBin(1.78,10.38);psxWallFrameZ(.15,12.52,1.10,[.43,.50,.42]);
+
+// BIM / Editoria / Interior / Renderisti: make every discipline visually distinct.
+psxPlanRack(-6.42,-5.50,.72);psxLowCabinet(-3.70,-6.90,.72,.32,[.29,.31,.31]);psxDeskClutter(-5.45,-5.72);psxDeskClutter(-4.05,-5.72);
+psxPlanRack(7.50,-2.80,.65);psxLowCabinet(3.25,-4.90,.76,.32,[.31,.28,.25]);psxDeskClutter(4.35,-3.52);psxDeskClutter(6.25,-3.52);
+for(const x of [12.95,13.25]){box(x,.10,1.15,.22,.18,.34,[.55,.45,.34]);box(x,.30,1.15,.22,.18,.34,[.39,.53,.46]);box(x,.50,1.15,.22,.18,.34,[.46,.42,.57]);}
+psxLowCabinet(10.20,4.45,.74,.30,[.32,.28,.24]);psxDeskClutter(11.55,3.72);psxDeskClutter(11.55,.42);
+psxLowCabinet(12.90,-2.10,.76,.30,[.23,.25,.29]);psxBin(10.18,-5.00);psxDeskClutter(11.48,-2.72);psxDeskClutter(12.28,-4.42);
+
+// Centrale: deliberately dense open-plan office, while central circulation stays free.
+psxLowCabinet(7.52,2.10,.70,.30,[.28,.30,.27]);psxBin(2.95,4.65);psxBin(7.65,.25);
+for(const p of [{x:3.65,z:4.12},{x:5.25,z:4.12},{x:6.85,z:4.12},{x:3.65,z:.02},{x:5.25,z:.02},{x:6.85,z:.02}])psxDeskClutter(p.x,p.z);
+psxWallFrameX(2.66,3.42,.82,[.45,.50,.40]);psxWallFrameX(2.66,.72,.82,[.49,.41,.31]);
+
+// South social / production wing: stronger silhouettes visible as soon as you enter.
+psxSofa(-11.30,-9.75,1.42,[.31,.27,.23]);psxLowCabinet(-7.55,-12.35,.86,.34,[.32,.29,.25]);psxBin(-11.80,-12.70);
+psxLowCabinet(-2.95,-9.70,.82,.32,[.24,.26,.31]);psxWallFrameZ(-1.55,-13.18,1.15,[.36,.42,.55]);
+psxSofa(1.20,-9.75,1.20,[.24,.31,.27]);psxSofa(6.15,-9.75,1.20,[.24,.31,.27]);psxLowCabinet(3.70,-12.60,1.00,.32,[.28,.31,.28]);
+psxPlanRack(8.75,-10.30,.52);psxBin(7.28,-12.72);psxLowCabinet(10.95,-12.80,.82,.32,[.26,.31,.30]);
 
 // Story devices. Monitor bodies/screens are now rendered by the M3.0 live-office layer.
 box(-4.80,.72,-1.35,.18,.18,.06,[.72,.58,.18]);
@@ -1110,7 +1196,14 @@ function buildWallMesh(cx,cz,fullHeight=false,mode="normal"){
  const wallCol=mode==="normal"?[.22,.28,.24]:(mode==="glitch"?[.29,.25,.20]:[.145,.135,.112]);
  for(const w of wallDefs){
    const h=fullHeight?(w.h||2.15):.92;
-   box(w.x,0,w.z,w.w,h,w.d,wallCol);
+   let col=wallCol;
+   if(mode==="normal"){
+     if(w.z<-8)col=[.205,.245,.218];
+     else if(w.x>9.4)col=[.245,.255,.225];
+     else if(w.x<-3.1)col=[.205,.265,.232];
+     else if(w.x>2.3&&w.x<8.2)col=[.225,.265,.225];
+   }
+   box(w.x,0,w.z,w.w,h,w.d,col);
  }
 
  const arr=new Float32Array(V);
@@ -1431,7 +1524,7 @@ function applySettings(){
 function setCrtEnabled(v){saveSettings({crt:!!v});applySettings();toast(v?"CRT // ON":"CRT // OFF");}
 function saveProgress(){
  if(!gameStarted||gameEnded)return;
- safeWrite(SAVE_KEY,{version:"M4.4",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
+ safeWrite(SAVE_KEY,{version:"M4.5",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
  refreshTitleMeta();
 }
 function refreshTitleMeta(){
@@ -1452,16 +1545,17 @@ function resetRunState(){
  setWeekDay(0,false);storyStep=0;player.x=0;player.z=9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
  setStoryStep(0);applyNpcSceneFromStory();sceneTint=0;realityGlitchUntil=0;otherOfficeFigureGone=false;
 }
+function fadeControlHelp(){const h=document.getElementById("help");if(!h)return;h.classList.remove("fade");clearTimeout(fadeControlHelp.t);fadeControlHelp.t=setTimeout(()=>h.classList.add("fade"),8500);}
 function startNewGame(){
  safeRemove(SAVE_KEY);resetRunState();gameStarted=true;closeAllReleaseScreens();
- showDayBanner();saveProgress();ensureAudio();
+ showDayBanner();saveProgress();ensureAudio();fadeControlHelp();
 }
 function continueGame(){
  const s=safeRead(SAVE_KEY);if(!s){startNewGame();return}
  gameEnded=false;choiceOpen=false;gameStarted=false;closeDialogueForCheckpoint();resetOfficeForCheckpoint();
  setWeekDay(s.day||0,false);storyStep=0;setStoryStep(Math.max(0,Math.min(storySteps.length-1,s.step||0)));applyWeekStartProfile();applyNpcSceneFromStory();
  player.x=Number.isFinite(s.x)?s.x:0;player.z=Number.isFinite(s.z)?s.z:9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=Number.isFinite(s.yaw)?s.yaw:FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
- gameStarted=true;closeAllReleaseScreens();showDayBanner();ensureAudio();saveProgress();
+ gameStarted=true;closeAllReleaseScreens();showDayBanner();ensureAudio();saveProgress();fadeControlHelp();
 }
 function goToTitle(){gameStarted=false;gameEnded=false;choiceOpen=false;endingScreenEl?.classList.add("hidden");choiceScreenEl?.classList.add("hidden");optionsScreenEl?.classList.add("hidden");titleScreenEl?.classList.remove("hidden");refreshTitleMeta();applySettings()}
 function completeDay(dayIndex){
@@ -1933,6 +2027,11 @@ function nearestInteractable(){
  }
  return best;
 }
+function promptLabelFor(it){
+ if(it.type==="npc")return it.label;
+ if(it.type==="workstation")return "PC";
+ return ({pc_it:"PC IT",server_rack_02:"RACK SERVER",printer_main:"STAMPANTE",render_04:"PC RENDER",interior_pc_03:"PC INTERIOR",bim_pc_02:"PC BIM",meet_phone:"TELEFONO",legacy_terminal:"TERMINALE",direzione_door:"PORTA",direzione_panel:"QUADRO",hr_archive_box:"ARCHIVIO",main_exit:"USCITA"})[it.id]||it.label;
+}
 function updateInteractionPrompt(){
  if(!gameStarted||gameEnded||choiceOpen||cutsceneActive){promptEl.classList.remove("on");return;}
  if(dialogueOpen){promptEl.classList.remove("on");return;}
@@ -1940,8 +2039,8 @@ function updateInteractionPrompt(){
  if(!it){promptEl.classList.remove("on");return;}
  const step=storySteps[storyStep];
  const active=step.targetInteractable===it.id;
- const verb=it.type==="npc"?"PARLA":(active?"USA":"ESAMINA");
- promptEl.innerHTML=`<b>SPAZIO</b> ${verb}<span>${it.label}</span>`;
+ const verb=it.type==="npc"?"PARLA CON":(active?"USA":"GUARDA");
+ promptEl.innerHTML=`<b>SPAZIO</b><span>${verb} ${promptLabelFor(it)}</span>`;
  promptEl.classList.add("on");
 }
 const tuesdayAmbientDialogue={
@@ -3027,7 +3126,7 @@ let proj,yaw,camX,camZ,targetX,targetZ,view;
 if(viewMode==="fp"){
  // True eye-level camera: camera and collision body occupy the same position.
  cameraState.x=player.x;cameraState.z=player.z;
- proj=persp(62*Math.PI/180,c.width/c.height,.075,60);
+ proj=persp(66*Math.PI/180,c.width/c.height,.075,60);
  yaw=cameraState.yaw;camX=player.x;camZ=player.z;
  const forwardCamX=-Math.sin(yaw),forwardCamZ=-Math.cos(yaw);
  targetX=camX+forwardCamX*cameraState.lookAhead;

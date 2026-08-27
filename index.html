@@ -192,6 +192,39 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
  .titlePanel{padding:24px 18px 18px}
 }
 
+
+/* M4.5 // MINIMAL PSX HUD */
+#fpBadge{display:none!important}
+#fpBadge.dev{display:block!important;top:auto;bottom:12px;left:12px;background:#050906e8;border:1px solid #536a59;color:#79d7ff}
+#miniWrap{display:none!important}
+#hud{
+ left:12px;top:12px;width:min(360px,calc(100vw - 24px));
+ display:grid;grid-template-columns:1fr auto;gap:0;
+ background:rgba(2,7,4,.88);border:1px solid #718078;
+ box-shadow:3px 3px #000;overflow:hidden;
+}
+#hud .card{padding:6px 9px!important;background:transparent!important;border:0!important;box-shadow:none!important}
+#hud .card:first-child{grid-column:1/3!important;border-bottom:1px solid #26332c!important;padding-bottom:5px!important}
+#hud .card:first-child b{display:inline!important;font-size:10px!important;letter-spacing:2px;color:#b7ff4a!important}
+#hud .card:first-child span{display:inline!important;margin-left:9px!important;font-size:8px!important;color:#8b9a90!important;letter-spacing:.4px}
+#objective{grid-column:1/3!important;border-bottom:1px solid #26332c!important;padding:7px 9px!important}
+#objective b{display:none!important}
+#objective span{margin:0!important;font:900 10px/1.35 Consolas,monospace!important;color:#edf2ee!important;letter-spacing:.25px!important}
+#objective span:before{content:"> ";color:#d2b54e}
+#clockCard,#dayCard{padding:5px 9px!important}
+#clockCard{border-right:1px solid #26332c!important}
+#clockCard b,#dayCard b{display:none!important}
+#clock,#day{margin:0!important;font:900 9px Consolas,monospace!important;color:#aab8ae!important;letter-spacing:1px!important}
+#clock:before{content:"ORA ";color:#6f8175}
+#day:before{content:"// ";color:#53675a}
+#help{opacity:.78;transition:opacity .6s;background:rgba(1,4,2,.72);border:1px solid #1f2923;color:#77857c;font-size:7px;letter-spacing:.15px}
+#help.fade{opacity:0;pointer-events:none}
+#interactionPrompt{bottom:24px;padding:7px 10px;background:rgba(1,5,3,.94);border:1px solid #6f7e73;box-shadow:3px 3px #000;font-size:9px;letter-spacing:.45px}
+#interactionPrompt b{margin-right:10px;padding:2px 5px;background:#b7ff4a;color:#071008}
+#interactionPrompt span{margin-left:0;color:#d9e2dc}
+#roomTransition{top:10%;font-size:9px;letter-spacing:1.2px;padding:5px 9px;border:1px solid #53645a;background:rgba(3,8,5,.90)}
+@media(max-width:760px){#hud{width:calc(100vw - 24px)}#help{display:none}}
+
 </style>
 </head>
 <body>
@@ -208,7 +241,7 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 <div id="dayBanner"><strong>LUNEDI</strong><span>PRIMO TURNO</span></div><div id="timeJump"><div><strong>13:00</strong><span>DOPO QUALCHE ORA</span></div></div><div id="cinematicBars"></div>
 <div id="interactionPrompt"></div>
 <div id="dialogue"><div class="dialogueFrame"><div class="dialogueAccent"></div><div class="dialogueInner"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">SPAZIO / INVIO / TOCCA — CONTINUA</div></div></div></div>
-<div id="help">W/S — AVANTI/INDIETRO · A/D — STRAFE/DIAGONALE · Q/E — RUOTA · SPAZIO — INTERAGISCI · F3 — 3/4 DEV · TAB — MAPPA</div>
+<div id="help">WASD — MUOVI · Q/E — RUOTA · SPAZIO — INTERAGISCI · TAB — MAPPA</div>
 <div id="miniWrap"><canvas id="miniMap" width="240" height="170"></canvas><span>● PLAYER ↑ &nbsp; ◎ OBIETTIVO &nbsp; ○ PORTA · TAB: NPC</span></div>
 <div id="bigMap" class="hidden">
   <div class="bigMapCard">
@@ -277,7 +310,7 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 <div id="devMenu">
   <div class="devMenuCard">
     <div class="devTitle">IT SHIFT // WEEK SYSTEM</div>
-    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.4 environment & gameplay polish. I checkpoint DEV sono disattivati nella build release.</div>
+    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.5 density & PSX environment pass. I checkpoint DEV sono disattivati nella build release.</div>
     <div class="devWeekGrid">
       <button class="devCheckpoint" data-cp="monday"><strong>LUNEDI</strong><span>09:00<br>Primo turno</span></button>
       <button class="devCheckpoint" data-cp="tuesday"><strong>MARTEDI</strong><span>09:05<br>Voci di corridoio</span></button>
@@ -305,10 +338,10 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
       <button class="devCheckpoint" data-cp="m32_start"><strong>13:32 — M3.2 INIZIO</strong><span>Ticket BIM 02</span></button>
       <button class="devCheckpoint" data-cp="manifestation"><strong>13:52 — APPARIZIONE</strong><span>Test diretto figura nel corridoio</span></button>
     </div>
-    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.4 ENVIRONMENT & GAMEPLAY POLISH</span></div>
+    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.5 DENSITY & PSX ENVIRONMENT PASS</span></div>
   </div>
 </div>
-<div id="version">M4.4</div>
+<div id="version">M4.5</div>
 <div id="mobile"><div id="stick"><i></i></div><button id="turnL" class="turnBtn">Q</button><button id="turnR" class="turnBtn">E</button><button id="act">␣<small>INTERAGISCI</small></button></div>
 </div>
 <script src="game.js"></script>
