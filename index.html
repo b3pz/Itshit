@@ -193,7 +193,7 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 }
 
 
-/* M4.6 // MINIMAL PSX HUD */
+/* M4.7 // MINIMAL PSX HUD */
 #fpBadge{display:none!important}
 #fpBadge.dev{display:block!important;top:auto;bottom:12px;left:12px;background:#050906e8;border:1px solid #536a59;color:#79d7ff}
 #miniWrap{display:none!important}
@@ -227,7 +227,7 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 
 
 
-/* M4.6 // STATIC MENU ART — the image is the menu, HTML only supplies 3 hotspots. */
+/* M4.7 // STATIC MENU ART — the image is the menu, HTML only supplies 3 hotspots. */
 #titleScreen{padding:0!important;background:#000!important;overflow:hidden}
 .menuArtFrame{
  position:relative;
@@ -255,6 +255,44 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
  .menuArtFrame{width:100vw;max-width:calc(100vh * 1.777896)}
 }
 
+
+
+/* M4.7 // BIG TEXT + PAUSE/SAVE + PSX UI */
+html,body{font-family:"Courier New",Courier,monospace}
+#hud{width:390px!important;border:2px solid #5c7263!important;background:rgba(3,8,5,.92)!important;box-shadow:4px 4px #000!important}
+#hud .card:first-child b{font-family:"Courier New",Courier,monospace!important;font-size:14px!important;letter-spacing:2.5px!important}
+#hud .card:first-child span{font-family:"Courier New",Courier,monospace!important;font-size:11px!important}
+#objective b{font-size:11px!important;letter-spacing:1.5px!important}
+#objText{font-family:"Courier New",Courier,monospace!important;font-size:14px!important;line-height:1.3!important;font-weight:800!important}
+#clock,#day{font-family:"Courier New",Courier,monospace!important;font-size:13px!important;font-weight:800!important}
+#interactionPrompt{font-family:"Courier New",Courier,monospace!important;font-size:14px!important;padding:10px 15px!important;border-width:2px!important}
+#dialogue{width:min(1120px,94vw)!important;bottom:24px!important}
+.dialogueFrame{grid-template-columns:18px 1fr!important;border:4px solid #75887b!important;box-shadow:12px 12px #000!important}
+.dialogueInner{padding:20px 25px 16px 22px!important}
+#dialogueName{font-family:"Courier New",Courier,monospace!important;font-size:19px!important;letter-spacing:2.5px!important;margin-bottom:13px!important;padding-bottom:9px!important;min-width:280px!important}
+#dialogueText{font-family:"Courier New",Courier,monospace!important;font-size:26px!important;line-height:1.42!important;font-weight:700!important;min-height:96px!important;max-width:1030px!important}
+#dialogueHint{font-family:"Courier New",Courier,monospace!important;font-size:12px!important;letter-spacing:1.2px!important;margin-top:15px!important}
+#toast{font-family:"Courier New",Courier,monospace!important;font-size:14px!important;padding:11px 16px!important}
+#help{font-family:"Courier New",Courier,monospace!important;font-size:10px!important}
+#pauseScreen{position:absolute;inset:0;z-index:125;background:rgba(0,3,2,.76);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;backdrop-filter:blur(1px)}
+#pauseScreen.hidden{display:none}
+.pauseCard{width:min(590px,92vw);background:#030806f8;border:3px solid #617666;box-shadow:11px 11px #000;padding:28px;box-sizing:border-box}
+.pauseTitle{color:#b7ff4a;font:900 34px/1 "Courier New",Courier,monospace;letter-spacing:6px;margin-bottom:8px}
+.pauseMeta{color:#94a497;font:700 13px/1.5 "Courier New",Courier,monospace;margin-bottom:22px;border-bottom:1px solid #314139;padding-bottom:14px}
+.pauseBtn{display:block;width:100%;margin:11px 0;padding:16px 17px;background:#0b1510;border:2px solid #526a5b;color:#edf2ee;text-align:left;font:900 16px "Courier New",Courier,monospace;letter-spacing:.6px;cursor:pointer;box-shadow:3px 3px #000}
+.pauseBtn:hover,.pauseBtn:focus-visible{outline:none;border-color:#b7ff4a;background:#112019}
+.pauseHint{margin-top:17px;color:#7f9185;font:700 11px/1.55 "Courier New",Courier,monospace}
+#saveFlash{position:absolute;right:18px;bottom:18px;z-index:126;opacity:0;pointer-events:none;background:#07100df0;border:2px solid #6c806f;color:#b7ff4a;padding:10px 13px;font:900 12px "Courier New",Courier,monospace;letter-spacing:1px;transition:opacity .15s}
+#saveFlash.on{opacity:1}
+@media(max-width:760px){
+ #hud{width:calc(100vw - 20px)!important}
+ #dialogue{bottom:118px!important;width:94vw!important}
+ #dialogueName{font-size:15px!important;min-width:unset!important}
+ #dialogueText{font-size:19px!important;line-height:1.42!important;min-height:80px!important}
+ #dialogueHint{font-size:10px!important}
+ .pauseTitle{font-size:28px}.pauseBtn{font-size:14px}
+}
+
 </style>
 </head>
 <body>
@@ -271,7 +309,7 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 <div id="dayBanner"><strong>LUNEDI</strong><span>PRIMO TURNO</span></div><div id="timeJump"><div><strong>13:00</strong><span>DOPO QUALCHE ORA</span></div></div><div id="cinematicBars"></div>
 <div id="interactionPrompt"></div>
 <div id="dialogue"><div class="dialogueFrame"><div class="dialogueAccent"></div><div class="dialogueInner"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">SPAZIO / INVIO / TOCCA — CONTINUA</div></div></div></div>
-<div id="help">WASD — MUOVI · Q/E — RUOTA · SPAZIO — INTERAGISCI · TAB — MAPPA</div>
+<div id="help">WASD — MUOVI · Q/E — RUOTA · SPAZIO — INTERAGISCI · TAB — MAPPA · ESC — PAUSA · F5 — SALVA</div>
 <div id="miniWrap"><canvas id="miniMap" width="240" height="170"></canvas><span>● PLAYER ↑ &nbsp; ◎ OBIETTIVO &nbsp; ○ PORTA · TAB: NPC</span></div>
 <div id="bigMap" class="hidden">
   <div class="bigMapCard">
@@ -328,12 +366,26 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
   </div>
 </div>
 
+
+<div id="pauseScreen" class="hidden">
+  <div class="pauseCard">
+    <div class="pauseTitle">PAUSA</div>
+    <div id="pauseMeta" class="pauseMeta">LUNEDI // 09:00</div>
+    <button id="resumeBtn" class="pauseBtn" type="button">&gt; RIPRENDI</button>
+    <button id="manualSaveBtn" class="pauseBtn" type="button">&gt; SALVA PARTITA</button>
+    <button id="pauseOptionsBtn" class="pauseBtn" type="button">&gt; OPZIONI</button>
+    <button id="saveMenuBtn" class="pauseBtn" type="button">&gt; SALVA E TORNA AL MENU</button>
+    <div class="pauseHint">ESC — RIPRENDI &nbsp; // &nbsp; F5 — SALVATAGGIO RAPIDO</div>
+  </div>
+</div>
+<div id="saveFlash">PARTITA SALVATA</div>
+
 <button id="devButton" type="button">DEV</button>
 <div id="devStatus"><b>DEV STATE</b><div id="devStatusText">BOOT...</div></div>
 <div id="devMenu">
   <div class="devMenuCard">
     <div class="devTitle">IT SHIFT // WEEK SYSTEM</div>
-    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.6 CORE // presentation & behaviour pass. I checkpoint DEV sono disattivati nella build release.</div>
+    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.7 CORE // presentation & behaviour pass. I checkpoint DEV sono disattivati nella build release.</div>
     <div class="devWeekGrid">
       <button class="devCheckpoint" data-cp="monday"><strong>LUNEDI</strong><span>09:00<br>Primo turno</span></button>
       <button class="devCheckpoint" data-cp="tuesday"><strong>MARTEDI</strong><span>09:05<br>Voci di corridoio</span></button>
@@ -361,10 +413,10 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
       <button class="devCheckpoint" data-cp="m32_start"><strong>13:32 — M3.2 INIZIO</strong><span>Ticket BIM 02</span></button>
       <button class="devCheckpoint" data-cp="manifestation"><strong>13:52 — APPARIZIONE</strong><span>Test diretto figura nel corridoio</span></button>
     </div>
-    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.6 CORE // PRESENTATION & BEHAVIOUR</span></div>
+    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.7 CORE // PRESENTATION & BEHAVIOUR</span></div>
   </div>
 </div>
-<div id="version">M4.6</div>
+<div id="version">M4.7</div>
 <div id="mobile"><div id="stick"><i></i></div><button id="turnL" class="turnBtn">Q</button><button id="turnR" class="turnBtn">E</button><button id="act">␣<small>INTERAGISCI</small></button></div>
 </div>
 <script src="game.js"></script>

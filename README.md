@@ -1,59 +1,48 @@
-# IT SHIFT — M4.6 CORE
+# IT SHIFT — M4.7 UI / PAUSE / SAVE / ENVIRONMENT FIX
 
 Build root-ready per GitHub Pages.
 
-## File da caricare nella root
-
+## File
 - `index.html`
 - `game.js`
 - `itshift_menu.png`
 - `README.md`
 
-## Core M4.6
+## M4.7
 
-### Menu principale
-- il menu non viene più costruito graficamente dal motore
-- `itshift_menu.png` è la schermata iniziale completa ad alta qualità
-- l'HTML aggiunge soltanto 3 hotspot trasparenti esattamente sopra:
-  - NUOVO TURNO
-  - CONTINUA
-  - OPZIONI
-- mouse, touch e navigazione da tastiera dei pulsanti restano disponibili
-- OPZIONI continua ad aprire il pannello reale per audio / CRT / salvataggio
+### Testi e font
+- dialoghi molto più grandi
+- nuovo font `Courier New` / monospace di fallback
+- nome NPC più grande
+- hint di avanzamento più leggibile
+- HUD, obiettivo, prompt e toast ingranditi
+- menu iniziale statico M4.6 mantenuto invariato
 
-### NPC
-- durante il normale lavoro gli NPC non ruotano continuamente verso il giocatore
-- durante un dialogo il personaggio coinvolto può rivolgersi al protagonista
-- il camera-follow innaturale viene riutilizzato soltanto per:
-  - manifestazioni
-  - Capo demoniaco
-  - Lorenzo nel reveal finale
-  - colleghi rimasti nella fase decaduta del venerdì
-- questo rende lo sguardo "zombie" un elemento horror progressivo invece di un comportamento normale
+### Pausa e salvataggio
+- `ESC` apre il menu **PAUSA**
+- PAUSA contiene:
+  - Riprendi
+  - Salva partita
+  - Opzioni
+  - Salva e torna al menu
+- `F5` = salvataggio rapido
+- il salvataggio conserva giorno, step narrativo, posizione e orientamento
+- feedback visivo `PARTITA SALVATA`
+- a ogni cambio giorno compare `CHECKPOINT SALVATO`
+
+### Porte
+- corretta la misura dei telai: ora coprono realmente il vano da 1.80 unità
+- i montanti arrivano fino ai bordi del muro e non devono più apparire sospesi/staccati
 
 ### Corridoi
-- rimossi i principali pannelli/mobili aggiunti nel mezzo della circolazione dalla M4.5
-- mantenute le luci e la densità dentro le stanze
-- piccoli elementi di corridoio sono ora più vicini ai bordi
-- pannelli/vetrate delle Sale Meet spostati leggermente all'interno delle stanze
+- rimossi i pochi cestini/oggetti a pavimento usati come riempitivo
+- aggiunte targhette e piccole luci integrate ai muri/telai delle porte
+- nessun nuovo arredo viene messo nel percorso di passaggio
 
-### Stampa 3D
-- stampante 3D ridisegnata come struttura aperta con:
-  - telaio
-  - piano di stampa
-  - gantry/testina
-  - piccolo pannello di controllo
-  - supporto materiale
-- la stanza usa una stampante leggibile, un banco di fabbricazione e materiali, invece di più volumi pieni sovrapposti
-
-### Conservato dalla M4.5.1
-- hotfix del boot / array grandi
+### Conservato dalla M4.6
+- menu statico cliccabile a 3 hotspot
+- NPC normali con orientamento stabile; sguardo inquietante solo nelle fasi horror
 - postazioni accessibili dal lato corretto
-- stampante accessibile frontalmente
-- altre workstation esaminabili
-- Server / Magazzino IT densificato
-- pavimento/subfloor continuo
-- HUD minimale
-- fix NPC durante dialoghi e pranzo
-- settimana completa e 3 finali
-- LMN_01
+- Stampa 3D open-frame
+- Server/Magazzino IT
+- tre finali e LMN_01

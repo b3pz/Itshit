@@ -39,7 +39,7 @@ function rack(x,z){solids.push({x,z,w:.7,d:.65});box(x,0,z,.7,1.75,.65,[.1,.15,.
 
 
 // -----------------------------------------------------------------------------
-// M4.6 // CORE PRESENTATION & BEHAVIOUR PASS
+// M4.7 // CORE PRESENTATION & BEHAVIOUR PASS
 // A small near-release art-language test covering REPARTO IT + HR + their corridor.
 // IMPORTANT: these are visual-only props; no new solids/collisions are introduced.
 // The frozen M2.9.2 architecture and all M3.4 gameplay remain unchanged.
@@ -147,14 +147,17 @@ function psxBathroomSet(x,z){
 }
 
 function doorFrame(x,z,axis="z",col=[.25,.19,.14]){
+ // The architectural wall cutout is 1.80 units wide. The old 1.16 frame
+ // left a visible air gap between jambs and walls; M4.7 spans the full cutout.
+ const half=.84, span=1.80;
  if(axis==="z"){
-   box(x-.52,0,z,.12,1.9,.14,col);
-   box(x+.52,0,z,.12,1.9,.14,col);
-   box(x,1.78,z,1.16,.12,.14,col);
+   box(x-half,0,z,.12,1.9,.14,col);
+   box(x+half,0,z,.12,1.9,.14,col);
+   box(x,1.78,z,span,.12,.14,col);
  }else{
-   box(x,0,z-.52,.14,1.9,.12,col);
-   box(x,0,z+.52,.14,1.9,.12,col);
-   box(x,1.78,z,.14,.12,1.16,col);
+   box(x,0,z-half,.14,1.9,.12,col);
+   box(x,0,z+half,.14,1.9,.12,col);
+   box(x,1.78,z,.14,.12,span,col);
  }
 }
 
@@ -360,6 +363,25 @@ doors.forEach(d=>{
  if(d.axis==="x")box(d.x,.012,d.z,.72,.024,1.45,[.31,.30,.23]);
  else box(d.x,.012,d.z,1.45,.024,.72,[.31,.30,.23]);
 });
+
+// M4.7 // Corridor dressing is wall-mounted only: plaques + header lights.
+// This adds rhythm without putting furniture in the circulation path.
+function corridorDoorPlaque(d){
+ const r=rooms.find(x=>x.name===d.room);if(!r)return;
+ const col=d.room==="REPARTO IT"?[.37,.56,.31]:d.room.includes("MEET")?[.46,.39,.25]:[.30,.39,.33];
+ if(d.axis==="x"){
+   const towardCorridor=-Math.sign(r.x-d.x)||1;
+   const px=d.x+towardCorridor*.085,pz=d.z+1.12;
+   box(px,.92,pz,.035,.42,.34,[.16,.19,.17]);box(px+towardCorridor*.018,1.00,pz,.018,.19,.25,col);
+   box(px,1.90,d.z,.04,.055,1.28,[.55,.55,.43]);
+ }else{
+   const towardCorridor=-Math.sign(r.z-d.z)||1;
+   const pz=d.z+towardCorridor*.085,px=d.x+1.12;
+   box(px,.92,pz,.34,.42,.035,[.16,.19,.17]);box(px,1.00,pz+towardCorridor*.018,.25,.19,.018,col);
+   box(d.x,1.90,pz,1.28,.055,.04,[.55,.55,.43]);
+ }
+}
+doors.forEach(corridorDoorPlaque);
 
 // M2.9.1 // ROOM SCALE BLOCKOUT
 // Furniture is deliberately simple but now represents the intended capacity.
@@ -570,7 +592,7 @@ function psxCeilingStrip(x,z,w=1.2,d=.26){box(x,2.105,z,w,.035,d,[.34,.35,.31]);
 // Corridors: keep circulation clear. Density now lives inside rooms and on ceilings/walls.
 for(const z of [8.3,5.5,2.5,-.5,-3.5,-6.5])psxCeilingStrip(0,z,1.35,.24);
 for(const z of [6.4,2.0,-2.4,-6.3])psxCeilingStrip(8.9,z,1.00,.22);
-psxBin(-1.52,7.35,[.15,.17,.15]);psxBin(8.18,-6.75,[.15,.17,.15]);
+
 
 // Meeting areas: corridor-facing dark-glass panels distinguish them immediately.
 psxGlassPanelX(2.76,6.18,.92);psxGlassPanelX(2.76,9.24,.92);
@@ -1514,12 +1536,12 @@ function smoothTo(a,b,k,dt){
 // M4.4 // RELEASE FLOW + LOCAL SAVE + OPTIONS
 // -----------------------------------------------------------------------------
 const SAVE_KEY="ITSHIFT_M42_SAVE",LIMEN_KEY="LIMEN_SESSION_01",SETTINGS_KEY="ITSHIFT_M43_SETTINGS";
-let gameStarted=false,gameEnded=false,choiceOpen=false,cutsceneActive=false;
+let gameStarted=false,gameEnded=false,choiceOpen=false,cutsceneActive=false,pauseOpen=false,optionsReturnPause=false;
 const timeJumpEl=document.getElementById("timeJump"),cinematicBarsEl=document.getElementById("cinematicBars");
-const titleScreenEl=document.getElementById("titleScreen"),endingScreenEl=document.getElementById("endingScreen"),choiceScreenEl=document.getElementById("choiceScreen"),optionsScreenEl=document.getElementById("optionsScreen");
+const titleScreenEl=document.getElementById("titleScreen"),endingScreenEl=document.getElementById("endingScreen"),choiceScreenEl=document.getElementById("choiceScreen"),optionsScreenEl=document.getElementById("optionsScreen"),pauseScreenEl=document.getElementById("pauseScreen"),pauseMetaEl=document.getElementById("pauseMeta"),saveFlashEl=document.getElementById("saveFlash");
 let timeJumpTimer=0,cutscene=null,cutsceneFootLast=0;
 const settingsDefaults={audioMuted:false,crt:true};
-function minsOf(t){const m=/^(d{2}):(d{2})$/.exec(t||"");return m?(+m[1]*60 + +m[2]):null;}
+function minsOf(t){const m=/^(\d{2}):(\d{2})$/.exec(t||"");return m?(+m[1]*60 + +m[2]):null;}
 function showTimeJump(time,label="DOPO QUALCHE ORA"){if(!timeJumpEl)return;const s=timeJumpEl.querySelector("strong"),l=timeJumpEl.querySelector("span");if(s)s.textContent=time;if(l)l.textContent=label;timeJumpEl.classList.add("on");clearTimeout(timeJumpTimer);timeJumpTimer=setTimeout(()=>timeJumpEl.classList.remove("on"),850);}
 function pathPoint(path,t){t=Math.max(0,Math.min(1,t));const scaled=t*(path.length-1),i=Math.min(path.length-2,Math.floor(scaled)),u=scaled-i;return{x:path[i].x+(path[i+1].x-path[i].x)*u,z:path[i].z+(path[i+1].z-path[i].z)*u};}
 function startLorenzoDirezioneWalk(){
@@ -1551,7 +1573,7 @@ function applySettings(){
 function setCrtEnabled(v){saveSettings({crt:!!v});applySettings();toast(v?"CRT // ON":"CRT // OFF");}
 function saveProgress(){
  if(!gameStarted||gameEnded)return;
- safeWrite(SAVE_KEY,{version:"M4.6",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
+ safeWrite(SAVE_KEY,{version:"M4.7",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
  refreshTitleMeta();
 }
 function refreshTitleMeta(){
@@ -1564,11 +1586,18 @@ function refreshTitleMeta(){
    meta.innerHTML=s?'SALVATAGGIO // '+(WEEK_DAYS[s.day]?.label||'?')+' · '+(storySteps[s.step]?.time||'--:--')+endingLine:'SESSIONE LOCALE // NESSUN SALVATAGGIO'+endingLine;
  }
 }
-function closeAllReleaseScreens(){titleScreenEl?.classList.add("hidden");endingScreenEl?.classList.add("hidden");choiceScreenEl?.classList.add("hidden");optionsScreenEl?.classList.add("hidden");}
-function openOptions(){optionsScreenEl?.classList.remove("hidden");}
-function closeOptions(){optionsScreenEl?.classList.add("hidden");}
+function closeAllReleaseScreens(){titleScreenEl?.classList.add("hidden");endingScreenEl?.classList.add("hidden");choiceScreenEl?.classList.add("hidden");optionsScreenEl?.classList.add("hidden");pauseScreenEl?.classList.add("hidden");pauseOpen=false;}
+function openOptions(fromPause=false){optionsReturnPause=!!fromPause;if(fromPause){pauseScreenEl?.classList.add("hidden");pauseOpen=false;}optionsScreenEl?.classList.remove("hidden");}
+function closeOptions(){optionsScreenEl?.classList.add("hidden");if(optionsReturnPause&&gameStarted){pauseScreenEl?.classList.remove("hidden");pauseOpen=true;}optionsReturnPause=false;}
+function updatePauseMeta(){if(!pauseMetaEl)return;pauseMetaEl.textContent=(WEEK_DAYS[currentDay]?.label||"?")+" // "+(storySteps[storyStep]?.time||"--:--")+" // "+(roomAt(player.x,player.z)||"");}
+function openPause(){if(!gameStarted||gameEnded||choiceOpen||cutsceneActive)return;pauseOpen=true;updatePauseMeta();pauseScreenEl?.classList.remove("hidden");Object.keys(keys||{}).forEach(k=>keys[k]=0);}
+function closePause(){pauseOpen=false;pauseScreenEl?.classList.add("hidden");}
+let saveFlashTimer=0;
+function showSaveFlash(label="PARTITA SALVATA"){if(!saveFlashEl)return;saveFlashEl.textContent=label;saveFlashEl.classList.add("on");clearTimeout(saveFlashTimer);saveFlashTimer=setTimeout(()=>saveFlashEl.classList.remove("on"),1250);}
+function manualSave(label="PARTITA SALVATA"){if(!gameStarted||gameEnded)return false;saveProgress();showSaveFlash(label);uiBlip();updatePauseMeta();return true;}
+function saveAndMenu(){manualSave("SALVATAGGIO COMPLETATO");closePause();goToTitle();}
 function resetRunState(){
- gameEnded=false;choiceOpen=false;cutsceneActive=false;cutscene=null;cinematicBarsEl?.classList.remove("on");closeDialogueForCheckpoint();resetOfficeForCheckpoint();
+ gameEnded=false;choiceOpen=false;cutsceneActive=false;pauseOpen=false;cutscene=null;cinematicBarsEl?.classList.remove("on");closeDialogueForCheckpoint();resetOfficeForCheckpoint();
  setWeekDay(0,false);storyStep=0;player.x=0;player.z=9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
  setStoryStep(0);applyNpcSceneFromStory();sceneTint=0;realityGlitchUntil=0;otherOfficeFigureGone=false;
 }
@@ -1584,11 +1613,11 @@ function continueGame(){
  player.x=Number.isFinite(s.x)?s.x:0;player.z=Number.isFinite(s.z)?s.z:9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=Number.isFinite(s.yaw)?s.yaw:FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
  gameStarted=true;closeAllReleaseScreens();showDayBanner();ensureAudio();saveProgress();fadeControlHelp();
 }
-function goToTitle(){gameStarted=false;gameEnded=false;choiceOpen=false;endingScreenEl?.classList.add("hidden");choiceScreenEl?.classList.add("hidden");optionsScreenEl?.classList.add("hidden");titleScreenEl?.classList.remove("hidden");refreshTitleMeta();applySettings()}
+function goToTitle(){gameStarted=false;gameEnded=false;choiceOpen=false;pauseOpen=false;endingScreenEl?.classList.add("hidden");choiceScreenEl?.classList.add("hidden");optionsScreenEl?.classList.add("hidden");pauseScreenEl?.classList.add("hidden");titleScreenEl?.classList.remove("hidden");refreshTitleMeta();applySettings()}
 function completeDay(dayIndex){
  const next=dayIndex+1;if(next>=WEEK_DAYS.length)return;
  resetOfficeForCheckpoint();setWeekDay(next,true);player.x=0;player.z=9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
- const starts=[0,TUESDAY_START_STEP,WEDNESDAY_START_STEP,THURSDAY_START_STEP,FRIDAY_START_STEP];setStoryStep(starts[next]);applyWeekStartProfile();applyNpcSceneFromStory();toast("FINE GIORNATA // "+WEEK_DAYS[next].label);saveProgress();
+ const starts=[0,TUESDAY_START_STEP,WEDNESDAY_START_STEP,THURSDAY_START_STEP,FRIDAY_START_STEP];setStoryStep(starts[next]);applyWeekStartProfile();applyNpcSceneFromStory();toast("FINE GIORNATA // "+WEEK_DAYS[next].label);saveProgress();showSaveFlash("CHECKPOINT SALVATO");
 }
 function openEndingChoice(){choiceOpen=true;choiceScreenEl?.classList.remove("hidden");}
 function showEnding(kind){
@@ -1605,13 +1634,17 @@ function showEnding(kind){
 function bindReleaseUi(){
  document.getElementById("newGameBtn")?.addEventListener("click",startNewGame);
  document.getElementById("continueBtn")?.addEventListener("click",continueGame);
- document.getElementById("optionsBtn")?.addEventListener("click",openOptions);
+ document.getElementById("optionsBtn")?.addEventListener("click",()=>openOptions(false));
  document.getElementById("closeOptionsBtn")?.addEventListener("click",closeOptions);
  document.getElementById("toggleAudioBtn")?.addEventListener("click",()=>{setAudioMuted(!audioMuted);saveSettings({audioMuted});applySettings()});
  document.getElementById("toggleCrtBtn")?.addEventListener("click",()=>{const s=getSettings();setCrtEnabled(!s.crt)});
  document.getElementById("resetSaveBtn")?.addEventListener("click",()=>{safeRemove(SAVE_KEY);refreshTitleMeta();toast("SALVATAGGIO CANCELLATO")});
  document.getElementById("endingRestartBtn")?.addEventListener("click",startNewGame);
  document.getElementById("endingMenuBtn")?.addEventListener("click",goToTitle);
+ document.getElementById("resumeBtn")?.addEventListener("click",closePause);
+ document.getElementById("manualSaveBtn")?.addEventListener("click",()=>manualSave());
+ document.getElementById("pauseOptionsBtn")?.addEventListener("click",()=>openOptions(true));
+ document.getElementById("saveMenuBtn")?.addEventListener("click",saveAndMenu);
  document.querySelectorAll(".endingChoice").forEach(b=>b.addEventListener("click",()=>showEnding(b.dataset.ending)));
  refreshTitleMeta();applySettings();
 }
@@ -1939,6 +1972,9 @@ addEventListener("keydown",e=>{
  const k=e.key.toLowerCase();
  if(["w","a","s","d","q","e","arrowup","arrowdown","arrowleft","arrowright","enter"," "].includes(k))ensureAudio();
  if(k==="m"&&!e.repeat){e.preventDefault();setAudioMuted(!audioMuted);return;}
+ if(k==="f5"&&!e.repeat&&gameStarted){e.preventDefault();manualSave("SALVATAGGIO RAPIDO");return;}
+ if(pauseOpen){if(k==="escape"&&!e.repeat){e.preventDefault();closePause();}else e.preventDefault();return;}
+ if(k==="escape"&&!e.repeat&&gameStarted){e.preventDefault();openPause();return;}
  if(k==="f2"&&!e.repeat){e.preventDefault();openDevMenu();return;}
  if(k==="f3"&&!e.repeat){e.preventDefault();toggleCameraMode();return;}
  if(optionsScreenEl&&!optionsScreenEl.classList.contains("hidden")){
@@ -3004,7 +3040,7 @@ function cameraSafeDistance(targetX,targetZ,yaw,wantedDist){
 }
 
 function resize(){const d=Math.min(1.25,devicePixelRatio||1),w=Math.max(320,Math.floor(innerWidth*d*.64)),h=Math.max(180,Math.floor(innerHeight*d*.64));if(c.width!==w||c.height!==h){c.width=w;c.height=h}}
-let last=performance.now();function frame(now){const dt=Math.min(.04,(now-last)/1000);last=now;dtForAtmosphere=dt;const mapOpen=bigMap&&!bigMap.classList.contains("hidden");const devOpen=devMenu&&!devMenu.classList.contains("hidden");const releasePaused=!gameStarted||gameEnded||choiceOpen||cutsceneActive;updateCutscene(now);
+let last=performance.now();function frame(now){const dt=Math.min(.04,(now-last)/1000);last=now;dtForAtmosphere=dt;const mapOpen=bigMap&&!bigMap.classList.contains("hidden");const devOpen=devMenu&&!devMenu.classList.contains("hidden");const releasePaused=!gameStarted||gameEnded||choiceOpen||cutsceneActive||pauseOpen;updateCutscene(now);
 
 // M3.3.2 // Dual controls.
 // FP GAME: W/S forward-back, A/D strafe, diagonals work naturally, Q/E rotate.
