@@ -1,37 +1,59 @@
-# IT SHIFT — M4.5.1 HOTFIX
+# IT SHIFT — M4.6 CORE
 
-Hotfix della M4.5 DENSITY & PSX ENVIRONMENT PASS.
+Build root-ready per GitHub Pages.
 
-## Per GitHub Pages
-Carica direttamente nella root del repository:
+## File da caricare nella root
 
 - `index.html`
 - `game.js`
+- `itshift_menu.png`
 - `README.md`
 
-## Fix critico
-La M4.5 poteva fermarsi sulla schermata iniziale perché il nuovo pass di densità ha aumentato molto il numero di vertici della scena. Alcuni ripristini del buffer usavano `V.push(...saved)`: con un array così grande il browser genera `RangeError: Maximum call stack size exceeded` prima di collegare i pulsanti del menu e prima di nascondere il menu DEV.
+## Core M4.6
 
-M4.5.1 sostituisce tutti quei ripristini con una copia iterativa sicura (`restoreV`).
+### Menu principale
+- il menu non viene più costruito graficamente dal motore
+- `itshift_menu.png` è la schermata iniziale completa ad alta qualità
+- l'HTML aggiunge soltanto 3 hotspot trasparenti esattamente sopra:
+  - NUOVO TURNO
+  - CONTINUA
+  - OPZIONI
+- mouse, touch e navigazione da tastiera dei pulsanti restano disponibili
+- OPZIONI continua ad aprire il pannello reale per audio / CRT / salvataggio
 
-## Verifiche eseguite
-- controllo sintattico JavaScript: OK
-- boot senza eccezioni runtime: OK
-- menu DEV nascosto in release: OK
-- pulsante `NUOVO TURNO`: OK
-- schermata iniziale si chiude correttamente: OK
-- gioco entra su `INGRESSO / SEGRETERIA` con obiettivo `PARLA CON ZIA ALE`: OK
+### NPC
+- durante il normale lavoro gli NPC non ruotano continuamente verso il giocatore
+- durante un dialogo il personaggio coinvolto può rivolgersi al protagonista
+- il camera-follow innaturale viene riutilizzato soltanto per:
+  - manifestazioni
+  - Capo demoniaco
+  - Lorenzo nel reveal finale
+  - colleghi rimasti nella fase decaduta del venerdì
+- questo rende lo sguardo "zombie" un elemento horror progressivo invece di un comportamento normale
 
-## Tutto il resto
-Restano invariati i contenuti M4.5:
-- densità ambientale
-- geometrie Server / Magazzino IT
-- postazioni raggiungibili
-- sale meeting caratterizzate
-- subfloor continuo
-- HUD minimale PSX
-- minimappa permanente rimossa
-- prompt contestuali
-- trama Lunedi–Venerdi e tre finali
+### Corridoi
+- rimossi i principali pannelli/mobili aggiunti nel mezzo della circolazione dalla M4.5
+- mantenute le luci e la densità dentro le stanze
+- piccoli elementi di corridoio sono ora più vicini ai bordi
+- pannelli/vetrate delle Sale Meet spostati leggermente all'interno delle stanze
 
-I checkpoint DEV restano disponibili con `?dev=1`.
+### Stampa 3D
+- stampante 3D ridisegnata come struttura aperta con:
+  - telaio
+  - piano di stampa
+  - gantry/testina
+  - piccolo pannello di controllo
+  - supporto materiale
+- la stanza usa una stampante leggibile, un banco di fabbricazione e materiali, invece di più volumi pieni sovrapposti
+
+### Conservato dalla M4.5.1
+- hotfix del boot / array grandi
+- postazioni accessibili dal lato corretto
+- stampante accessibile frontalmente
+- altre workstation esaminabili
+- Server / Magazzino IT densificato
+- pavimento/subfloor continuo
+- HUD minimale
+- fix NPC durante dialoghi e pranzo
+- settimana completa e 3 finali
+- LMN_01

@@ -193,7 +193,7 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 }
 
 
-/* M4.5 // MINIMAL PSX HUD */
+/* M4.6 // MINIMAL PSX HUD */
 #fpBadge{display:none!important}
 #fpBadge.dev{display:block!important;top:auto;bottom:12px;left:12px;background:#050906e8;border:1px solid #536a59;color:#79d7ff}
 #miniWrap{display:none!important}
@@ -225,6 +225,36 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 #roomTransition{top:10%;font-size:9px;letter-spacing:1.2px;padding:5px 9px;border:1px solid #53645a;background:rgba(3,8,5,.90)}
 @media(max-width:760px){#hud{width:calc(100vw - 24px)}#help{display:none}}
 
+
+
+/* M4.6 // STATIC MENU ART — the image is the menu, HTML only supplies 3 hotspots. */
+#titleScreen{padding:0!important;background:#000!important;overflow:hidden}
+.menuArtFrame{
+ position:relative;
+ width:min(100vw,calc(100vh * 1.777896));
+ aspect-ratio:1672/941;
+ max-height:100vh;
+ background:url('itshift_menu.png') center center/100% 100% no-repeat;
+ box-shadow:0 0 55px #000;
+}
+.menuHotspot{
+ position:absolute;z-index:4;border:0;background:transparent;color:transparent;
+ cursor:pointer;padding:0;margin:0;border-radius:2px;
+ transition:background .12s,box-shadow .12s;
+}
+.menuHotspot:hover,.menuHotspot:focus-visible{
+ outline:none;background:rgba(183,255,74,.035);
+ box-shadow:inset 0 0 0 2px rgba(183,255,74,.42),0 0 20px rgba(183,255,74,.08);
+}
+#newGameBtn.menuHotspot{left:6.25%;top:46.85%;width:30.15%;height:11.15%}
+#continueBtn.menuHotspot{left:6.25%;top:59.85%;width:30.15%;height:10.85%}
+#optionsBtn.menuHotspot{left:6.25%;top:72.80%;width:30.15%;height:10.85%}
+.menuSr{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#titleMeta,#continueSub{display:none!important}
+@media(max-width:760px){
+ .menuArtFrame{width:100vw;max-width:calc(100vh * 1.777896)}
+}
+
 </style>
 </head>
 <body>
@@ -251,18 +281,11 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 </div>
 
 <div id="titleScreen">
-  <div class="titleShell">
-    <div class="titlePanel">
-      <div class="titleEyebrow">TURNO SETTIMANALE // REPARTO IT</div>
-      <div class="releaseLogo">IT SHIFT</div>
-      <div class="releaseTagline">Ticket, badge, colleghi. Cinque giorni di lavoro. Almeno sulla carta.</div>
-      <div class="releaseSub">Gioca con mouse o tastiera. Continua una partita esistente oppure avvia un nuovo turno.</div>
-      <button id="newGameBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; NUOVO TURNO</span><span class="subLine">Ricominci da <strong>LUNEDI // 09:00</strong></span></button>
-      <button id="continueBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; CONTINUA</span><span id="continueSub" class="subLine">NESSUN SALVATAGGIO DISPONIBILE</span></button>
-      <button id="optionsBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; OPZIONI</span><span class="subLine">Audio, filtro CRT e gestione salvataggio</span></button>
-      <div id="titleMeta" class="releaseMeta">SESSIONE LOCALE // NESSUN SALVATAGGIO</div>
-      <div class="titleFoot">Usa mouse o tocco sui pulsanti · ESC chiude le opzioni</div>
-    </div>
+  <div class="menuArtFrame" role="group" aria-label="Menu principale IT SHIFT">
+    <button id="newGameBtn" class="menuHotspot" type="button" aria-label="Nuovo turno"><span class="menuSr">NUOVO TURNO</span></button>
+    <button id="continueBtn" class="menuHotspot" type="button" aria-label="Continua"><span id="continueSub" class="menuSr">CONTINUA</span></button>
+    <button id="optionsBtn" class="menuHotspot" type="button" aria-label="Opzioni"><span class="menuSr">OPZIONI</span></button>
+    <div id="titleMeta" class="menuSr">SESSIONE LOCALE</div>
   </div>
 </div>
 <div id="optionsScreen" class="hidden">
@@ -310,7 +333,7 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
 <div id="devMenu">
   <div class="devMenuCard">
     <div class="devTitle">IT SHIFT // WEEK SYSTEM</div>
-    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.5.1 hotfix // density & PSX environment pass. I checkpoint DEV sono disattivati nella build release.</div>
+    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.6 CORE // presentation & behaviour pass. I checkpoint DEV sono disattivati nella build release.</div>
     <div class="devWeekGrid">
       <button class="devCheckpoint" data-cp="monday"><strong>LUNEDI</strong><span>09:00<br>Primo turno</span></button>
       <button class="devCheckpoint" data-cp="tuesday"><strong>MARTEDI</strong><span>09:05<br>Voci di corridoio</span></button>
@@ -338,10 +361,10 @@ linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100
       <button class="devCheckpoint" data-cp="m32_start"><strong>13:32 — M3.2 INIZIO</strong><span>Ticket BIM 02</span></button>
       <button class="devCheckpoint" data-cp="manifestation"><strong>13:52 — APPARIZIONE</strong><span>Test diretto figura nel corridoio</span></button>
     </div>
-    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.5.1 HOTFIX // DENSITY & PSX ENVIRONMENT PASS</span></div>
+    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.6 CORE // PRESENTATION & BEHAVIOUR</span></div>
   </div>
 </div>
-<div id="version">M4.5.1</div>
+<div id="version">M4.6</div>
 <div id="mobile"><div id="stick"><i></i></div><button id="turnL" class="turnBtn">Q</button><button id="turnR" class="turnBtn">E</button><button id="act">␣<small>INTERAGISCI</small></button></div>
 </div>
 <script src="game.js"></script>

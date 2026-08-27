@@ -39,7 +39,7 @@ function rack(x,z){solids.push({x,z,w:.7,d:.65});box(x,0,z,.7,1.75,.65,[.1,.15,.
 
 
 // -----------------------------------------------------------------------------
-// M4.5 // DENSITY & PSX ENVIRONMENT PASS
+// M4.6 // CORE PRESENTATION & BEHAVIOUR PASS
 // A small near-release art-language test covering REPARTO IT + HR + their corridor.
 // IMPORTANT: these are visual-only props; no new solids/collisions are introduced.
 // The frozen M2.9.2 architecture and all M3.4 gameplay remain unchanged.
@@ -129,10 +129,15 @@ function psxCoffeeCorner(x,z){
  box(x+.32,.88,z,.36,.54,.36,[.54,.55,.50]);
 }
 function psx3DPrinter(x,z){
- box(x,.05,z,.72,.78,.62,[.22,.28,.28]);
- box(x,.28,z,.58,.44,.48,[.08,.10,.10]);
- box(x,.69,z,.52,.08,.44,[.39,.43,.42]);
- box(x,.50,z,.06,.18,.06,[.65,.50,.20]);
+ // Open-frame FDM printer: clear bed + gantry silhouette instead of a solid cube.
+ box(x,.04,z,.82,.18,.70,[.22,.27,.27]);
+ for(const dx of [-.35,.35])for(const dz of [-.28,.28])box(x+dx,.20,z+dz,.055,1.10,.055,[.34,.38,.37]);
+ box(x,1.28,z-.28,.76,.07,.06,[.38,.42,.40]);box(x,1.28,z+.28,.76,.07,.06,[.38,.42,.40]);
+ box(x-.35,1.28,z,.055,.07,.62,[.38,.42,.40]);box(x+.35,1.28,z,.055,.07,.62,[.38,.42,.40]);
+ box(x,.42,z,.58,.045,.46,[.12,.14,.14]);box(x,.46,z,.50,.022,.38,[.36,.38,.35]);
+ box(x,.91,z,.58,.045,.055,[.48,.51,.48]);box(x+.10,.79,z,.12,.14,.12,[.18,.20,.19]);
+ box(x+.42,.55,z-.17,.08,.20,.22,[.19,.23,.22]);box(x+.425,.63,z-.17,.012,.07,.12,[.22,.55,.37]);
+ box(x-.44,1.05,z+.24,.045,.42,.045,[.31,.35,.34]);box(x-.38,1.36,z+.24,.18,.08,.12,[.65,.45,.24]);
 }
 function psxBathroomSet(x,z){
  box(x,0,z,.72,.55,.42,[.62,.64,.60]);
@@ -512,13 +517,16 @@ psxWhiteboardZ(3.70,-13.18,1.90);box(1.40,.02,-12.65,.85,.42,.58,[.26,.32,.28]);
 // Stampanti — printer bay with copier, paper shelves and clear front access
 psxCopier(7.45,-12.15);psxShelf(8.75,-12.45,.58,1.30,.28,[.31,.31,.28]);psxBoxStack(8.85,-9.75);box(7.40,.02,-9.70,.58,.62,.38,[.32,.33,.30]);
 
-// Stampa 3D — actual fabrication corner
-psx3DPrinter(10.55,-10.55);psx3DPrinter(11.65,-11.75);psxShelf(12.10,-9.75,.55,1.26,.28,[.26,.31,.31]);box(10.25,.02,-12.70,1.20,.68,.52,[.35,.28,.21]);
+// Stampa 3D — one readable printer, a fabrication bench and wall-side materials.
+psx3DPrinter(10.55,-10.55);
+box(11.72,.02,-12.30,1.18,.72,.50,[.34,.29,.23]);box(11.72,.73,-12.30,1.18,.055,.50,[.46,.38,.28]);
+psxShelf(12.10,-9.72,.48,1.20,.24,[.26,.31,.31]);
+box(11.45,.82,-12.28,.16,.12,.16,[.62,.42,.22]);box(11.74,.82,-12.28,.16,.12,.16,[.34,.52,.43]);box(12.03,.82,-12.28,.16,.12,.16,[.45,.39,.57]);
 
 // Corridor identity: repeated lights, occasional plants and low office trim
 for(const z of [7.0,3.5,0,-3.5,-7.0])psxFluorescent(0,z,1.20);
 for(const z of [7.0,2.5,-2.5,-7.0])psxFluorescent(8.9,z,.95);
-psxPlant(1.15,6.85);psxPlant(7.95,-6.65);psxFilingCabinet(1.05,-6.85,.52,.34,.78);
+
 
 
 // M4.5 // DENSITY PASS -------------------------------------------------------
@@ -559,19 +567,14 @@ function psxDeskClutter(x,z){
 }
 function psxCeilingStrip(x,z,w=1.2,d=.26){box(x,2.105,z,w,.035,d,[.34,.35,.31]);box(x,2.14,z,w*.82,.014,d*.52,[.70,.70,.58]);}
 
-// Corridors: break the tunnel effect with repeated architectural rhythm.
-for(const z of [8.0,5.2,2.2,-.8,-3.8,-6.7]){
- psxWallFrameX(-1.73,z,.72,(Math.round(z*10)&1)?[.40,.48,.42]:[.50,.40,.29]);
- if(z<7.5)psxWallFrameX(1.73,z,.72,[.35,.46,.40]);
-}
-for(const z of [6.0,1.5,-3.0,-6.2]){psxWallFrameX(8.08,z,.68,[.44,.42,.31]);}
-psxLowCabinet(-1.15,-6.85,.92,.32,[.27,.29,.27]);psxBin(1.20,3.15);psxBin(7.95,4.85);
+// Corridors: keep circulation clear. Density now lives inside rooms and on ceilings/walls.
 for(const z of [8.3,5.5,2.5,-.5,-3.5,-6.5])psxCeilingStrip(0,z,1.35,.24);
 for(const z of [6.4,2.0,-2.4,-6.3])psxCeilingStrip(8.9,z,1.00,.22);
+psxBin(-1.52,7.35,[.15,.17,.15]);psxBin(8.18,-6.75,[.15,.17,.15]);
 
 // Meeting areas: corridor-facing dark-glass panels distinguish them immediately.
-psxGlassPanelX(2.515,6.18,1.05);psxGlassPanelX(2.515,9.24,1.05);
-psxGlassPanelX(9.615,6.22,1.00);psxGlassPanelX(9.615,9.20,1.00);
+psxGlassPanelX(2.76,6.18,.92);psxGlassPanelX(2.76,9.24,.92);
+psxGlassPanelX(9.88,6.22,.90);psxGlassPanelX(9.88,9.20,.90);
 psxLowCabinet(4.00,9.25,1.05,.32,[.29,.28,.24]);psxLowCabinet(12.90,9.20,.86,.32,[.24,.24,.22]);
 psxDeskClutter(5.10,7.70);psxDeskClutter(11.65,7.70);
 
@@ -1084,6 +1087,29 @@ function applyNpcSceneFromStory(){
    if(storyStep>=87&&storyStep<=88)setNpcWorldPosition("lorenzo",11.15,8.62);
  }
 }
+const npcFacingYaw={
+ zia_ale:Math.PI,it_manager:Math.PI/2,hr_01:Math.PI/2,bim_01:Math.PI/2,bim_02:Math.PI/2,
+ central_01:-Math.PI/2,central_02:-Math.PI/2,central_03:-Math.PI/2,central_04:-Math.PI/2,central_05:-Math.PI/2,central_06:-Math.PI/2,
+ alice_editoria:-Math.PI/2,editoria_02:-Math.PI/2,marino_interior:-Math.PI/2,interior_02:-Math.PI/2,render_01:-Math.PI/2,render_02:-Math.PI/2,
+ don:Math.PI/2,lorenzo:Math.PI,capo:-Math.PI/2
+};
+function npcShouldTrackCamera(n){
+ if(activeTalkingNpcId===n.id)return true;
+ if(n.id==="corridor_figure"||n.id==="other_office_figure")return true;
+ if(n.id==="capo"&&currentDay===4&&storyStep>=81)return true;
+ if(n.id==="lorenzo"&&currentDay===4&&storyStep>=87)return true;
+ // Only late Friday do the remaining colleagues acquire the unnatural zombie stare.
+ return currentDay===4&&storyStep>=83&&n.kind==="staff";
+}
+function npcRightVector(n,camX,camZ){
+ if(npcShouldTrackCamera(n)||cutsceneActive&&n.id==="lorenzo"){
+   const dx=camX-n.x,dz=camZ-n.z,len=Math.hypot(dx,dz)||1;return {x:dz/len,z:-dx/len};
+ }
+ // Lunch scenes face back toward the corridor; normal work scenes keep a stable desk-facing pose.
+ const lunch=n.z<-8.7&&n.kind==="staff";
+ const yaw=lunch?0:(npcFacingYaw[n.id]??0);
+ return {x:Math.cos(yaw),z:-Math.sin(yaw)};
+}
 function renderNpcSprites(vp,camX,camZ){
  gl.useProgram(spritePr);gl.bindBuffer(gl.ARRAY_BUFFER,spriteBuf);
  gl.enableVertexAttribArray(spPos);gl.enableVertexAttribArray(spUV);
@@ -1093,11 +1119,11 @@ function renderNpcSprites(vp,camX,camZ){
  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(true);
  for(const n of npcSprites){
    if(!isNpcVisible(n.id))continue;
-   let dx=camX-n.x,dz=camZ-n.z,len=Math.hypot(dx,dz)||1;
+   const rv=npcRightVector(n,camX,camZ);
    const demonFloat=n.id==="capo"&&currentDay===4&&storyStep>=81;
    const hover=demonFloat ? .62+Math.sin(performance.now()/420)*.08 : .025;
    const drawW=demonFloat?n.w*1.32:n.w,drawH=demonFloat?n.h*1.18:n.h;
-   const rx=dz/len,rz=-dx/len,hw=drawW/2,y0=hover,y1=y0+drawH;
+   const rx=rv.x,rz=rv.z,hw=drawW/2,y0=hover,y1=y0+drawH;
    const lx=n.x-rx*hw,lz=n.z-rz*hw,rrx=n.x+rx*hw,rrz=n.z+rz*hw;
    // UV is flipped vertically because canvas uploads top-left first.
    const d=new Float32Array([
@@ -1525,12 +1551,12 @@ function applySettings(){
 function setCrtEnabled(v){saveSettings({crt:!!v});applySettings();toast(v?"CRT // ON":"CRT // OFF");}
 function saveProgress(){
  if(!gameStarted||gameEnded)return;
- safeWrite(SAVE_KEY,{version:"M4.5.1",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
+ safeWrite(SAVE_KEY,{version:"M4.6",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
  refreshTitleMeta();
 }
 function refreshTitleMeta(){
  const meta=document.getElementById("titleMeta"),cont=document.getElementById("continueBtn"),contSub=document.getElementById("continueSub"),s=safeRead(SAVE_KEY),lm=safeRead(LIMEN_KEY);
- if(cont)cont.disabled=!s;
+ if(cont)cont.disabled=false;
  const endings=Array.isArray(lm?.endings)?lm.endings:[];
  if(contSub)contSub.innerHTML=s?'Riprendi da <strong>'+(WEEK_DAYS[s.day]?.label||'?')+' // '+(storySteps[s.step]?.time||'--:--')+'</strong>':'NESSUN SALVATAGGIO DISPONIBILE';
  if(meta){
