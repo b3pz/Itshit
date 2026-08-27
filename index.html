@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>IT SHIFT // M4.2 STAGING & POLISH</title>
+<title>IT SHIFT</title>
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;color:#dce5df;font-family:Consolas,monospace}
 #app{position:fixed;inset:0} canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
@@ -41,7 +41,6 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
  .bigMapCard{width:96vw;padding:7px}
 }
 
-
 #roomTransition{
  position:absolute;left:50%;top:10%;transform:translate(-50%,-8px);
  z-index:18;opacity:0;pointer-events:none;
@@ -53,7 +52,6 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 #miniWrap{background:#050a07f2!important}
 #miniWrap canvas{border:1px solid #28382e}
 
-
 #interactionPrompt{
  position:absolute;left:50%;bottom:42px;transform:translateX(-50%);z-index:14;
  padding:7px 11px;background:#06100bea;border:2px solid #6f855f;color:#dce8da;
@@ -62,33 +60,36 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 }
 #interactionPrompt.on{opacity:1}
 #interactionPrompt b{color:#ffc857}
-#dialogue{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);z-index:40;width:min(940px,92vw);display:none;pointer-events:auto}
+#dialogue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:40;width:min(980px,92vw);display:none;pointer-events:auto}
 #dialogue.on{display:block}
-.dialogueBox{background:#050907f5;border:3px solid #657469;box-shadow:9px 9px #000;padding:18px 20px;cursor:pointer;user-select:none}
-#dialogueName{color:#b7ff4a;font:900 13px Consolas,monospace;letter-spacing:1.8px;margin-bottom:10px;border-bottom:1px solid #33483b;padding-bottom:7px}
-#dialogueText{color:#edf2ee;font:15px/1.5 Consolas,monospace;min-height:50px;max-width:860px}
-#dialogueHint{text-align:right;color:#87978c;font:9px Consolas,monospace;margin-top:10px}
+.dialogueFrame{position:relative;background:linear-gradient(180deg,rgba(8,14,11,.98),rgba(3,7,5,.98));border:3px solid #6d8073;box-shadow:10px 10px #000;cursor:pointer;user-select:none;display:grid;grid-template-columns:14px 1fr;overflow:hidden}
+.dialogueAccent{background:linear-gradient(180deg,#b7ff4a 0%,#84bb31 36%,#304c11 100%);box-shadow:inset -1px 0 #1f2a20}
+.dialogueInner{padding:14px 18px 12px 16px;border-left:1px solid #1d291f;background:linear-gradient(180deg,rgba(13,21,17,.72),rgba(3,6,5,.82))}
+#dialogueName{display:inline-block;color:#b7ff4a;font:900 14px Consolas,monospace;letter-spacing:2.2px;margin-bottom:10px;padding:0 0 8px 0;border-bottom:1px solid #33483b;min-width:220px;text-shadow:1px 1px #000}
+#dialogueText{color:#edf2ee;font:17px/1.6 Consolas,monospace;min-height:74px;max-width:860px;text-wrap:pretty}
+#dialogueHint{text-align:right;color:#94a397;font:900 10px Consolas,monospace;letter-spacing:1px;margin-top:12px}
 #timeJump{position:absolute;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;background:#020302e8;opacity:0;pointer-events:none;transition:opacity .18s}
 #timeJump.on{opacity:1}#timeJump strong{font:900 30px Consolas,monospace;letter-spacing:5px;color:#dce8df}#timeJump span{display:block;margin-top:8px;text-align:center;color:#8fa196;font:900 9px Consolas,monospace;letter-spacing:2px}
 #cinematicBars{position:absolute;inset:0;z-index:36;pointer-events:none;opacity:0;transition:opacity .2s}#cinematicBars.on{opacity:1}#cinematicBars:before,#cinematicBars:after{content:"";position:absolute;left:0;right:0;height:9vh;background:#000}#cinematicBars:before{top:0}#cinematicBars:after{bottom:0}
 @media(hover:none),(pointer:coarse){
  #interactionPrompt{bottom:120px;max-width:58vw;white-space:normal;text-align:center}
- #dialogue{bottom:126px;width:88vw}
- .dialogueBox{padding:11px}
+ #dialogue{bottom:126px;width:90vw}
+ .dialogueInner{padding:12px 12px 10px 12px}
+ #dialogueName{font-size:12px;min-width:unset}
+ #dialogueText{font-size:14px;line-height:1.5;min-height:64px}
+ #dialogueHint{font-size:9px}
 }
-
 
 /* M2.8 atmosphere overlays: visual-only, never intercept input. */
 #atmoOverlay,#psxNoise,#flickerOverlay{position:absolute;inset:0;z-index:3;pointer-events:none}
 #atmoOverlay{background:radial-gradient(circle at 50% 45%,transparent 34%,rgba(0,0,0,.10) 100%);transition:background .45s linear}
 #psxNoise{opacity:.042;background:repeating-linear-gradient(0deg,rgba(205,235,218,.08) 0,rgba(205,235,218,.08) 1px,transparent 1px,transparent 4px);mix-blend-mode:soft-light}
 #flickerOverlay{z-index:4;background:#07100b;opacity:0;transition:opacity .045s linear}
+html.crtOff #psxNoise{display:none!important}
 
-/* M3.3 weekday chapter banner */
 #dayBanner{position:absolute;left:50%;top:28%;transform:translate(-50%,-8px);z-index:72;min-width:270px;text-align:center;padding:16px 24px;background:#030604f3;border:3px solid #657469;box-shadow:7px 7px #000;opacity:0;pointer-events:none;transition:.16s}
 #dayBanner.on{opacity:1;transform:translate(-50%,0)}#dayBanner strong{display:block;color:#d5a8ff;font:900 22px Consolas,monospace;letter-spacing:4px}#dayBanner span{display:block;margin-top:6px;color:#b7ff4a;font:900 9px Consolas,monospace;letter-spacing:2px}
 
-/* M3.1/M3.3 development checkpoint system */
 #devButton{position:absolute;right:12px;top:208px;z-index:28;padding:7px 10px;background:#10140f;border:2px solid #788b65;color:#b7ff4a;font:900 9px Consolas,monospace;cursor:pointer;box-shadow:3px 3px #000}
 #devStatus{position:absolute;left:12px;bottom:34px;z-index:6;min-width:255px;padding:7px 9px;background:#07100dcf;border:1px solid #3f5748;color:#90a398;font:8px/1.45 Consolas,monospace;pointer-events:none}
 #devStatus b{color:#b7ff4a}
@@ -101,20 +102,95 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 .devFoot{display:flex;justify-content:space-between;gap:10px;margin-top:13px;color:#718278;font-size:8px}
 @media(hover:none),(pointer:coarse){#devButton{right:6px;top:184px}#devStatus{display:none}.devWeekGrid{grid-template-columns:1fr}.devGrid{grid-template-columns:1fr}.devMenuCard{max-height:90vh;overflow:auto}}
 
-
-/* M3.3.2 dual camera / FP gameplay branch */
 #fpCrosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:12;color:#c7d6c9;font:900 13px Consolas,monospace;opacity:.48;pointer-events:none;text-shadow:1px 1px #000}#fpCrosshair.hidden{display:none}
 #fpBadge{position:absolute;left:12px;top:104px;z-index:10;padding:4px 7px;background:#07100dcc;border:1px solid #536a59;color:#d5a8ff;font:900 8px Consolas,monospace;letter-spacing:1px;pointer-events:none}#fpBadge.dev{color:#79d7ff;border-color:#47788b}
 
-/* M4.0 release shell */
-#titleScreen,#endingScreen,#choiceScreen{position:absolute;inset:0;z-index:120;background:rgba(1,3,2,.94);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
-#titleScreen.hidden,#endingScreen.hidden,#choiceScreen.hidden{display:none}
-.releaseCard{width:min(620px,92vw);background:#07100df8;border:3px solid #526a5b;box-shadow:10px 10px #000;padding:24px;box-sizing:border-box}
-.releaseLogo{font:900 36px Consolas,monospace;letter-spacing:7px;color:#b7ff4a}.releaseSub{margin:7px 0 22px;color:#8fa196;font:9px/1.6 Consolas,monospace;letter-spacing:1px}
-.releaseBtn{display:block;width:100%;margin:9px 0;padding:13px 14px;text-align:left;background:#0d1711;border:2px solid #536a59;color:#dce8df;font:900 11px Consolas,monospace;cursor:pointer}.releaseBtn:hover{border-color:#b7ff4a;background:#122019}.releaseBtn:disabled{opacity:.35;cursor:default}
-.releaseMeta{margin-top:18px;padding-top:12px;border-top:1px solid #33483b;color:#6f8377;font:8px/1.55 Consolas,monospace}.releaseMeta b{color:#d5a8ff}
+#titleScreen,#endingScreen,#choiceScreen,#optionsScreen{position:absolute;inset:0;z-index:120;background:rgba(1,3,2,.94);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
+#titleScreen.hidden,#endingScreen.hidden,#choiceScreen.hidden,#optionsScreen.hidden{display:none}
+#titleScreen{background:radial-gradient(circle at 76% 40%,rgba(87,122,45,.14),rgba(3,5,4,.80) 36%,rgba(0,2,1,.96) 100%)}
+.titleShell{width:min(1220px,96vw);min-height:min(770px,92vh);border:3px solid #4f6556;box-shadow:12px 12px #000;background:
+linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(1,5,3,.64) 48%,rgba(1,5,3,.18) 100%);display:flex;align-items:stretch;overflow:hidden;position:relative}
+.titleShell:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(195,235,167,.04) 0,rgba(195,235,167,.04) 1px,transparent 1px,transparent 4px);mix-blend-mode:screen;pointer-events:none}
+.titlePanel{width:min(520px,100%);padding:42px 40px 28px;background:linear-gradient(180deg,rgba(3,9,6,.90),rgba(0,4,2,.82));border-right:1px solid rgba(115,145,117,.35);display:flex;flex-direction:column;justify-content:flex-start;position:relative;z-index:1}
+.titleEyebrow{color:#8bad8c;font:900 10px Consolas,monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.releaseLogo{font:900 clamp(46px,7vw,84px) Consolas,monospace;line-height:.94;letter-spacing:6px;color:#b7ff4a;text-shadow:0 0 18px rgba(183,255,74,.12),2px 2px #001800}
+.releaseTagline{margin:18px 0 14px;color:#d7e2d9;font:900 12px/1.65 Consolas,monospace;letter-spacing:1px;max-width:420px}
+.releaseSub{margin:0 0 22px;color:#7f9586;font:10px/1.65 Consolas,monospace;letter-spacing:1px}
+.releaseBtn{display:block;width:100%;margin:10px 0;padding:15px 16px;text-align:left;background:#08110cf0;border:2px solid #536a59;color:#dce8df;font:900 12px Consolas,monospace;cursor:pointer;box-shadow:3px 3px #000;transition:.12s}
+.releaseBtn:hover,.releaseBtn:focus-visible{border-color:#b7ff4a;background:#122019;outline:none}
+.releaseBtn:disabled{opacity:.38;cursor:default}
+.releaseBtn .mainLine{display:block;letter-spacing:1px}
+.releaseBtn .subLine{display:block;margin-top:5px;color:#8da093;font:9px/1.4 Consolas,monospace;letter-spacing:.7px}
+.releaseBtn .subLine strong{color:#d5a8ff}
+.releaseMeta{margin-top:auto;padding-top:16px;border-top:1px solid #33483b;color:#6f8377;font:9px/1.65 Consolas,monospace}.releaseMeta b{color:#d5a8ff}
+.titleFoot{margin-top:14px;color:#708278;font:9px/1.5 Consolas,monospace}
+.releaseCard{width:min(720px,92vw);background:#07100df8;border:3px solid #526a5b;box-shadow:10px 10px #000;padding:24px;box-sizing:border-box}
 #endingTitle{font:900 24px Consolas,monospace;letter-spacing:3px;color:#ffc857}#endingBody{margin:16px 0;color:#dce8df;font:11px/1.65 Consolas,monospace;white-space:pre-line}#endingCode{margin:17px 0 4px;padding:10px;border:1px solid #34483c;color:#7f9586;font:9px Consolas,monospace}
 .choiceTitle{color:#d5a8ff;font:900 14px Consolas,monospace;letter-spacing:2px;margin-bottom:8px}.choiceText{color:#cbd6ce;font:10px/1.55 Consolas,monospace;margin-bottom:16px}
+.optionsTitle{font:900 22px Consolas,monospace;letter-spacing:3px;color:#b7ff4a;margin-bottom:8px}.optionsCopy{color:#95a79a;font:10px/1.6 Consolas,monospace;margin-bottom:16px}
+.optionRow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #28372e}.optionRow:first-of-type{border-top:0}
+.optionLabel b{display:block;color:#dce8df;font-size:12px;letter-spacing:1px}.optionLabel span{display:block;margin-top:4px;color:#8da093;font-size:9px;line-height:1.45}
+.optionAction{min-width:178px}
+.optionFooter{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+@media(max-width:860px){
+ .titleShell{min-height:auto;background-position:center right}
+ .titlePanel{width:100%;padding:28px 20px 20px}
+ .releaseLogo{font-size:44px}
+ .releaseBtn{padding:13px 14px}
+ .optionRow{grid-template-columns:1fr}
+ .optionAction{min-width:0}
+}
+
+/* M4.4 // PSX HUD + CLEAN RELEASE MENU */
+#version{display:none!important}
+#hud{
+ left:10px;top:10px;width:min(470px,calc(100vw - 305px));
+ display:grid;grid-template-columns:1fr 1fr;gap:0;
+ background:rgba(3,8,6,.86);border:1px solid #67766d;
+ box-shadow:4px 4px #000;overflow:hidden;
+}
+#hud .card{min-width:0;width:auto;padding:7px 10px;background:transparent;border:0!important;box-shadow:none;border-radius:0}
+#hud .card:first-child{grid-column:1/3;border-bottom:1px solid #29362f!important;padding-bottom:6px}
+#hud .card:first-child b{font-size:10px;letter-spacing:2px;color:#b7ff4a}
+#hud .card:first-child span{font-size:9px;color:#a6b4aa;letter-spacing:.6px}
+#objective{grid-column:1/3;border-bottom:1px solid #29362f!important;padding-top:8px!important;padding-bottom:8px!important}
+#objective b{font-size:8px!important;letter-spacing:1.3px;color:#d2b54e!important}
+#objective span{font-size:11px!important;color:#edf2ee;line-height:1.35;letter-spacing:.3px}
+#clockCard,#dayCard{padding-top:6px!important;padding-bottom:6px!important}
+#clockCard{border-right:1px solid #29362f!important}
+#clockCard b,#dayCard b{font-size:7px!important;letter-spacing:1.1px}
+#clock,#day{font-size:11px!important;letter-spacing:1.2px!important;color:#dbe4de}
+#clockCard b{color:#83b9c8!important}#dayCard b{color:#ad91c4!important}
+#help{bottom:7px;padding:5px 9px;background:rgba(1,4,2,.78);border:1px solid #26322b;color:#93a096;font-size:8px;letter-spacing:.2px}
+#roomTransition{top:14%;padding:7px 12px;background:rgba(8,12,9,.92);border:1px solid #6e7d72;box-shadow:3px 3px #000;font-size:11px;letter-spacing:1.4px;color:#d9e2dc}
+#interactionPrompt{bottom:36px;padding:8px 12px;background:rgba(2,7,4,.94);border:1px solid #78877c;box-shadow:4px 4px #000;font-size:9px;letter-spacing:.5px}
+#interactionPrompt b{display:inline-block;margin-right:8px;padding:2px 5px;background:#b7ff4a;color:#071008}
+#interactionPrompt span{margin-left:9px;color:#9eada2}
+#miniWrap{border:1px solid #66756c;box-shadow:4px 4px #000;background:rgba(3,8,5,.88)!important}
+#miniWrap span{color:#718278;font-size:7px}
+#titleScreen{background:rgba(0,3,1,.66);backdrop-filter:none}
+.titleShell{
+ width:min(1120px,95vw);min-height:min(680px,90vh);
+ background:linear-gradient(90deg,rgba(1,7,4,.88) 0%,rgba(1,7,4,.78) 46%,rgba(1,5,3,.22) 72%,rgba(0,0,0,.08) 100%)!important;
+ border:1px solid #5d7164;box-shadow:8px 8px #000;
+}
+.titleShell:after{opacity:.55}
+.titlePanel{width:min(490px,100%);padding:38px 36px 28px;background:rgba(1,6,3,.82);border-right:1px solid rgba(111,132,116,.28)}
+.titleEyebrow{font-size:8px;letter-spacing:1.6px;color:#788b7d}
+.releaseLogo{font-size:clamp(48px,7vw,76px);letter-spacing:4px;text-shadow:2px 2px #001800}
+.releaseTagline{font-size:11px;line-height:1.55;font-weight:700;color:#cfd8d1;max-width:410px}
+.releaseSub{font-size:9px;color:#77877d}
+.releaseBtn{margin:8px 0;padding:12px 13px;border:1px solid #53675a;box-shadow:2px 2px #000;background:rgba(7,16,11,.90);font-size:10px}
+.releaseBtn:hover,.releaseBtn:focus-visible{border-color:#b7ff4a;background:#0f1d14}
+.releaseBtn .subLine{font-size:8px;color:#77877d}
+.releaseMeta{font-size:8px;border-top:1px solid #2a382f;color:#65766c}
+.titleFoot{font-size:8px;color:#65766c}
+@media(max-width:760px){
+ #hud{width:calc(100vw - 20px);right:10px}
+ #miniWrap{display:none}
+ .titleShell{min-height:auto}
+ .titlePanel{padding:24px 18px 18px}
+}
 
 </style>
 </head>
@@ -123,7 +199,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <canvas id="c"></canvas>
 <div id="atmoOverlay"></div><div id="psxNoise"></div><div id="flickerOverlay"></div><div id="fpCrosshair">+</div><div id="fpBadge">GAME // FIRST PERSON</div>
 <div id="hud">
-<div class="card"><b>IT SHIFT // M4.2</b><span id="room">INGRESSO / SEGRETERIA</span></div>
+<div class="card"><b>IT SHIFT</b><span id="room">INGRESSO / SEGRETERIA</span></div>
 <div id="objective" class="card"><b>OBIETTIVO</b><span id="objText">PARLA CON ZIA ALE</span></div>
 <div id="clockCard" class="card"><b>ORARIO</b><span id="clock">09:00</span></div>
 <div id="dayCard" class="card"><b>GIORNO</b><span id="day">LUNEDI</span></div>
@@ -131,7 +207,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <div id="toast"></div>
 <div id="dayBanner"><strong>LUNEDI</strong><span>PRIMO TURNO</span></div><div id="timeJump"><div><strong>13:00</strong><span>DOPO QUALCHE ORA</span></div></div><div id="cinematicBars"></div>
 <div id="interactionPrompt"></div>
-<div id="dialogue"><div class="dialogueBox"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">SPAZIO / INVIO / TOCCA — CONTINUA</div></div></div>
+<div id="dialogue"><div class="dialogueFrame"><div class="dialogueAccent"></div><div class="dialogueInner"><div id="dialogueName"></div><div id="dialogueText"></div><div id="dialogueHint">SPAZIO / INVIO / TOCCA — CONTINUA</div></div></div></div>
 <div id="help">W/S — AVANTI/INDIETRO · A/D — STRAFE/DIAGONALE · Q/E — RUOTA · SPAZIO — INTERAGISCI · F3 — 3/4 DEV · TAB — MAPPA</div>
 <div id="miniWrap"><canvas id="miniMap" width="240" height="170"></canvas><span>● PLAYER ↑ &nbsp; ◎ OBIETTIVO &nbsp; ○ PORTA · TAB: NPC</span></div>
 <div id="bigMap" class="hidden">
@@ -141,24 +217,49 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
   </div>
 </div>
 
-
 <div id="titleScreen">
+  <div class="titleShell">
+    <div class="titlePanel">
+      <div class="titleEyebrow">TURNO SETTIMANALE // REPARTO IT</div>
+      <div class="releaseLogo">IT SHIFT</div>
+      <div class="releaseTagline">Ticket, badge, colleghi. Cinque giorni di lavoro. Almeno sulla carta.</div>
+      <div class="releaseSub">Gioca con mouse o tastiera. Continua una partita esistente oppure avvia un nuovo turno.</div>
+      <button id="newGameBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; NUOVO TURNO</span><span class="subLine">Ricominci da <strong>LUNEDI // 09:00</strong></span></button>
+      <button id="continueBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; CONTINUA</span><span id="continueSub" class="subLine">NESSUN SALVATAGGIO DISPONIBILE</span></button>
+      <button id="optionsBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; OPZIONI</span><span class="subLine">Audio, filtro CRT e gestione salvataggio</span></button>
+      <div id="titleMeta" class="releaseMeta">SESSIONE LOCALE // NESSUN SALVATAGGIO</div>
+      <div class="titleFoot">Usa mouse o tocco sui pulsanti · ESC chiude le opzioni</div>
+    </div>
+  </div>
+</div>
+<div id="optionsScreen" class="hidden">
   <div class="releaseCard">
-    <div class="releaseLogo">IT SHIFT</div>
-    <div class="releaseSub">M4.2 // STAGING & POLISH<br>LUNEDI — VENERDI // 3 FINALI</div>
-    <button id="newGameBtn" class="releaseBtn" type="button">&gt; NUOVO TURNO</button>
-    <button id="continueBtn" class="releaseBtn" type="button">&gt; CONTINUA</button>
-    <button id="resetSaveBtn" class="releaseBtn" type="button">&gt; CANCELLA SALVATAGGIO</button>
-    <div id="titleMeta" class="releaseMeta">SESSIONE LOCALE // NESSUN PROFILO CARICATO</div>
+    <div class="optionsTitle">OPZIONI</div>
+    <div class="optionsCopy">Impostazioni essenziali. Le modifiche vengono salvate automaticamente.</div>
+    <div class="optionRow">
+      <div class="optionLabel"><b>AUDIO</b><span>Attiva o disattiva i suoni del gioco.</span></div>
+      <button id="toggleAudioBtn" class="releaseBtn optionAction" type="button"><span class="mainLine">AUDIO // ON</span></button>
+    </div>
+    <div class="optionRow">
+      <div class="optionLabel"><b>FILTRO CRT</b><span>Mostra o nasconde scanline e rumore video.</span></div>
+      <button id="toggleCrtBtn" class="releaseBtn optionAction" type="button"><span class="mainLine">CRT // ON</span></button>
+    </div>
+    <div class="optionRow">
+      <div class="optionLabel"><b>SALVATAGGIO</b><span>Cancella la partita attuale se vuoi ripartire da zero.</span></div>
+      <button id="resetSaveBtn" class="releaseBtn optionAction" type="button"><span class="mainLine">CANCELLA SALVATAGGIO</span></button>
+    </div>
+    <div class="optionFooter">
+      <button id="closeOptionsBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; TORNA AL MENU</span></button>
+    </div>
   </div>
 </div>
 <div id="choiceScreen" class="hidden">
   <div class="releaseCard">
     <div class="choiceTitle">LORENZO // UNA SOLA SCELTA</div>
-    <div class="choiceText">Il Capo non c'è più. Lorenzo era già lì, dietro la Direzione. Ti offre un posto dall'altra parte del sistema.</div>
-    <button class="releaseBtn endingChoice" data-ending="good" type="button">SPEZZA IL COLLEGAMENTO</button>
-    <button class="releaseBtn endingChoice" data-ending="normal" type="button">VOGLIO SOLO USCIRE</button>
-    <button class="releaseBtn endingChoice" data-ending="evil" type="button">ACCETTA L'OFFERTA</button>
+    <div class="choiceText">Il Capo non c'e piu. Lorenzo era gia li, dietro la Direzione. Ti offre un posto dall'altra parte del sistema.</div>
+    <button class="releaseBtn endingChoice" data-ending="good" type="button"><span class="mainLine">SPEZZA IL COLLEGAMENTO</span></button>
+    <button class="releaseBtn endingChoice" data-ending="normal" type="button"><span class="mainLine">VOGLIO SOLO USCIRE</span></button>
+    <button class="releaseBtn endingChoice" data-ending="evil" type="button"><span class="mainLine">ACCETTA L'OFFERTA</span></button>
   </div>
 </div>
 <div id="endingScreen" class="hidden">
@@ -166,8 +267,8 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
     <div id="endingTitle">ENDING</div>
     <div id="endingBody"></div>
     <div id="endingCode">LMN_01 // SESSION CLOSED</div>
-    <button id="endingRestartBtn" class="releaseBtn" type="button">&gt; NUOVO TURNO</button>
-    <button id="endingMenuBtn" class="releaseBtn" type="button">&gt; MENU PRINCIPALE</button>
+    <button id="endingRestartBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; NUOVO TURNO</span></button>
+    <button id="endingMenuBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; MENU PRINCIPALE</span></button>
   </div>
 </div>
 
@@ -176,7 +277,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
 <div id="devMenu">
   <div class="devMenuCard">
     <div class="devTitle">IT SHIFT // WEEK SYSTEM</div>
-    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.2 staging/polish. I checkpoint DEV sono disattivati nella build release.</div>
+    <div class="devSub">Scegli direttamente il giorno da sviluppare. Martedi e ora un capitolo giocabile completo di lore e NPC dinamici. M4.4 environment & gameplay polish. I checkpoint DEV sono disattivati nella build release.</div>
     <div class="devWeekGrid">
       <button class="devCheckpoint" data-cp="monday"><strong>LUNEDI</strong><span>09:00<br>Primo turno</span></button>
       <button class="devCheckpoint" data-cp="tuesday"><strong>MARTEDI</strong><span>09:05<br>Voci di corridoio</span></button>
@@ -204,10 +305,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#020302;col
       <button class="devCheckpoint" data-cp="m32_start"><strong>13:32 — M3.2 INIZIO</strong><span>Ticket BIM 02</span></button>
       <button class="devCheckpoint" data-cp="manifestation"><strong>13:52 — APPARIZIONE</strong><span>Test diretto figura nel corridoio</span></button>
     </div>
-    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.2 STAGING & POLISH</span></div>
+    <div class="devFoot"><span>F2 — CHECKPOINT · F3 — FP / 3/4</span><span>M4.4 ENVIRONMENT & GAMEPLAY POLISH</span></div>
   </div>
 </div>
-<div id="version">M4.2 // STAGING & POLISH</div>
+<div id="version">M4.4</div>
 <div id="mobile"><div id="stick"><i></i></div><button id="turnL" class="turnBtn">Q</button><button id="turnR" class="turnBtn">E</button><button id="act">␣<small>INTERAGISCI</small></button></div>
 </div>
 <script src="game.js"></script>

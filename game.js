@@ -38,7 +38,7 @@ function rack(x,z){solids.push({x,z,w:.7,d:.65});box(x,0,z,.7,1.75,.65,[.1,.15,.
 
 
 // -----------------------------------------------------------------------------
-// M4.2 // STAGING & POLISH
+// M4.4 // ENVIRONMENT & GAMEPLAY POLISH
 // A small near-release art-language test covering REPARTO IT + HR + their corridor.
 // IMPORTANT: these are visual-only props; no new solids/collisions are introduced.
 // The frozen M2.9.2 architecture and all M3.4 gameplay remain unchanged.
@@ -46,13 +46,13 @@ function rack(x,z){solids.push({x,z,w:.7,d:.65});box(x,0,z,.7,1.75,.65,[.1,.15,.
 function floorPlate(x,z,w,d,col,y=-.001){
  quad([x-w/2,y,z-d/2],[x+w/2,y,z-d/2],[x+w/2,y,z+d/2],[x-w/2,y,z+d/2],col);
 }
-function psxTilePatch(cx,cz,w,d,size=.52){
+function psxTilePatch(cx,cz,w,d,size=.52,colA=[.245,.252,.235],colB=[.205,.214,.201],y=-.0015){
  const x0=cx-w/2,z0=cz-d/2;
  const nx=Math.max(1,Math.floor(w/size)),nz=Math.max(1,Math.floor(d/size));
  const tw=w/nx,td=d/nz;
  for(let iz=0;iz<nz;iz++)for(let ix=0;ix<nx;ix++){
-   const col=((ix+iz)&1)?[.245,.252,.235]:[.205,.214,.201];
-   floorPlate(x0+tw*(ix+.5),z0+td*(iz+.5),tw-.025,td-.025,col,-.0015);
+   const col=((ix+iz)&1)?colA:colB;
+   floorPlate(x0+tw*(ix+.5),z0+td*(iz+.5),tw-.025,td-.025,col,y);
  }
 }
 function psxCrtShell(x,z,w=.48){
@@ -87,6 +87,57 @@ function psxWallTrimZ(x,z,w){box(x,.015,z,w,.16,.045,[.20,.14,.10]);}
 function psxFluorescent(x,z,w=1.05){
  box(x,2.105,z,w,.045,.30,[.30,.31,.27]);
  box(x,2.145,z,w*.84,.018,.17,[.72,.72,.60]);
+}
+function psxChair(x,z,rot=0,col=[.20,.23,.21]){
+ // visual-only low-poly office chair; kept non-blocking for comfortable FP navigation
+ box(x,.04,z,.44,.44,.42,col);
+ box(x,.42,z+(rot?0:.18),.44,.52,.10,col.map(v=>Math.max(.05,v*.88)));
+ box(x-.16,.00,z,.06,.12,.06,[.10,.11,.10]);box(x+.16,.00,z,.06,.12,.06,[.10,.11,.10]);
+}
+function psxShelf(x,z,w=1.05,h=1.55,d=.30,col=[.28,.29,.27]){
+ box(x,0,z,w,h,d,col);
+ for(let i=1;i<4;i++)box(x,.18+i*.31,z-d/2-.012,w*.88,.025,.018,[.12,.13,.12]);
+}
+function psxWhiteboardX(x,z,w=1.55){
+ box(x,1.00,z,.025,.72,w,[.72,.73,.67]);
+ box(x-.015,1.18,z,.012,.045,w*.72,[.23,.34,.28]);
+ box(x-.016,1.38,z+.20,.012,.035,w*.28,[.48,.28,.22]);
+}
+function psxWhiteboardZ(x,z,w=1.55){
+ box(x,1.00,z,w,.72,.025,[.72,.73,.67]);
+ box(x,1.18,z-.015,w*.72,.045,.012,[.23,.34,.28]);
+ box(x+.20,1.38,z-.016,w*.28,.035,.012,[.48,.28,.22]);
+}
+function psxPinboardX(x,z,w=1.30){
+ box(x,1.02,z,.025,.70,w,[.39,.29,.19]);
+ for(let i=0;i<5;i++)box(x-.014,1.12+(i%2)*.20,z-.42+i*.20,.012,.14,.16,i%2?[.70,.65,.48]:[.58,.64,.59]);
+}
+function psxBoxStack(x,z){
+ box(x,0,z,.55,.34,.45,[.42,.31,.20]);box(x+.13,.34,z-.05,.42,.27,.36,[.48,.36,.23]);
+}
+function psxCopier(x,z){
+ box(x,.03,z,.86,.76,.66,[.43,.45,.42]);
+ box(x,.76,z,.72,.18,.56,[.24,.27,.25]);
+ box(x,.92,z-.05,.58,.10,.48,[.52,.54,.49]);
+ box(x+.29,.80,z-.25,.16,.055,.10,[.12,.30,.18]);
+}
+function psxCoffeeCorner(x,z){
+ box(x,0,z,1.45,.88,.48,[.39,.29,.20]);
+ box(x-.45,.88,z,.32,.36,.30,[.18,.20,.18]);
+ box(x-.45,1.10,z-.13,.18,.06,.08,[.62,.50,.23]);
+ box(x+.32,.88,z,.36,.54,.36,[.54,.55,.50]);
+}
+function psx3DPrinter(x,z){
+ box(x,.05,z,.72,.78,.62,[.22,.28,.28]);
+ box(x,.28,z,.58,.44,.48,[.08,.10,.10]);
+ box(x,.69,z,.52,.08,.44,[.39,.43,.42]);
+ box(x,.50,z,.06,.18,.06,[.65,.50,.20]);
+}
+function psxBathroomSet(x,z){
+ box(x,0,z,.72,.55,.42,[.62,.64,.60]);
+ box(x,.55,z+.10,.56,.20,.28,[.68,.70,.66]);
+ box(x+.75,.68,z,.46,.12,.28,[.70,.72,.68]);
+ box(x+.75,.82,z+.16,.42,.58,.035,[.34,.40,.38]);
 }
 
 function doorFrame(x,z,axis="z",col=[.34,.22,.12]){
@@ -340,9 +391,30 @@ desk(-9.65,-11.10,2.80,.85);               // cucina table / island
 // M3.4.2 // FINAL-STYLE SAMPLE: REPARTO IT + HR + short central corridor.
 // Tile language inspired by late-90s office games: deliberately low-frequency,
 // low-resolution forms rather than modern PBR detail.
-psxTilePatch(-5.0,2.90,3.72,3.52,.50);
-psxTilePatch(-5.0,7.00,3.72,3.30,.50);
-psxTilePatch(0,4.85,3.12,4.85,.52);
+// M4.4 // CONTINUOUS PSX FLOOR PASS
+// The finished floor language now covers the whole studio instead of stopping at IT/HR.
+const roomFloorPalette={
+ "INGRESSO / SEGRETERIA":[[.205,.218,.199],[.174,.188,.173]],
+ "HR":[[.232,.218,.222],[.196,.184,.192]],
+ "REPARTO IT":[[.205,.220,.202],[.174,.190,.177]],
+ "SALA MEET":[[.225,.220,.190],[.190,.185,.160]],
+ "SALA MEET CAPO":[[.202,.190,.174],[.169,.158,.145]],
+ "SERVER / MAGAZZINO IT":[[.184,.205,.193],[.150,.172,.160]],
+ "CENTRALE":[[.204,.211,.192],[.174,.181,.164]],
+ "INTERIOR":[[.218,.199,.184],[.184,.167,.154]],
+ "BIM":[[.190,.205,.215],[.158,.172,.184]],
+ "EDITORIA":[[.220,.202,.181],[.186,.170,.151]],
+ "RENDERISTI":[[.188,.197,.218],[.157,.165,.185]],
+ "CUCINA":[[.221,.204,.181],[.188,.171,.150]],
+ "BAGNI":[[.202,.218,.211],[.171,.187,.181]],
+ "GALLERIA DIGITALE":[[.188,.194,.220],[.157,.164,.189]],
+ "SPAZIO A":[[.190,.215,.199],[.160,.183,.168]],
+ "STAMPANTI":[[.210,.210,.190],[.178,.178,.161]],
+ "STAMPA 3D":[[.186,.208,.207],[.157,.178,.178]]
+};
+for(const r of rooms){const pal=roomFloorPalette[r.name]||[[.21,.22,.20],[.18,.19,.17]];psxTilePatch(r.x,r.z,r.w-.24,r.d-.24,.53,pal[0],pal[1],-.0012);}
+for(const r of corridors)psxTilePatch(r.x,r.z,r.w-.10,r.d-.10,.62,[.178,.190,.177],[.151,.162,.151],-.0010);
+for(const r of doorLinks)floorPlate(r.x,r.z,r.w,r.d,[.175,.184,.166],-.0008);
 
 // Dark wooden/rubber skirting makes rooms read as real interiors in first person.
 psxWallTrimX(-6.92,2.90,3.45);psxWallTrimZ(-5.0,1.08,3.72);psxWallTrimZ(-5.0,4.72,3.72);
@@ -364,6 +436,84 @@ box(-4.92,.765,2.55,.22,.055,.16,[.16,.17,.15]);
 box(-5.95,.765,2.72,.09,.11,.09,[.46,.43,.34]);
 box(-4.67,.765,1.73,.26,.025,.18,[.66,.64,.54]);
 box(-5.62,.765,7.00,.24,.025,.18,[.68,.66,.56]);
+
+// M4.4 // ENVIRONMENT DRESSING — every room now has a clear purpose and silhouette.
+// Props are deliberately non-blocking unless the underlying desk/rack was already a solid.
+// Reception / Segreteria
+psxFilingCabinet(1.85,11.45,.58,.38,.94);psxPlant(1.78,9.62);psxPinboardX(-2.50,10.45,1.15);
+box(-.62,.03,10.55,1.45,.72,.48,[.37,.26,.18]);box(-.62,.75,10.55,1.45,.08,.48,[.51,.35,.22]);
+psxChair(-.62,11.12,0,[.22,.24,.22]);box(-.95,.84,10.42,.20,.06,.14,[.14,.16,.14]);
+
+// HR — archive, paperwork, coat/storage language
+psxShelf(-6.52,6.10,.70,1.48,.28,[.31,.30,.29]);psxBoxStack(-6.35,5.62);psxChair(-5.10,6.25,0,[.30,.23,.27]);
+psxPinboardX(-6.90,6.65,1.18);box(-4.55,.765,7.06,.34,.025,.24,[.70,.66,.56]);box(-4.82,.765,7.06,.18,.025,.16,[.56,.51,.45]);
+
+// IT — shelves, spare hardware and two real work positions
+psxChair(-5.45,3.46,0,[.18,.24,.20]);psxChair(-4.20,2.42,0,[.19,.23,.21]);psxShelf(-6.54,1.52,.68,1.42,.28,[.26,.30,.27]);
+psxBoxStack(-6.35,1.68);box(-6.52,.95,3.72,.56,.20,.24,[.18,.19,.17]);box(-3.62,.03,3.95,.42,.62,.35,[.30,.31,.28]);
+
+// Server / Magazzino IT — denser storage, spare boxes, patching bench
+psxShelf(-6.50,-2.30,.72,1.55,.30,[.24,.29,.26]);psxShelf(-6.48,-.45,.70,1.42,.30,[.25,.29,.27]);
+psxBoxStack(-3.72,-2.55);psxFilingCabinet(-3.65,-.52,.52,.34,.82);box(-5.25,.05,-.10,1.10,.18,.20,[.22,.24,.22]);
+box(-5.25,.23,-.10,.12,.82,.12,[.17,.19,.17]);
+
+// BIM — two proper desks with chairs, whiteboard and project folders
+psxCrtShell(-5.55,-5.75,.42);psxCrtShell(-4.15,-5.75,.42);psxChair(-5.55,-5.12,0,[.20,.24,.27]);psxChair(-4.15,-5.12,0,[.23,.21,.28]);
+psxWhiteboardZ(-5.00,-7.58,1.65);psxShelf(-6.52,-6.55,.72,1.30,.28,[.28,.30,.31]);box(-6.45,.78,-6.46,.38,.10,.24,[.44,.49,.48]);
+
+// Centrale — six recognizable workstations + central pinboard / plants
+for(const sc of [{x:3.75,z:4.15},{x:5.35,z:4.15},{x:6.95,z:4.15},{x:3.75,z:.05},{x:5.35,z:.05},{x:6.95,z:.05}])psxCrtShell(sc.x,sc.z,.38);
+for(const sc of [{x:3.75,z:3.48},{x:5.35,z:3.48},{x:6.95,z:3.48},{x:3.75,z:.72},{x:5.35,z:.72},{x:6.95,z:.72}])psxChair(sc.x,sc.z,0,[.21,.23,.21]);
+psxPinboardX(2.66,2.10,1.45);psxPlant(7.55,4.55);psxPlant(7.55,-.25);box(5.35,.02,2.10,.70,.34,.42,[.29,.31,.28]);
+
+// Editoria — proofs, shelves and paired workstation dressing
+psxCrtShell(4.25,-3.55,.44);psxCrtShell(6.35,-3.55,.44);psxChair(4.25,-4.20,0,[.28,.23,.19]);psxChair(6.35,-4.20,0,[.24,.21,.27]);
+psxShelf(7.55,-4.55,.65,1.40,.28,[.31,.29,.26]);psxPinboardX(2.67,-3.20,1.40);box(5.30,.765,-3.38,.58,.025,.30,[.72,.68,.58]);
+
+// Interior — material samples + whiteboard
+psxCrtShell(11.65,3.75,.43);psxCrtShell(11.65,.45,.43);psxChair(11.05,3.75,1,[.25,.23,.20]);psxChair(11.05,.45,1,[.24,.22,.20]);
+psxWhiteboardX(13.63,2.05,1.60);psxShelf(13.20,4.35,.58,1.32,.26,[.34,.30,.26]);box(13.15,.86,4.30,.36,.06,.22,[.55,.42,.31]);
+
+// Renderisti — darker room, reference boards and two render stations
+psxCrtShell(11.55,-2.75,.42);psxCrtShell(12.35,-4.45,.42);psxChair(10.95,-2.75,1,[.20,.22,.26]);psxChair(11.70,-4.45,1,[.24,.20,.20]);
+psxPinboardX(13.63,-3.55,1.45);psxShelf(10.08,-4.72,.55,1.22,.25,[.26,.27,.30]);box(10.20,.92,-3.05,.34,.25,.18,[.18,.20,.24]);
+
+// Sala Meet — chairs all around the table, presentation wall and credenza
+for(const p of [{x:4.05,z:6.90},{x:5.35,z:6.90},{x:6.65,z:6.90},{x:4.05,z:8.48},{x:5.35,z:8.48},{x:6.65,z:8.48}])psxChair(p.x,p.z,0,[.25,.25,.22]);
+psxWhiteboardZ(5.35,9.82,2.05);box(5.35,1.00,9.75,1.22,.58,.045,[.12,.15,.13]);box(5.35,1.06,9.70,.98,.42,.025,[.06,.09,.07]);
+psxFilingCabinet(7.45,8.85,.60,.36,.86);psxPlant(3.15,8.95);psxFluorescent(5.35,7.70,1.35);
+
+// Sala Meet Capo — more formal, deliberately colder and slightly sparse
+for(const p of [{x:10.85,z:6.95},{x:12.00,z:6.95},{x:13.00,z:7.70},{x:10.85,z:8.45},{x:12.00,z:8.45}])psxChair(p.x,p.z,0,[.18,.18,.18]);
+psxWhiteboardZ(11.90,9.82,1.65);box(11.90,1.02,9.75,1.08,.56,.045,[.10,.11,.10]);box(13.45,.02,8.80,.58,.90,.35,[.29,.27,.24]);
+box(10.10,.92,6.00,.40,.54,.035,[.33,.27,.22]);psxFluorescent(11.90,7.70,1.10);
+
+// Cucina — actual break room: counter, coffee, chairs, fridge/storage
+psxCoffeeCorner(-11.35,-12.55);box(-8.20,.02,-12.65,.72,1.54,.58,[.45,.47,.43]);box(-8.20,1.18,-12.34,.38,.06,.04,[.15,.18,.16]);
+for(const p of [{x:-10.90,z:-10.35},{x:-9.65,z:-10.25},{x:-8.45,z:-10.35},{x:-10.90,z:-11.90},{x:-9.65,z:-12.00},{x:-8.45,z:-11.90}])psxChair(p.x,p.z,0,[.28,.24,.20]);
+psxPinboardX(-12.12,-10.65,1.15);psxPlant(-7.55,-9.55);
+
+// Bagni — sanitary fixtures + mirrors
+psxBathroomSet(-5.82,-10.50);psxBathroomSet(-5.82,-12.10);box(-4.45,.72,-10.45,.52,.12,.34,[.68,.70,.67]);box(-4.45,.88,-10.62,.46,.55,.035,[.35,.43,.41]);
+
+// Galleria Digitale — display desk, wall screens and small equipment shelf
+psxCrtShell(-1.60,-11.00,.50);psxChair(-1.60,-10.35,0,[.18,.20,.27]);psxShelf(-3.45,-12.25,.62,1.30,.28,[.25,.27,.31]);
+box(-.25,1.05,-12.95,1.40,.58,.035,[.12,.15,.19]);box(-.25,1.10,-12.92,1.18,.44,.018,[.06,.09,.12]);psxPlant(.12,-9.45);
+
+// Spazio A — collaborative table with chairs, whiteboard and soft lounge blocks
+for(const p of [{x:2.25,z:-10.25},{x:3.70,z:-10.25},{x:5.15,z:-10.25},{x:2.25,z:-11.85},{x:3.70,z:-11.85},{x:5.15,z:-11.85}])psxChair(p.x,p.z,0,[.20,.26,.22]);
+psxWhiteboardZ(3.70,-13.18,1.90);box(1.40,.02,-12.65,.85,.42,.58,[.26,.32,.28]);box(5.95,.02,-12.65,.85,.42,.58,[.26,.32,.28]);
+
+// Stampanti — printer bay with copier, paper shelves and clear front access
+psxCopier(7.45,-12.15);psxShelf(8.75,-12.45,.58,1.30,.28,[.31,.31,.28]);psxBoxStack(8.85,-9.75);box(7.40,.02,-9.70,.58,.62,.38,[.32,.33,.30]);
+
+// Stampa 3D — actual fabrication corner
+psx3DPrinter(10.55,-10.55);psx3DPrinter(11.65,-11.75);psxShelf(12.10,-9.75,.55,1.26,.28,[.26,.31,.31]);box(10.25,.02,-12.70,1.20,.68,.52,[.35,.28,.21]);
+
+// Corridor identity: repeated lights, occasional plants and low office trim
+for(const z of [7.0,3.5,0,-3.5,-7.0])psxFluorescent(0,z,1.20);
+for(const z of [7.0,2.5,-2.5,-7.0])psxFluorescent(8.9,z,.95);
+psxPlant(1.15,6.85);psxPlant(7.95,-6.65);psxFilingCabinet(1.05,-6.85,.52,.34,.78);
 
 // Story devices. Monitor bodies/screens are now rendered by the M3.0 live-office layer.
 box(-4.80,.72,-1.35,.18,.18,.06,[.72,.58,.18]);
@@ -400,16 +550,16 @@ box(.72,.94,12.455,.025,.055,.09,[.58,.48,.17]);
 const interactables=[
  {id:"zia_ale",label:"ZIA ALE",x:-1.55,z:10.55,range:1.35,type:"npc"},
  {id:"it_manager",label:"IT MANAGER",x:-4.05,z:4.00,range:1.32,type:"npc"},
- {id:"pc_it",label:"PC REPARTO IT",x:-5.45,z:2.85,range:1.28,type:"device"},
- {id:"server_rack_02",label:"RACK SERVER 02",x:-4.80,z:-1.35,range:1.25,type:"device"},
+ {id:"pc_it",label:"POSTAZIONE IT",x:-5.45,z:2.85,range:1.28,type:"device"},
+ {id:"server_rack_02",label:"RACK 02",x:-4.80,z:-1.35,range:1.25,type:"device"},
  {id:"alice_editoria",label:"ALICE",x:4.55,z:-4.45,range:1.35,type:"npc"},
- {id:"printer_main",label:"STAMPANTE PRINCIPALE",x:8.10,z:-11.00,range:1.35,type:"device"},
- {id:"render_04",label:"POSTAZIONE RENDER_04",x:12.35,z:-4.45,range:1.40,type:"device"},
+ {id:"printer_main",label:"STAMPANTE",x:8.10,z:-11.00,range:1.35,type:"device"},
+ {id:"render_04",label:"POSTAZIONE RENDER",x:12.35,z:-4.45,range:1.40,type:"device"},
  {id:"marino_interior",label:"MARINO",x:10.55,z:3.25,range:1.35,type:"npc"},
- {id:"interior_pc_03",label:"PC INTERIOR_03",x:11.65,z:.45,range:1.35,type:"device"},
- {id:"meet_phone",label:"TELEFONO SALA MEET CAPO",x:12.65,z:7.70,range:1.40,type:"device"},
+ {id:"interior_pc_03",label:"POSTAZIONE DI MARINO",x:11.65,z:.45,range:1.35,type:"device"},
+ {id:"meet_phone",label:"TELEFONO",x:12.65,z:7.70,range:1.40,type:"device"},
  {id:"bim_02",label:"BIM 02",x:-4.15,z:-5.05,range:1.35,type:"npc"},
- {id:"bim_pc_02",label:"PC BIM 02",x:-4.15,z:-5.75,range:1.28,type:"device"},
+ {id:"bim_pc_02",label:"POSTAZIONE BIM",x:-4.15,z:-5.75,range:1.28,type:"device"},
  // M3.4 // Tuesday lore/NPC interactables
  {id:"hr_01",label:"BETTY",x:-5.10,z:6.35,range:1.38,type:"npc"},
  {id:"lorenzo",label:"LORENZO",x:-.75,z:9.95,range:1.45,type:"npc"},
@@ -417,8 +567,8 @@ const interactables=[
  {id:"direzione_door",label:"PORTA DIREZIONE",x:9.34,z:7.70,range:1.35,type:"device"},
  {id:"direzione_panel",label:"QUADRO ELETTRICO DIREZIONE",x:9.28,z:8.72,range:1.35,type:"device"},
  // M3.5 // Wednesday lore devices
- {id:"legacy_terminal",label:"TERMINALE INVENTARIO LEGACY",x:-4.22,z:-2.22,range:1.42,type:"device"},
- {id:"hr_archive_box",label:"ARCHIVIO HR",x:-6.48,z:8.20,range:1.28,type:"device"},
+ {id:"legacy_terminal",label:"VECCHIO TERMINALE",x:-4.22,z:-2.22,range:1.42,type:"device"},
+ {id:"hr_archive_box",label:"SCATOLARIO HR",x:-6.48,z:8.20,range:1.28,type:"device"},
  {id:"don",label:"DON",x:-5.72,z:-2.38,range:1.45,type:"npc"},
  {id:"main_exit",label:"USCITA PRINCIPALE",x:0,z:12.15,range:1.75,type:"device"}
 ];
@@ -667,7 +817,7 @@ function spriteTexture(pal,state="idle",features={}){
 // Canonical fixed staff: 17 NPCs + the player = 18 people in the studio at peak activity.
 // Every fixed NPC exists from 09:00; story missions activate interactions, not existence.
 const npcSprites=[
- {id:"zia_ale",name:"ZIA ALE",role:"SEGRETERIA",kind:"staff",x:-1.55,z:10.55,w:.72,h:1.36,from:0,to:999,pal:{body:"#65465f",accent:"#ba8aaf",legs:"#34303a",skin:"#c88f70",hair:"#493126",light:"#d6abc9"}},
+ {id:"zia_ale",name:"ZIA ALE",role:"SEGRETERIA",kind:"staff",x:-1.55,z:10.55,w:.72,h:1.36,from:0,to:999,pal:{body:"#65465f",accent:"#ba8aaf",legs:"#34303a",skin:"#c88f70",hair:"#d7bf68",light:"#f3df9b"}},
  {id:"it_manager",name:"IT MANAGER",role:"IT",kind:"staff",x:-4.05,z:4.00,w:.74,h:1.40,from:0,to:999,features:{glasses:true},pal:{body:"#36546b",accent:"#7394a5",legs:"#252d35",skin:"#bd856a",hair:"#44362f",light:"#8ab5ca"}},
  {id:"hr_01",name:"BETTY",role:"HR",kind:"staff",x:-5.10,z:6.35,w:.70,h:1.35,from:0,to:999,features:{stripes:true},pal:{body:"#5b4a51",accent:"#d7c9bd",legs:"#332b30",skin:"#cb9475",hair:"#49332f",light:"#c79aa4"}},
  {id:"bim_01",name:"BIM 01",role:"BIM",kind:"staff",x:-5.55,z:-5.05,w:.72,h:1.36,from:0,to:999,pal:{body:"#435f68",accent:"#7999a1",legs:"#293239",skin:"#c89072",hair:"#3c322e",light:"#94adb3"}},
@@ -737,6 +887,8 @@ for(const n of npcSprites)dialogueNpcMap[n.name]=n.id;
 function npcById(id){return npcSprites.find(n=>n.id===id)||null;}
 function isNpcVisible(id){
  const n=npcById(id);if(!n)return false;
+ // Never pop an NPC out of existence while their dialogue box is still open.
+ if(activeTalkingNpcId===id)return true;
  // Lorenzo is a recurring dynamic character: Tuesday's electrical visit and a
  // short Wednesday maintenance stop use the same sprite/entity.
  if(id==="lorenzo")return (currentDay===1&&storyStep>=51&&storyStep<=55)||(currentDay===2&&storyStep===66)||(currentDay===4&&storyStep>=87&&storyStep<=88);
@@ -756,6 +908,31 @@ function fixedStaffCount(){return npcSprites.filter(n=>n.kind==="staff").length;
 for(const n of npcSprites){
  if(n.kind!=="staff"||interactables.some(it=>it.id===n.id))continue;
  interactables.push({id:n.id,label:n.name,x:n.x,z:n.z,range:1.30,type:"npc"});
+}
+
+// M4.4 // Every workstation can now be approached and examined.
+// Interaction points sit on the aisle side of desks, so the player no longer has
+// to wedge behind a monitor or clip through a colleague to use a machine.
+const stationApproach={
+ it_pc_02:{x:-3.75,z:2.15,label:"SECONDA POSTAZIONE IT"},
+ hr_pc_01:{x:-4.35,z:7.05,label:"POSTAZIONE HR"},
+ bim_pc_01:{x:-4.90,z:-5.18,label:"POSTAZIONE BIM 01"},
+ central_pc_01:{x:3.75,z:3.45,label:"POSTAZIONE CENTRALE"},central_pc_02:{x:5.35,z:3.45,label:"POSTAZIONE CENTRALE"},central_pc_03:{x:6.95,z:3.45,label:"POSTAZIONE CENTRALE"},
+ central_pc_04:{x:3.75,z:.75,label:"POSTAZIONE CENTRALE"},central_pc_05:{x:5.35,z:.75,label:"POSTAZIONE CENTRALE"},central_pc_06:{x:6.95,z:.75,label:"POSTAZIONE CENTRALE"},
+ editoria_pc_01:{x:4.25,z:-4.22,label:"POSTAZIONE EDITORIA"},editoria_pc_02:{x:6.35,z:-4.22,label:"POSTAZIONE EDITORIA"},
+ interior_pc_01:{x:10.95,z:3.75,label:"POSTAZIONE INTERIOR"},
+ render_pc_01:{x:10.90,z:-2.75,label:"POSTAZIONE RENDER"}
+};
+for(const sc of officeScreens){
+ if(interactables.some(it=>it.id===sc.id))continue;
+ const a=stationApproach[sc.id]||{x:sc.x,z:sc.z,label:"POSTAZIONE"};
+ interactables.push({id:sc.id,label:a.label,x:a.x,z:a.z,range:1.78,type:"workstation",room:sc.room});
+}
+// Existing mission devices also use aisle-side interaction points.
+for(const [id,pos] of Object.entries({
+ pc_it:{x:-4.78,z:3.25},server_rack_02:{x:-4.05,z:-1.35},printer_main:{x:8.10,z:-9.82},render_04:{x:11.55,z:-4.18},interior_pc_03:{x:10.95,z:.45},bim_pc_02:{x:-3.72,z:-5.30},meet_phone:{x:12.55,z:7.05},legacy_terminal:{x:-3.58,z:-2.22}
+})){
+ const it=interactables.find(v=>v.id===id);if(it){it.x=pos.x;it.z=pos.z;it.range=Math.max(it.range||0,1.85);}
 }
 // Reserved for later: Capo, manutentori and visitors will use kind="dynamic"
 // and will NOT change the canonical 17-person fixed staff count.
@@ -790,7 +967,7 @@ function applyNpcSceneFromStory(){
  for(const [id,pos] of Object.entries(npcHomePositions))setNpcWorldPosition(id,pos.x,pos.z);
  // Lunch scene: relocate the SAME 17 fixed NPCs instead of spawning lunch extras.
  // 6 CUCINA + 6 SPAZIO A + 5 SALA MEET = 17.
- if(currentDay===0&&(storyStep===33||storyStep===34)){
+ if(currentDay===0&&(storyStep===33||storyStep===34||storyStep===35)){
    for(const [id,pos] of Object.entries(npcLunchPositions))setNpcWorldPosition(id,pos.x,pos.z);
  }
  // Tuesday dynamic staging: Lorenzo arrives at reception, then relocates to the
@@ -802,7 +979,12 @@ function applyNpcSceneFromStory(){
  }
  if(currentDay===1)setNpcWorldPosition("don",-5.72,-2.38);
  if(currentDay===2){
-   if(storyStep===64)for(const [id,pos] of Object.entries(npcLunchPositions))setNpcWorldPosition(id,pos.x,pos.z);
+   // Wednesday lunch no longer makes everybody teleport home the instant Zia Ale finishes talking.
+   if(storyStep===64||storyStep===65){
+     for(const [id,pos] of Object.entries(npcLunchPositions))setNpcWorldPosition(id,pos.x,pos.z);
+     // Betty is the next objective, so she heads back to HR first while the others finish lunch.
+     if(storyStep===65)setNpcWorldPosition("hr_01",npcHomePositions.hr_01.x,npcHomePositions.hr_01.z);
+   }
    if(storyStep===66)setNpcWorldPosition("lorenzo",-.65,10.05);
    setNpcWorldPosition("don",-5.72,-2.38);
  }
@@ -979,14 +1161,14 @@ const storySteps=[
  {id:"reach_editoria",time:"09:22",objective:"VAI DA ALICE IN EDITORIA",targetRoom:"EDITORIA"},
  {id:"talk_alice",time:"09:29",objective:"PARLA CON ALICE",targetRoom:"EDITORIA",targetInteractable:"alice_editoria"},
  {id:"reach_stampanti",time:"09:34",objective:"VAI ALLE STAMPANTI",targetRoom:"STAMPANTI"},
- {id:"fix_printer",time:"09:39",objective:"CONTROLLA LA STAMPANTE PRINCIPALE",targetRoom:"STAMPANTI",targetInteractable:"printer_main"},
+ {id:"fix_printer",time:"09:39",objective:"CONTROLLA LA STAMPANTE",targetRoom:"STAMPANTI",targetInteractable:"printer_main"},
  {id:"return_editoria",time:"09:44",objective:"TORNA DA ALICE",targetRoom:"EDITORIA"},
  {id:"report_alice",time:"09:47",objective:"CONFERMA IL RIPRISTINO AD ALICE",targetRoom:"EDITORIA",targetInteractable:"alice_editoria"},
  {id:"return_it_pc",time:"09:51",objective:"TORNA IN IT E CHIUDI IL TICKET",targetRoom:"REPARTO IT"},
  {id:"close_ticket_pc",time:"09:56",objective:"CHIUDI IL TICKET DAL PC IT",targetRoom:"REPARTO IT",targetInteractable:"pc_it"},
 
- {id:"reach_renderisti",time:"10:01",objective:"VERIFICA LA POSTAZIONE RENDER_04",targetRoom:"RENDERISTI"},
- {id:"inspect_render04",time:"10:04",objective:"CONTROLLA RENDER_04",targetRoom:"RENDERISTI",targetInteractable:"render_04"},
+ {id:"reach_renderisti",time:"10:01",objective:"VAI DAI RENDERISTI",targetRoom:"RENDERISTI"},
+ {id:"inspect_render04",time:"10:04",objective:"CONTROLLA LA POSTAZIONE SPENTA",targetRoom:"RENDERISTI",targetInteractable:"render_04"},
  {id:"return_it_anomaly",time:"10:06",objective:"TORNA IN IT",targetRoom:"REPARTO IT"},
  {id:"report_anomaly",time:"10:08",objective:"PARLA CON L'IT MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
  {id:"continue_after_m26",time:"10:10",objective:"PARLA CON L'IT MANAGER // NUOVA RICHIESTA",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
@@ -994,7 +1176,7 @@ const storySteps=[
  // M2.7.1 // ESCALATION LEGGERA
  {id:"reach_interior",time:"10:12",objective:"VAI DA MARINO IN INTERIOR",targetRoom:"INTERIOR"},
  {id:"talk_marino",time:"10:16",objective:"PARLA CON MARINO",targetRoom:"INTERIOR",targetInteractable:"marino_interior"},
- {id:"inspect_interior_pc",time:"10:20",objective:"CONTROLLA IL PC INTERIOR_03",targetRoom:"INTERIOR",targetInteractable:"interior_pc_03"},
+ {id:"inspect_interior_pc",time:"10:20",objective:"CONTROLLA LA POSTAZIONE DI MARINO",targetRoom:"INTERIOR",targetInteractable:"interior_pc_03"},
  {id:"report_marino",time:"10:25",objective:"CONFERMA IL RIPRISTINO A MARINO",targetRoom:"INTERIOR",targetInteractable:"marino_interior"},
  {id:"return_it_interior",time:"10:29",objective:"TORNA IN IT E CHIUDI IL TICKET",targetRoom:"REPARTO IT"},
  {id:"close_interior_ticket",time:"10:33",objective:"CHIUDI IL TICKET DAL PC IT",targetRoom:"REPARTO IT",targetInteractable:"pc_it"},
@@ -1015,7 +1197,7 @@ const storySteps=[
  {id:"m32_start",time:"13:32",objective:"CONTROLLA IL PC IT // NUOVA RICHIESTA",targetRoom:"REPARTO IT",targetInteractable:"pc_it"},
  {id:"reach_bim",time:"13:35",objective:"VAI DA BIM 02",targetRoom:"BIM"},
  {id:"talk_bim_02",time:"13:39",objective:"PARLA CON BIM 02",targetRoom:"BIM",targetInteractable:"bim_02"},
- {id:"inspect_bim_pc_02",time:"13:43",objective:"CONTROLLA IL PC BIM 02",targetRoom:"BIM",targetInteractable:"bim_pc_02"},
+ {id:"inspect_bim_pc_02",time:"13:43",objective:"CONTROLLA LA POSTAZIONE BIM",targetRoom:"BIM",targetInteractable:"bim_pc_02"},
  {id:"report_bim_02",time:"13:48",objective:"CONFERMA IL RIPRISTINO A BIM 02",targetRoom:"BIM",targetInteractable:"bim_02"},
  {id:"return_it_bim",time:"13:51",objective:"TORNA IN IT E CHIUDI IL TICKET",targetRoom:"REPARTO IT"},
  {id:"corridor_manifestation",time:"13:52",objective:"TORNA IN IT",targetRoom:"REPARTO IT"},
@@ -1041,7 +1223,7 @@ const storySteps=[
  {id:"wednesday_start",time:"09:05",objective:"MERCOLEDI // RAGGIUNGI IL REPARTO IT",targetRoom:"REPARTO IT"},
  {id:"wednesday_manager",time:"09:20",objective:"PARLA CON L'IT MANAGER",targetRoom:"REPARTO IT",targetInteractable:"it_manager"},
  {id:"wednesday_reach_server",time:"10:25",objective:"VAI NEL SERVER / MAGAZZINO IT",targetRoom:"SERVER / MAGAZZINO IT"},
- {id:"wednesday_legacy_terminal",time:"10:35",objective:"CONTROLLA IL TERMINALE INVENTARIO LEGACY",targetRoom:"SERVER / MAGAZZINO IT",targetInteractable:"legacy_terminal"},
+ {id:"wednesday_legacy_terminal",time:"10:35",objective:"CONTROLLA IL VECCHIO TERMINALE",targetRoom:"SERVER / MAGAZZINO IT",targetInteractable:"legacy_terminal"},
  {id:"wednesday_other_office",time:"10:37",objective:"TORNA VERSO HR // QUALCOSA NON VA",targetRoom:"HR"},
  {id:"wednesday_lunch",time:"12:55",objective:"PAUSA PRANZO // RAGGIUNGI LA CUCINA",targetRoom:"CUCINA",targetInteractable:"zia_ale"},
  {id:"wednesday_betty",time:"13:20",objective:"DOPO PRANZO // PARLA CON BETTY",targetRoom:"HR",targetInteractable:"hr_01"},
@@ -1209,13 +1391,15 @@ function smoothTo(a,b,k,dt){
 }
 
 // -----------------------------------------------------------------------------
-// M4.2 // RELEASE FLOW + LOCAL SAVE + ENDINGS
+// M4.4 // RELEASE FLOW + LOCAL SAVE + OPTIONS
 // -----------------------------------------------------------------------------
-const SAVE_KEY="ITSHIFT_M42_SAVE",LIMEN_KEY="LIMEN_SESSION_01";
+const SAVE_KEY="ITSHIFT_M42_SAVE",LIMEN_KEY="LIMEN_SESSION_01",SETTINGS_KEY="ITSHIFT_M43_SETTINGS";
 let gameStarted=false,gameEnded=false,choiceOpen=false,cutsceneActive=false;
 const timeJumpEl=document.getElementById("timeJump"),cinematicBarsEl=document.getElementById("cinematicBars");
+const titleScreenEl=document.getElementById("titleScreen"),endingScreenEl=document.getElementById("endingScreen"),choiceScreenEl=document.getElementById("choiceScreen"),optionsScreenEl=document.getElementById("optionsScreen");
 let timeJumpTimer=0,cutscene=null,cutsceneFootLast=0;
-function minsOf(t){const m=/^(\d{2}):(\d{2})$/.exec(t||"");return m?(+m[1]*60 + +m[2]):null;}
+const settingsDefaults={audioMuted:false,crt:true};
+function minsOf(t){const m=/^(d{2}):(d{2})$/.exec(t||"");return m?(+m[1]*60 + +m[2]):null;}
 function showTimeJump(time,label="DOPO QUALCHE ORA"){if(!timeJumpEl)return;const s=timeJumpEl.querySelector("strong"),l=timeJumpEl.querySelector("span");if(s)s.textContent=time;if(l)l.textContent=label;timeJumpEl.classList.add("on");clearTimeout(timeJumpTimer);timeJumpTimer=setTimeout(()=>timeJumpEl.classList.remove("on"),850);}
 function pathPoint(path,t){t=Math.max(0,Math.min(1,t));const scaled=t*(path.length-1),i=Math.min(path.length-2,Math.floor(scaled)),u=scaled-i;return{x:path[i].x+(path[i+1].x-path[i].x)*u,z:path[i].z+(path[i+1].z-path[i].z)*u};}
 function startLorenzoDirezioneWalk(){
@@ -1233,27 +1417,43 @@ function updateCutscene(now){
 function safeRead(key){try{return JSON.parse(localStorage.getItem(key)||"null")}catch(_){return null}}
 function safeWrite(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(_){}}
 function safeRemove(key){try{localStorage.removeItem(key)}catch(_){}}
+function getSettings(){return Object.assign({},settingsDefaults,safeRead(SETTINGS_KEY)||{})}
+function saveSettings(partial){const next=Object.assign({},getSettings(),partial||{});safeWrite(SETTINGS_KEY,next);return next}
+function applySettings(){
+ const s=getSettings();
+ audioMuted=!!s.audioMuted;
+ document.documentElement.classList.toggle("crtOff",!s.crt);
+ if(masterGain&&audioCtx)masterGain.gain.setTargetAtTime(audioMuted?0:.72,audioCtx.currentTime,.025);
+ const aBtn=document.getElementById("toggleAudioBtn"),cBtn=document.getElementById("toggleCrtBtn");
+ if(aBtn)aBtn.innerHTML='<span class="mainLine">AUDIO // '+(audioMuted?'OFF':'ON')+'</span>';
+ if(cBtn)cBtn.innerHTML='<span class="mainLine">CRT // '+(s.crt?'ON':'OFF')+'</span>';
+}
+function setCrtEnabled(v){saveSettings({crt:!!v});applySettings();toast(v?"CRT // ON":"CRT // OFF");}
 function saveProgress(){
  if(!gameStarted||gameEnded)return;
- safeWrite(SAVE_KEY,{version:"M4.2",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
+ safeWrite(SAVE_KEY,{version:"M4.4",day:currentDay,step:storyStep,x:player.x,z:player.z,yaw:savedFpYaw,updated:Date.now()});
  refreshTitleMeta();
 }
 function refreshTitleMeta(){
- const meta=document.getElementById("titleMeta"),cont=document.getElementById("continueBtn"),s=safeRead(SAVE_KEY),lm=safeRead(LIMEN_KEY);
+ const meta=document.getElementById("titleMeta"),cont=document.getElementById("continueBtn"),contSub=document.getElementById("continueSub"),s=safeRead(SAVE_KEY),lm=safeRead(LIMEN_KEY);
  if(cont)cont.disabled=!s;
+ const endings=Array.isArray(lm?.endings)?lm.endings:[];
+ if(contSub)contSub.innerHTML=s?'Riprendi da <strong>'+(WEEK_DAYS[s.day]?.label||'?')+' // '+(storySteps[s.step]?.time||'--:--')+'</strong>':'NESSUN SALVATAGGIO DISPONIBILE';
  if(meta){
-   const endings=Array.isArray(lm?.endings)?lm.endings:[];
-   meta.innerHTML=s?`SALVATAGGIO // ${WEEK_DAYS[s.day]?.label||"?"} · ${storySteps[s.step]?.time||"--:--"}<br><b>FINALI TROVATI ${endings.length}/3</b>`:`SESSIONE LOCALE // NESSUN SALVATAGGIO<br><b>FINALI TROVATI ${endings.length}/3</b>`;
+   const endingLine=endings.length?'<br><b>FINALI TROVATI '+endings.length+'/3</b>':'';
+   meta.innerHTML=s?'SALVATAGGIO // '+(WEEK_DAYS[s.day]?.label||'?')+' · '+(storySteps[s.step]?.time||'--:--')+endingLine:'SESSIONE LOCALE // NESSUN SALVATAGGIO'+endingLine;
  }
 }
+function closeAllReleaseScreens(){titleScreenEl?.classList.add("hidden");endingScreenEl?.classList.add("hidden");choiceScreenEl?.classList.add("hidden");optionsScreenEl?.classList.add("hidden");}
+function openOptions(){optionsScreenEl?.classList.remove("hidden");}
+function closeOptions(){optionsScreenEl?.classList.add("hidden");}
 function resetRunState(){
  gameEnded=false;choiceOpen=false;cutsceneActive=false;cutscene=null;cinematicBarsEl?.classList.remove("on");closeDialogueForCheckpoint();resetOfficeForCheckpoint();
  setWeekDay(0,false);storyStep=0;player.x=0;player.z=9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
  setStoryStep(0);applyNpcSceneFromStory();sceneTint=0;realityGlitchUntil=0;otherOfficeFigureGone=false;
 }
 function startNewGame(){
- safeRemove(SAVE_KEY);resetRunState();gameStarted=true;
- document.getElementById("titleScreen")?.classList.add("hidden");document.getElementById("endingScreen")?.classList.add("hidden");document.getElementById("choiceScreen")?.classList.add("hidden");
+ safeRemove(SAVE_KEY);resetRunState();gameStarted=true;closeAllReleaseScreens();
  showDayBanner();saveProgress();ensureAudio();
 }
 function continueGame(){
@@ -1261,32 +1461,38 @@ function continueGame(){
  gameEnded=false;choiceOpen=false;gameStarted=false;closeDialogueForCheckpoint();resetOfficeForCheckpoint();
  setWeekDay(s.day||0,false);storyStep=0;setStoryStep(Math.max(0,Math.min(storySteps.length-1,s.step||0)));applyWeekStartProfile();applyNpcSceneFromStory();
  player.x=Number.isFinite(s.x)?s.x:0;player.z=Number.isFinite(s.z)?s.z:9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=Number.isFinite(s.yaw)?s.yaw:FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
- gameStarted=true;document.getElementById("titleScreen")?.classList.add("hidden");document.getElementById("endingScreen")?.classList.add("hidden");document.getElementById("choiceScreen")?.classList.add("hidden");showDayBanner();ensureAudio();saveProgress();
+ gameStarted=true;closeAllReleaseScreens();showDayBanner();ensureAudio();saveProgress();
 }
-function goToTitle(){gameStarted=false;gameEnded=false;choiceOpen=false;document.getElementById("endingScreen")?.classList.add("hidden");document.getElementById("choiceScreen")?.classList.add("hidden");document.getElementById("titleScreen")?.classList.remove("hidden");refreshTitleMeta()}
+function goToTitle(){gameStarted=false;gameEnded=false;choiceOpen=false;endingScreenEl?.classList.add("hidden");choiceScreenEl?.classList.add("hidden");optionsScreenEl?.classList.add("hidden");titleScreenEl?.classList.remove("hidden");refreshTitleMeta();applySettings()}
 function completeDay(dayIndex){
  const next=dayIndex+1;if(next>=WEEK_DAYS.length)return;
  resetOfficeForCheckpoint();setWeekDay(next,true);player.x=0;player.z=9.6;player._lastRoom=roomAt(player.x,player.z);savedFpYaw=FP_DEFAULT_YAW;cameraState.yaw=savedFpYaw;
  const starts=[0,TUESDAY_START_STEP,WEDNESDAY_START_STEP,THURSDAY_START_STEP,FRIDAY_START_STEP];setStoryStep(starts[next]);applyWeekStartProfile();applyNpcSceneFromStory();toast("FINE GIORNATA // "+WEEK_DAYS[next].label);saveProgress();
 }
-function openEndingChoice(){choiceOpen=true;document.getElementById("choiceScreen")?.classList.remove("hidden");}
+function openEndingChoice(){choiceOpen=true;choiceScreenEl?.classList.remove("hidden");}
 function showEnding(kind){
  const data={
    good:{title:"LOGOUT",body:"Rifiuti Lorenzo. Torni al nodo legacy, spezzi il badge e interrompi la sessione.\n\nPer un istante lo studio torna normale. La porta d'ingresso si apre. Nessuno ti ferma.\n\nSul CRT resta una sola riga:",axis:"rebellion"},
    normal:{title:"CONTRATTO RINNOVATO",body:"Non vuoi sapere altro. Attraversi l'uscita e torni a casa.\n\nLunedi, alle 09:00, il badge funziona di nuovo. Il Manager ti saluta come se nulla fosse successo.\n\nSulla scrivania c'e un contratto gia firmato.",axis:"compliance"},
    evil:{title:"PROMOZIONE",body:"Accetti l'offerta di Lorenzo. Non ti chiede fedelta: ti chiede soltanto di mantenere aperta la porta.\n\nLunedi arriva un nuovo stagista. Questa volta sei tu dall'altra parte della scrivania.",axis:"control"}
  }[kind]||null;if(!data)return;
- choiceOpen=false;gameEnded=true;gameStarted=false;document.getElementById("choiceScreen")?.classList.add("hidden");safeRemove(SAVE_KEY);
+ choiceOpen=false;gameEnded=true;gameStarted=false;choiceScreenEl?.classList.add("hidden");safeRemove(SAVE_KEY);
  const lm=safeRead(LIMEN_KEY)||{session:"LMN_01",endings:[],profile:{rebellion:0,compliance:0,control:0}};if(!lm.endings.includes(kind))lm.endings.push(kind);lm.lastEnding=kind;lm.profile=lm.profile||{rebellion:0,compliance:0,control:0};lm.profile[data.axis]=(lm.profile[data.axis]||0)+1;safeWrite(LIMEN_KEY,lm);
- const title=document.getElementById("endingTitle"),body=document.getElementById("endingBody"),code=document.getElementById("endingCode");if(title)title.textContent=data.title;if(body)body.textContent=data.body;if(code)code.textContent=`LMN_01 // SESSION CLOSED // ${kind.toUpperCase()}`;
- document.getElementById("endingScreen")?.classList.remove("hidden");refreshTitleMeta();
+ const title=document.getElementById("endingTitle"),body=document.getElementById("endingBody"),code=document.getElementById("endingCode");if(title)title.textContent=data.title;if(body)body.textContent=data.body;if(code)code.textContent='LMN_01 // SESSION CLOSED // '+kind.toUpperCase();
+ endingScreenEl?.classList.remove("hidden");refreshTitleMeta();
 }
 function bindReleaseUi(){
- document.getElementById("newGameBtn")?.addEventListener("click",startNewGame);document.getElementById("continueBtn")?.addEventListener("click",continueGame);
+ document.getElementById("newGameBtn")?.addEventListener("click",startNewGame);
+ document.getElementById("continueBtn")?.addEventListener("click",continueGame);
+ document.getElementById("optionsBtn")?.addEventListener("click",openOptions);
+ document.getElementById("closeOptionsBtn")?.addEventListener("click",closeOptions);
+ document.getElementById("toggleAudioBtn")?.addEventListener("click",()=>{setAudioMuted(!audioMuted);saveSettings({audioMuted});applySettings()});
+ document.getElementById("toggleCrtBtn")?.addEventListener("click",()=>{const s=getSettings();setCrtEnabled(!s.crt)});
  document.getElementById("resetSaveBtn")?.addEventListener("click",()=>{safeRemove(SAVE_KEY);refreshTitleMeta();toast("SALVATAGGIO CANCELLATO")});
- document.getElementById("endingRestartBtn")?.addEventListener("click",startNewGame);document.getElementById("endingMenuBtn")?.addEventListener("click",goToTitle);
+ document.getElementById("endingRestartBtn")?.addEventListener("click",startNewGame);
+ document.getElementById("endingMenuBtn")?.addEventListener("click",goToTitle);
  document.querySelectorAll(".endingChoice").forEach(b=>b.addEventListener("click",()=>showEnding(b.dataset.ending)));
- refreshTitleMeta();
+ refreshTitleMeta();applySettings();
 }
 
 // -----------------------------------------------------------------------------
@@ -1614,6 +1820,10 @@ addEventListener("keydown",e=>{
  if(k==="m"&&!e.repeat){e.preventDefault();setAudioMuted(!audioMuted);return;}
  if(k==="f2"&&!e.repeat){e.preventDefault();openDevMenu();return;}
  if(k==="f3"&&!e.repeat){e.preventDefault();toggleCameraMode();return;}
+ if(optionsScreenEl&&!optionsScreenEl.classList.contains("hidden")){
+   if(k==="escape"&&!e.repeat)closeOptions();
+   e.preventDefault();return;
+ }
  if(devMenu&&!devMenu.classList.contains("hidden")){
    if(k==="escape"&&!e.repeat)closeDevMenu();
    e.preventDefault();return;
@@ -1730,7 +1940,8 @@ function updateInteractionPrompt(){
  if(!it){promptEl.classList.remove("on");return;}
  const step=storySteps[storyStep];
  const active=step.targetInteractable===it.id;
- promptEl.innerHTML=`<b>[SPAZIO]</b> ${active?"INTERAGISCI":"ESAMINA"} — ${it.label}`;
+ const verb=it.type==="npc"?"PARLA":(active?"USA":"ESAMINA");
+ promptEl.innerHTML=`<b>SPAZIO</b> ${verb}<span>${it.label}</span>`;
  promptEl.classList.add("on");
 }
 const tuesdayAmbientDialogue={
@@ -2059,6 +2270,16 @@ function handleFridayInteraction(it){
  if(it.type==="npc")openDialogue(it.label,["VENERDI // NON RISPONDE.","Per un momento sembra guardare oltre la tua spalla."],null);
  else openDialogue(it.label,["VENERDI // IL DISPOSITIVO NON RISPONDE COME DOVREBBE."],null);
  return true;
+}
+
+function inspectGenericWorkstation(it){
+ const sc=officeScreens.find(s=>s.id===it.id);if(!sc)return false;
+ const state=officeState.devices[it.id]||"on";
+ const room=sc.room||it.room||"UFFICIO";
+ const lines=state==="off"?
+   [room+" // SCHERMO SPENTO.","NESSUNA SESSIONE ATTIVA."]:
+   [room+" // POSTAZIONE ATTIVA.","NESSUN TICKET ASSEGNATO SU QUESTO PC.","Puoi comunque avvicinarti, leggere lo schermo e controllare la postazione."];
+ openDialogue(it.label,lines,null);return true;
 }
 
 function interact(){
@@ -2392,6 +2613,7 @@ function interact(){
    }
    return;
  }
+ if(it.type==="workstation"){inspectGenericWorkstation(it);return;}
 }
 let jx=0,jy=0,mobileTurn=0;const st=document.getElementById("stick"),nub=st?.querySelector("i");
 if(st){const set=e=>{ensureAudio();const t=e.touches?.[0]||e,r=st.getBoundingClientRect();let x=(t.clientX-r.left-r.width/2)/(r.width*.32),y=(t.clientY-r.top-r.height/2)/(r.height*.32),l=Math.hypot(x,y);if(l>1){x/=l;y/=l}jx=x;jy=y;nub.style.transform=`translate(${x*31}px,${y*31}px)`;e.preventDefault()};
