@@ -56,14 +56,38 @@ function psxTilePatch(cx,cz,w,d,size=.52,colA=[.245,.252,.235],colB=[.205,.214,.
    floorPlate(x0+tw*(ix+.5),z0+td*(iz+.5),tw-.025,td-.025,col,y);
  }
 }
-function psxCrtShell(x,z,w=.48){
+function psxCrtShell(x,z,w=.48,facing="n"){
  // Thick beige CRT casing around the live M3.0 screen.
- box(x,.735,z+.045,w+.13,.40,.19,[.43,.42,.36]);
- box(x,.715,z+.105,w+.18,.27,.13,[.34,.34,.30]);
- box(x,.695,z+.095,.30,.075,.23,[.39,.38,.33]);
- // keyboard + small mouse on the desk, both visual-only
- box(x,.767,z-.32,.58,.025,.17,[.44,.43,.38]);
- box(x+.38,.768,z-.31,.10,.025,.14,[.34,.34,.31]);
+ // facing = lato verso cui guarda lo schermo (cioe' il lato da cui si siede chi lo usa).
+ // "n" (default, invariato) = utente a sud, schermo verso nord.
+ // "s" = utente a nord, schermo verso sud (fila di scrivanie speculare).
+ // "e"/"w" = scrivania addossata a parete est/ovest, monitor ruotato sull'asse x.
+ if(facing==="s"){
+   box(x,.735,z-.045,w+.13,.40,.19,[.43,.42,.36]);
+   box(x,.715,z-.105,w+.18,.27,.13,[.34,.34,.30]);
+   box(x,.695,z-.095,.30,.075,.23,[.39,.38,.33]);
+   box(x,.767,z+.32,.58,.025,.17,[.44,.43,.38]);
+   box(x+.38,.768,z+.31,.10,.025,.14,[.34,.34,.31]);
+ }else if(facing==="e"){
+   box(x-.045,.735,z,.19,.40,w+.13,[.43,.42,.36]);
+   box(x-.105,.715,z,.13,.27,w+.18,[.34,.34,.30]);
+   box(x-.095,.695,z,.23,.075,.30,[.39,.38,.33]);
+   box(x+.32,.767,z,.17,.025,.58,[.44,.43,.38]);
+   box(x+.31,.768,z+.38,.14,.025,.10,[.34,.34,.31]);
+ }else if(facing==="w"){
+   box(x+.045,.735,z,.19,.40,w+.13,[.43,.42,.36]);
+   box(x+.105,.715,z,.13,.27,w+.18,[.34,.34,.30]);
+   box(x+.095,.695,z,.23,.075,.30,[.39,.38,.33]);
+   box(x-.32,.767,z,.17,.025,.58,[.44,.43,.38]);
+   box(x-.31,.768,z+.38,.14,.025,.10,[.34,.34,.31]);
+ }else{
+   box(x,.735,z+.045,w+.13,.40,.19,[.43,.42,.36]);
+   box(x,.715,z+.105,w+.18,.27,.13,[.34,.34,.30]);
+   box(x,.695,z+.095,.30,.075,.23,[.39,.38,.33]);
+   // keyboard + small mouse on the desk, both visual-only
+   box(x,.767,z-.32,.58,.025,.17,[.44,.43,.38]);
+   box(x+.38,.768,z-.31,.10,.025,.14,[.34,.34,.31]);
+ }
 }
 function psxFilingCabinet(x,z,w=.62,d=.42,h=1.02){
  box(x,0,z,w,h,d,[.34,.35,.32]);
@@ -142,8 +166,8 @@ function psx3DPrinter(x,z){
 function psxBathroomSet(x,z){
  box(x,0,z,.72,.55,.42,[.62,.64,.60]);
  box(x,.55,z+.10,.56,.20,.28,[.68,.70,.66]);
- box(x+.75,.68,z,.46,.12,.28,[.70,.72,.68]);
- box(x+.75,.82,z+.16,.42,.58,.035,[.34,.40,.38]);
+ box(x+.58,.68,z,.46,.12,.28,[.70,.72,.68]);
+ box(x+.58,.82,z+.16,.42,.58,.035,[.34,.40,.38]);
 }
 
 function doorFrame(x,z,axis="z",col=[.25,.19,.14]){
@@ -453,7 +477,7 @@ psxWallTrimX(-6.92,2.90,3.45);psxWallTrimZ(-5.0,1.08,3.72);psxWallTrimZ(-5.0,4.7
 psxWallTrimX(-6.92,7.00,3.28);psxWallTrimZ(-5.0,5.25,3.72);psxWallTrimZ(-5.0,8.74,3.72);
 
 // Chunky CRT workstations: live screen colours still come from officeState.
-psxCrtShell(-5.45,2.85,.48);psxCrtShell(-4.20,1.85,.44);psxCrtShell(-5.10,7.05,.46);
+psxCrtShell(-5.45,2.85,.48,"s");psxCrtShell(-4.20,1.85,.44,"s");psxCrtShell(-5.10,7.05,.46);
 
 // Non-blocking dressing: filing, plants, wall print and fluorescent panels.
 psxFilingCabinet(-6.48,4.28,.58,.38,.95);
@@ -490,24 +514,25 @@ psxBoxStack(-3.72,-2.55);psxFilingCabinet(-3.65,-.52,.52,.34,.82);box(-5.25,.05,
 box(-5.25,.23,-.10,.12,.82,.12,[.17,.19,.17]);
 
 // BIM — two proper desks with chairs, whiteboard and project folders
-psxCrtShell(-5.55,-5.75,.42);psxCrtShell(-4.15,-5.75,.42);psxChair(-5.55,-5.12,0,[.20,.24,.27]);psxChair(-4.15,-5.12,0,[.23,.21,.28]);
+psxCrtShell(-5.55,-5.75,.42,"s");psxCrtShell(-4.15,-5.75,.42,"s");psxChair(-5.55,-5.12,0,[.20,.24,.27]);psxChair(-4.15,-5.12,0,[.23,.21,.28]);
 psxWhiteboardZ(-5.00,-7.58,1.65);psxShelf(-6.52,-6.55,.72,1.30,.28,[.28,.30,.31]);box(-6.45,.78,-6.46,.38,.10,.24,[.44,.49,.48]);
 
 // Centrale — six recognizable workstations + central pinboard / plants
-for(const sc of [{x:3.75,z:4.15},{x:5.35,z:4.15},{x:6.95,z:4.15},{x:3.75,z:.05},{x:5.35,z:.05},{x:6.95,z:.05}])psxCrtShell(sc.x,sc.z,.38);
+for(const sc of [{x:3.75,z:4.15},{x:5.35,z:4.15},{x:6.95,z:4.15}])psxCrtShell(sc.x,sc.z,.38);
+for(const sc of [{x:3.75,z:.05},{x:5.35,z:.05},{x:6.95,z:.05}])psxCrtShell(sc.x,sc.z,.38,"s");
 for(const sc of [{x:3.75,z:3.48},{x:5.35,z:3.48},{x:6.95,z:3.48},{x:3.75,z:.72},{x:5.35,z:.72},{x:6.95,z:.72}])psxChair(sc.x,sc.z,0,[.21,.23,.21]);
-psxPinboardX(2.66,2.10,1.45);psxPlant(7.55,4.55);psxPlant(7.55,-.25);box(5.35,.02,2.10,.70,.34,.42,[.29,.31,.28]);
+psxPinboardX(2.66,4.60,1.45);psxPlant(7.55,4.55);psxPlant(7.55,-.25);box(5.35,.02,2.10,.70,.34,.42,[.29,.31,.28]);
 
 // Editoria — proofs, shelves and paired workstation dressing
 psxCrtShell(4.25,-3.55,.44);psxCrtShell(6.35,-3.55,.44);psxChair(4.25,-4.20,0,[.28,.23,.19]);psxChair(6.35,-4.20,0,[.24,.21,.27]);
-psxShelf(7.55,-4.55,.65,1.40,.28,[.31,.29,.26]);psxPinboardX(2.67,-3.20,1.40);box(5.30,.765,-3.38,.58,.025,.30,[.72,.68,.58]);
+psxShelf(7.55,-4.55,.65,1.40,.28,[.31,.29,.26]);psxPinboardX(2.67,-5.10,1.40);box(5.30,.765,-3.38,.58,.025,.30,[.72,.68,.58]);
 
 // Interior — material samples + whiteboard
-psxCrtShell(11.65,3.75,.43);psxCrtShell(11.65,.45,.43);psxChair(11.05,3.75,1,[.25,.23,.20]);psxChair(11.05,.45,1,[.24,.22,.20]);
+psxCrtShell(11.65,3.75,.43,"w");psxCrtShell(11.65,.45,.43,"w");psxChair(11.05,3.75,1,[.25,.23,.20]);psxChair(11.05,.45,1,[.24,.22,.20]);
 psxWhiteboardX(13.63,2.05,1.60);psxShelf(13.20,4.35,.58,1.32,.26,[.34,.30,.26]);box(13.15,.86,4.30,.36,.06,.22,[.55,.42,.31]);
 
 // Renderisti — darker room, reference boards and two render stations
-psxCrtShell(11.55,-2.75,.42);psxCrtShell(12.35,-4.45,.42);psxChair(10.95,-2.75,1,[.20,.22,.26]);psxChair(11.70,-4.45,1,[.24,.20,.20]);
+psxCrtShell(11.55,-2.75,.42,"w");psxCrtShell(12.35,-4.45,.42,"w");psxChair(10.95,-2.75,1,[.20,.22,.26]);psxChair(11.70,-4.45,1,[.24,.20,.20]);
 psxPinboardX(13.63,-3.55,1.45);psxShelf(10.08,-4.72,.55,1.22,.25,[.26,.27,.30]);box(10.20,.92,-3.05,.34,.25,.18,[.18,.20,.24]);
 
 // Sala Meet — chairs all around the table, presentation wall and credenza
@@ -529,7 +554,7 @@ psxPinboardX(-12.12,-10.65,1.15);psxPlant(-7.55,-9.55);
 psxBathroomSet(-5.82,-10.50);psxBathroomSet(-5.82,-12.10);box(-4.45,.72,-10.45,.52,.12,.34,[.68,.70,.67]);box(-4.45,.88,-10.62,.46,.55,.035,[.35,.43,.41]);
 
 // Galleria Digitale — display desk, wall screens and small equipment shelf
-psxCrtShell(-1.60,-11.00,.50);psxChair(-1.60,-10.35,0,[.18,.20,.27]);psxShelf(-3.45,-12.25,.62,1.30,.28,[.25,.27,.31]);
+psxCrtShell(-1.60,-11.00,.50,"s");psxChair(-1.60,-10.35,0,[.18,.20,.27]);psxShelf(-3.45,-12.25,.62,1.30,.28,[.25,.27,.31]);
 box(-.25,1.05,-12.95,1.40,.58,.035,[.12,.15,.19]);box(-.25,1.10,-12.92,1.18,.44,.018,[.06,.09,.12]);psxPlant(.12,-9.45);
 
 // Spazio A — collaborative table with chairs, whiteboard and soft lounge blocks
@@ -548,6 +573,25 @@ box(11.45,.82,-12.28,.16,.12,.16,[.62,.42,.22]);box(11.74,.82,-12.28,.16,.12,.16
 // Corridor identity: repeated lights, occasional plants and low office trim
 for(const z of [7.0,3.5,0,-3.5,-7.0])psxFluorescent(0,z,1.20);
 for(const z of [7.0,2.5,-2.5,-7.0])psxFluorescent(8.9,z,.95);
+// CORRIDOIO SUD (davanti a Cucina/Bagni/Galleria/Spazio A/Stampanti/Stampa 3D)
+// non aveva NESSUN corpo illuminante: da qui il corridoio completamente nero.
+for(const x of [-10.3,-6.6,-2.9,.8,4.5,8.2,11.6])psxFluorescent(x,-7.9,1.15);
+// Tra una stanza sud e l'altra restavano 5 fessure (0.3-0.5 unita') dove NESSUNA
+// delle due stanze forniva il muro di confine: il giocatore poteva camminarci
+// dentro finendo in una tasca senza pavimento ne' nome-stanza ("pezzo di mappa
+// non calpestabile"). Richiuse con un breve tratto di muro ciascuna.
+wall(-6.95,-8.7,.55,.16);   // tra Cucina e Bagni
+wall(-3.975,-8.7,.50,.16);  // tra Bagni e Galleria Digitale
+wall(.85,-8.7,.65,.16);     // tra Galleria Digitale e Spazio A
+wall(6.55,-8.7,.65,.16);    // tra Spazio A e Stampanti
+wall(9.55,-8.7,.45,.16);    // tra Stampanti e Stampa 3D
+// A nord del tratto ovest di Corridoio Sud (davanti a Cucina/Bagni) non esiste
+// NESSUNA stanza: la collisione fermava gia' il giocatore intorno a z=-7.05,
+// ma senza un muro vero disegnato lì, si vedeva un riquadro nero pieno al
+// posto di una parete (l'etichetta stanza diventava "FUORI MAPPA" pochi
+// passi più a nord). Stesso problema a nord di Sala Meet Capo.
+wall(-9.55,-7.08,5.3,.18);      // nord del tratto Cucina/Bagni di Corridoio Sud
+wall(11.90,9.88,4.5,.18);       // nord di Sala Meet Capo
 
 
 
@@ -595,12 +639,12 @@ for(const z of [6.4,2.0,-2.4,-6.3])psxCeilingStrip(8.9,z,1.00,.22);
 
 
 // Meeting areas: corridor-facing dark-glass panels distinguish them immediately.
-psxGlassPanelX(2.76,6.18,.92);psxGlassPanelX(2.76,9.24,.92);
-psxGlassPanelX(9.88,6.22,.90);psxGlassPanelX(9.88,9.20,.90);
-// extra office-style glazed frames so Meet / Direzione stop reading as dark caves
-psxGlassPanelZ(3.02,6.58,.58);psxGlassPanelZ(3.02,8.82,.58);
-psxGlassPanelZ(10.16,6.60,.56);psxGlassPanelZ(10.16,8.80,.56);
-psxGlassPanelX(2.98,7.70,.46);psxGlassPanelX(10.10,7.70,.44);
+// Erano 10 pannelli totali: 6 aggiunti in seguito ("extra glazed frames") usavano
+// l'orientamento sbagliato e non erano agganciati a nessun muro reale, quindi si
+// vedevano come vetri sparsi a caso in mezzo alla stanza. Restano solo i 4 corretti,
+// stretti accanto alla porta per leggersi chiaramente come vetrate laterali.
+psxGlassPanelX(2.76,6.55,.60);psxGlassPanelX(2.76,8.85,.60);
+psxGlassPanelX(9.88,6.55,.60);psxGlassPanelX(9.88,8.85,.60);
 psxLowCabinet(4.00,9.25,1.05,.32,[.29,.28,.24]);psxLowCabinet(12.90,9.20,.86,.32,[.24,.24,.22]);
 psxDeskClutter(5.10,7.70);psxDeskClutter(11.65,7.70);
 
@@ -665,19 +709,19 @@ box(.72,.94,12.455,.025,.055,.09,[.58,.48,.17]);
 
 const interactables=[
  {id:"zia_ale",label:"ZIA ALE",x:-1.55,z:10.55,range:1.35,type:"npc"},
- {id:"it_manager",label:"IT MANAGER",x:-4.05,z:4.00,range:1.32,type:"npc"},
+ {id:"it_manager",label:"IT MANAGER",x:-5.45,z:3.46,range:1.32,type:"npc"},
  {id:"pc_it",label:"POSTAZIONE IT",x:-5.45,z:2.85,range:1.28,type:"device"},
  {id:"server_rack_02",label:"RACK 02",x:-4.80,z:-1.35,range:1.25,type:"device"},
- {id:"alice_editoria",label:"ALICE",x:4.55,z:-4.45,range:1.35,type:"npc"},
+ {id:"alice_editoria",label:"ALICE",x:4.25,z:-4.2,range:1.35,type:"npc"},
  {id:"printer_main",label:"STAMPANTE",x:8.10,z:-11.00,range:1.35,type:"device"},
  {id:"render_04",label:"POSTAZIONE RENDER",x:12.35,z:-4.45,range:1.40,type:"device"},
- {id:"marino_interior",label:"MARINO",x:10.55,z:3.25,range:1.35,type:"npc"},
+ {id:"marino_interior",label:"MARINO",x:11.05,z:3.75,range:1.35,type:"npc"},
  {id:"interior_pc_03",label:"POSTAZIONE DI MARINO",x:11.65,z:.45,range:1.35,type:"device"},
  {id:"meet_phone",label:"TELEFONO",x:12.65,z:7.70,range:1.40,type:"device"},
- {id:"bim_02",label:"BIM 02",x:-4.15,z:-5.05,range:1.35,type:"npc"},
+ {id:"bim_02",label:"BIM 02",x:-4.15,z:-5.12,range:1.35,type:"npc"},
  {id:"bim_pc_02",label:"POSTAZIONE BIM",x:-4.15,z:-5.75,range:1.28,type:"device"},
  // M3.4 // Tuesday lore/NPC interactables
- {id:"hr_01",label:"BETTY",x:-5.10,z:6.35,range:1.38,type:"npc"},
+ {id:"hr_01",label:"BETTY",x:-5.1,z:6.25,range:1.38,type:"npc"},
  {id:"lorenzo",label:"LORENZO",x:-.75,z:9.95,range:1.45,type:"npc"},
  {id:"capo",label:"CAPO",x:9.05,z:7.70,range:1.55,type:"npc"},
  {id:"direzione_door",label:"PORTA DIREZIONE",x:9.34,z:7.70,range:1.35,type:"device"},
@@ -714,15 +758,15 @@ function setDeviceState(id,state){officeState.devices[id]=state;}
 // Workstation screens. These match the intended room capacities and are purely
 // visual: desks remain the frozen collision geometry. REPARTO IT is exactly 2.
 const officeScreens=[
- {id:"pc_it",room:"REPARTO IT",x:-5.45,z:2.85,w:.48},
- {id:"it_pc_02",room:"REPARTO IT",x:-4.20,z:1.85,w:.44},
+ {id:"pc_it",room:"REPARTO IT",x:-5.45,z:2.85,w:.48,facing:"s"},
+ {id:"it_pc_02",room:"REPARTO IT",x:-4.20,z:1.85,w:.44,facing:"s"},
  {id:"hr_pc_01",room:"HR",x:-5.10,z:7.05,w:.46},
- {id:"bim_pc_01",room:"BIM",x:-5.55,z:-5.75,w:.42},{id:"bim_pc_02",room:"BIM",x:-4.15,z:-5.75,w:.42},
+ {id:"bim_pc_01",room:"BIM",x:-5.55,z:-5.75,w:.42,facing:"s"},{id:"bim_pc_02",room:"BIM",x:-4.15,z:-5.75,w:.42,facing:"s"},
  {id:"central_pc_01",room:"CENTRALE",x:3.75,z:4.15,w:.38},{id:"central_pc_02",room:"CENTRALE",x:5.35,z:4.15,w:.38},{id:"central_pc_03",room:"CENTRALE",x:6.95,z:4.15,w:.38},
- {id:"central_pc_04",room:"CENTRALE",x:3.75,z:.05,w:.38},{id:"central_pc_05",room:"CENTRALE",x:5.35,z:.05,w:.38},{id:"central_pc_06",room:"CENTRALE",x:6.95,z:.05,w:.38},
+ {id:"central_pc_04",room:"CENTRALE",x:3.75,z:.05,w:.38,facing:"s"},{id:"central_pc_05",room:"CENTRALE",x:5.35,z:.05,w:.38,facing:"s"},{id:"central_pc_06",room:"CENTRALE",x:6.95,z:.05,w:.38,facing:"s"},
  {id:"editoria_pc_01",room:"EDITORIA",x:4.25,z:-3.55,w:.44},{id:"editoria_pc_02",room:"EDITORIA",x:6.35,z:-3.55,w:.44},
- {id:"interior_pc_01",room:"INTERIOR",x:11.65,z:3.75,w:.43},{id:"interior_pc_03",room:"INTERIOR",x:11.65,z:.45,w:.43},
- {id:"render_pc_01",room:"RENDERISTI",x:11.55,z:-2.75,w:.42},{id:"render_04",room:"RENDERISTI",x:12.35,z:-4.45,w:.42},
+ {id:"interior_pc_01",room:"INTERIOR",x:11.65,z:3.75,w:.43,facing:"w"},{id:"interior_pc_03",room:"INTERIOR",x:11.65,z:.45,w:.43,facing:"w"},
+ {id:"render_pc_01",room:"RENDERISTI",x:11.55,z:-2.75,w:.42,facing:"w"},{id:"render_04",room:"RENDERISTI",x:12.35,z:-4.45,w:.42,facing:"w"},
  {id:"legacy_terminal",room:"SERVER / MAGAZZINO IT",x:-4.22,z:-2.22,w:.46}
 ];
 for(const sc of officeScreens){if(!(sc.id in officeState.devices))officeState.devices[sc.id]="on";}
@@ -828,9 +872,14 @@ function buildOfficeLiveMesh(now,showDevLightProxies=true){
  // Workstation monitors and screen-state LEDs.
  for(const sc of officeScreens){
    const state=officeState.devices[sc.id]||"on";
-   box(sc.x,.77,sc.z,sc.w,.34,.09,[.055,.065,.06]);
+   if(sc.facing==="w"||sc.facing==="e")box(sc.x,.77,sc.z,.09,.34,sc.w,[.055,.065,.06]);
+   else box(sc.x,.77,sc.z,sc.w,.34,.09,[.055,.065,.06]);
    const col=deviceScreenColor(state);
-   box(sc.x,.82,sc.z-.052,Math.max(.24,sc.w-.08),.22,.018,col);
+   const glowSize=Math.max(.24,sc.w-.08);
+   if(sc.facing==="s")box(sc.x,.82,sc.z+.052,glowSize,.22,.018,col);
+   else if(sc.facing==="w")box(sc.x-.052,.82,sc.z,.018,.22,glowSize,col);
+   else if(sc.facing==="e")box(sc.x+.052,.82,sc.z,.018,.22,glowSize,col);
+   else box(sc.x,.82,sc.z-.052,glowSize,.22,.018,col);
  }
  // Rack activity LEDs.
  const rackState=officeState.devices.server_rack_02;
@@ -847,10 +896,12 @@ function buildOfficeLiveMesh(now,showDevLightProxies=true){
    box(ph.x+.10,.805,ph.z-.115,.055,.04,.018,col);
  }
  // Closed doors are rendered as real leaves. Current story keeps them open.
+ // L'anta era larga 1.10 contro un vano di 1.80: restava sospesa in mezzo
+ // all'apertura, staccata dagli stipiti. Ora arriva fino al telaio.
  for(const d of doors){
    if(officeState.doors[d.room]!=="closed")continue;
-   if(d.axis==="x")box(d.x,0,d.z,.10,1.72,1.10,[.30,.19,.11]);
-   else box(d.x,0,d.z,1.10,1.72,.10,[.30,.19,.11]);
+   if(d.axis==="x")box(d.x,0,d.z,.11,1.74,1.74,[.30,.19,.11]);
+   else box(d.x,0,d.z,1.74,1.74,.11,[.30,.19,.11]);
  }
  const arr=new Float32Array(V);restoreV(saved);return arr;
 }
@@ -894,9 +945,20 @@ function spriteTexture(pal,state="idle",features={}){
  const x=cv.getContext("2d");x.imageSmoothingEnabled=false;
  const px=(c,a,b,w,h)=>{x.fillStyle=c;x.fillRect(a,b,w,h)};
  // shadow / shoes / legs
- px("rgba(0,0,0,.35)",7,44,18,3);
- px(pal.legs,10,31,5,12);px(pal.legs,17,31,5,12);
- px("#171817",9,41,7,3);px("#171817",17,41,7,3);
+ if(state==="sit"){
+   // Seduto: la versione precedente accorciava le gambe lasciando trasparente
+   // la parte "tagliata" - uno sprite piatto (billboard) diventa una finestra
+   // su quello che sta dietro (es. il case scuro del monitor), creando un
+   // blocco nero illeggibile. Ora la sagoma resta piena/opaca come idle, solo
+   // piu' bassa e leggermente raccolta, cosi' non rivela mai nulla dietro.
+   px("rgba(0,0,0,.30)",7,43,18,3);
+   px(pal.legs,9,33,6,10);px(pal.legs,17,33,6,10);
+   px("#171817",8,41,7,3);px("#171817",16,41,7,3);
+ }else{
+   px("rgba(0,0,0,.35)",7,44,18,3);
+   px(pal.legs,10,31,5,12);px(pal.legs,17,31,5,12);
+   px("#171817",9,41,7,3);px("#171817",17,41,7,3);
+ }
  // torso + collar
  px(pal.body,8,17,16,16);px(pal.accent,12,17,8,3);
  // arms. Talk state raises one hand, making dialogue immediately readable.
@@ -934,22 +996,22 @@ function spriteTexture(pal,state="idle",features={}){
 // Every fixed NPC exists from 09:00; story missions activate interactions, not existence.
 const npcSprites=[
  {id:"zia_ale",name:"ZIA ALE",role:"SEGRETERIA",kind:"staff",x:-1.55,z:10.55,w:.72,h:1.36,from:0,to:999,pal:{body:"#65465f",accent:"#ba8aaf",legs:"#34303a",skin:"#c88f70",hair:"#d7bf68",light:"#f3df9b"}},
- {id:"it_manager",name:"IT MANAGER",role:"IT",kind:"staff",x:-4.05,z:4.00,w:.74,h:1.40,from:0,to:999,features:{glasses:true},pal:{body:"#36546b",accent:"#7394a5",legs:"#252d35",skin:"#bd856a",hair:"#44362f",light:"#8ab5ca"}},
- {id:"hr_01",name:"BETTY",role:"HR",kind:"staff",x:-5.22,z:6.08,w:.70,h:1.35,from:0,to:999,features:{stripes:true},pal:{body:"#5b4a51",accent:"#d7c9bd",legs:"#332b30",skin:"#cb9475",hair:"#49332f",light:"#c79aa4"}},
- {id:"bim_01",name:"BIM 01",role:"BIM",kind:"staff",x:-5.55,z:-5.05,w:.72,h:1.36,from:0,to:999,pal:{body:"#435f68",accent:"#7999a1",legs:"#293239",skin:"#c89072",hair:"#3c322e",light:"#94adb3"}},
- {id:"bim_02",name:"BIM 02",role:"BIM",kind:"staff",x:-4.15,z:-5.05,w:.72,h:1.36,from:0,to:999,pal:{body:"#5c4f72",accent:"#8d7ba7",legs:"#302c3d",skin:"#c68d70",hair:"#3f3028",light:"#aa97bd"}},
- {id:"central_01",name:"CENTRALE 01",role:"CENTRALE",kind:"staff",x:3.55,z:3.18,w:.70,h:1.35,from:0,to:999,pal:{body:"#4d5668",accent:"#8b97a9",legs:"#2b3038",skin:"#c58e70",hair:"#49372d",light:"#aab4c2"}},
- {id:"central_02",name:"CENTRALE 02",role:"CENTRALE",kind:"staff",x:5.15,z:3.18,w:.70,h:1.35,from:0,to:999,pal:{body:"#665b43",accent:"#a18d63",legs:"#332f27",skin:"#c99173",hair:"#3c3028",light:"#b9a476"}},
- {id:"central_03",name:"CENTRALE 03",role:"CENTRALE",kind:"staff",x:6.75,z:3.18,w:.70,h:1.35,from:0,to:999,pal:{body:"#4b6254",accent:"#7f9b87",legs:"#29342d",skin:"#c58d70",hair:"#342c28",light:"#96b19c"}},
- {id:"central_04",name:"CENTRALE 04",role:"CENTRALE",kind:"staff",x:3.55,z:.42,w:.70,h:1.35,from:0,to:999,pal:{body:"#66505b",accent:"#9d7b88",legs:"#352d32",skin:"#d09a78",hair:"#53382c",light:"#b8939e"}},
- {id:"central_05",name:"CENTRALE 05",role:"CENTRALE",kind:"staff",x:5.15,z:.42,w:.70,h:1.35,from:0,to:999,pal:{body:"#4d5f72",accent:"#8199ac",legs:"#2b323d",skin:"#c88f70",hair:"#3e332e",light:"#98afc0"}},
- {id:"central_06",name:"CENTRALE 06",role:"CENTRALE",kind:"staff",x:6.75,z:.42,w:.70,h:1.35,from:0,to:999,pal:{body:"#625747",accent:"#9f8e6f",legs:"#342f28",skin:"#c88e70",hair:"#453429",light:"#b4a17d"}},
- {id:"alice_editoria",name:"ALICE",role:"EDITORIA",kind:"staff",x:4.55,z:-4.45,w:.70,h:1.35,from:0,to:999,pal:{body:"#72563d",accent:"#bf9564",legs:"#393026",skin:"#d09a77",hair:"#553727",light:"#d9ad78"}},
- {id:"editoria_02",name:"EDITORIA 02",role:"EDITORIA",kind:"staff",x:6.35,z:-4.45,w:.70,h:1.35,from:0,to:999,pal:{body:"#5f5268",accent:"#9784a1",legs:"#322d38",skin:"#c99172",hair:"#49342d",light:"#ad9ab6"}},
- {id:"marino_interior",name:"MARINO",role:"INTERIOR",kind:"staff",x:10.55,z:3.25,w:.73,h:1.39,from:0,to:999,pal:{body:"#4b5942",accent:"#84926f",legs:"#2d3229",skin:"#c28b6d",hair:"#3f332c",light:"#9fad88"}},
- {id:"interior_02",name:"INTERIOR 02",role:"INTERIOR",kind:"staff",x:10.85,z:.45,w:.72,h:1.36,from:0,to:999,pal:{body:"#635346",accent:"#9d856f",legs:"#342e29",skin:"#cb9474",hair:"#46332c",light:"#b49b82"}},
- {id:"render_01",name:"RENDER 01",role:"RENDERISTI",kind:"staff",x:10.85,z:-2.75,w:.72,h:1.36,from:0,to:999,pal:{body:"#49566b",accent:"#7f8fa7",legs:"#29303b",skin:"#c78e70",hair:"#3c302b",light:"#98a6ba"}},
- {id:"render_02",name:"RENDER 02",role:"RENDERISTI",kind:"staff",x:11.55,z:-5.00,w:.72,h:1.36,from:0,to:999,pal:{body:"#5f4c48",accent:"#987974",legs:"#332b2a",skin:"#ce9675",hair:"#4c342d",light:"#ae8d87"}},
+ {id:"it_manager",name:"IT MANAGER",role:"IT",kind:"staff",seated:true,x:-5.45,z:3.46,w:.74,h:1.40,from:0,to:999,features:{glasses:true},pal:{body:"#36546b",accent:"#7394a5",legs:"#252d35",skin:"#bd856a",hair:"#44362f",light:"#8ab5ca"}},
+ {id:"hr_01",name:"BETTY",role:"HR",kind:"staff",seated:true,x:-5.1,z:6.25,w:.70,h:1.35,from:0,to:999,features:{stripes:true},pal:{body:"#5b4a51",accent:"#d7c9bd",legs:"#332b30",skin:"#cb9475",hair:"#49332f",light:"#c79aa4"}},
+ {id:"bim_01",name:"BIM 01",role:"BIM",kind:"staff",seated:true,x:-5.55,z:-5.12,w:.72,h:1.36,from:0,to:999,pal:{body:"#435f68",accent:"#7999a1",legs:"#293239",skin:"#c89072",hair:"#3c322e",light:"#94adb3"}},
+ {id:"bim_02",name:"BIM 02",role:"BIM",kind:"staff",seated:true,x:-4.15,z:-5.12,w:.72,h:1.36,from:0,to:999,pal:{body:"#5c4f72",accent:"#8d7ba7",legs:"#302c3d",skin:"#c68d70",hair:"#3f3028",light:"#aa97bd"}},
+ {id:"central_01",name:"CENTRALE 01",role:"CENTRALE",kind:"staff",seated:true,x:3.75,z:3.48,w:.70,h:1.35,from:0,to:999,pal:{body:"#4d5668",accent:"#8b97a9",legs:"#2b3038",skin:"#c58e70",hair:"#49372d",light:"#aab4c2"}},
+ {id:"central_02",name:"CENTRALE 02",role:"CENTRALE",kind:"staff",seated:true,x:5.35,z:3.48,w:.70,h:1.35,from:0,to:999,pal:{body:"#665b43",accent:"#a18d63",legs:"#332f27",skin:"#c99173",hair:"#3c3028",light:"#b9a476"}},
+ {id:"central_03",name:"CENTRALE 03",role:"CENTRALE",kind:"staff",seated:true,x:6.95,z:3.48,w:.70,h:1.35,from:0,to:999,pal:{body:"#4b6254",accent:"#7f9b87",legs:"#29342d",skin:"#c58d70",hair:"#342c28",light:"#96b19c"}},
+ {id:"central_04",name:"CENTRALE 04",role:"CENTRALE",kind:"staff",seated:true,x:3.75,z:0.72,w:.70,h:1.35,from:0,to:999,pal:{body:"#66505b",accent:"#9d7b88",legs:"#352d32",skin:"#d09a78",hair:"#53382c",light:"#b8939e"}},
+ {id:"central_05",name:"CENTRALE 05",role:"CENTRALE",kind:"staff",seated:true,x:5.35,z:0.72,w:.70,h:1.35,from:0,to:999,pal:{body:"#4d5f72",accent:"#8199ac",legs:"#2b323d",skin:"#c88f70",hair:"#3e332e",light:"#98afc0"}},
+ {id:"central_06",name:"CENTRALE 06",role:"CENTRALE",kind:"staff",seated:true,x:6.95,z:0.72,w:.70,h:1.35,from:0,to:999,pal:{body:"#625747",accent:"#9f8e6f",legs:"#342f28",skin:"#c88e70",hair:"#453429",light:"#b4a17d"}},
+ {id:"alice_editoria",name:"ALICE",role:"EDITORIA",kind:"staff",seated:true,x:4.25,z:-4.2,w:.70,h:1.35,from:0,to:999,pal:{body:"#72563d",accent:"#bf9564",legs:"#393026",skin:"#d09a77",hair:"#553727",light:"#d9ad78"}},
+ {id:"editoria_02",name:"EDITORIA 02",role:"EDITORIA",kind:"staff",seated:true,x:6.35,z:-4.2,w:.70,h:1.35,from:0,to:999,pal:{body:"#5f5268",accent:"#9784a1",legs:"#322d38",skin:"#c99172",hair:"#49342d",light:"#ad9ab6"}},
+ {id:"marino_interior",name:"MARINO",role:"INTERIOR",kind:"staff",seated:true,x:11.05,z:3.75,w:.73,h:1.39,from:0,to:999,pal:{body:"#4b5942",accent:"#84926f",legs:"#2d3229",skin:"#c28b6d",hair:"#3f332c",light:"#9fad88"}},
+ {id:"interior_02",name:"INTERIOR 02",role:"INTERIOR",kind:"staff",seated:true,x:11.05,z:0.45,w:.72,h:1.36,from:0,to:999,pal:{body:"#635346",accent:"#9d856f",legs:"#342e29",skin:"#cb9474",hair:"#46332c",light:"#b49b82"}},
+ {id:"render_01",name:"RENDER 01",role:"RENDERISTI",kind:"staff",seated:true,x:10.95,z:-2.75,w:.72,h:1.36,from:0,to:999,pal:{body:"#49566b",accent:"#7f8fa7",legs:"#29303b",skin:"#c78e70",hair:"#3c302b",light:"#98a6ba"}},
+ {id:"render_02",name:"RENDER 02",role:"RENDERISTI",kind:"staff",seated:true,x:11.7,z:-4.45,w:.72,h:1.36,from:0,to:999,pal:{body:"#5f4c48",accent:"#987974",legs:"#332b2a",skin:"#ce9675",hair:"#4c342d",light:"#ae8d87"}},
  // M3.4 // Tuesday dynamic cast. These do not change the canonical 17 fixed staff.
  {id:"lorenzo",name:"LORENZO",role:"ELETTRICISTA",kind:"dynamic",day:1,x:-.75,z:9.95,w:.78,h:1.43,from:51,to:55,features:{longHair:true},pal:{body:"#7a6335",accent:"#d3a84c",legs:"#333127",skin:"#c99170",hair:"#d2b45f",light:"#f0d98a"}},
  {id:"capo",name:"CAPO",role:"DIREZIONE",kind:"dynamic",day:1,x:9.05,z:7.70,w:.76,h:1.44,from:55,to:55,pal:{body:"#282d35",accent:"#6c7280",legs:"#171a1f",skin:"#d0a083",hair:"#5a5149",light:"#a5acb8"}},
@@ -960,7 +1022,7 @@ const npcSprites=[
  // M3.5 // A silhouette that exists only inside THE OTHER OFFICE.
  {id:"other_office_figure",name:"...",role:"ALTRO UFFICIO",kind:"dynamic",day:2,x:-.55,z:4.55,w:.68,h:1.56,from:63,to:63,pal:{body:"#28251f",accent:"#494238",legs:"#141310",skin:"#827969",hair:"#11100e",light:"#5c5549"}}
 ];
-for(const n of npcSprites){n.texIdle=spriteTexture(n.pal,"idle",n.features||{});n.texTalk=spriteTexture(n.pal,"talk",n.features||{});}
+for(const n of npcSprites){n.texIdle=spriteTexture(n.pal,"idle",n.features||{});n.texTalk=spriteTexture(n.pal,"talk",n.features||{});if(n.seated){n.texSit=spriteTexture(n.pal,"sit",n.features||{});n.seatX=n.x;n.seatZ=n.z;}}
 function demonTexture(){
  const cv=document.createElement("canvas");cv.width=32;cv.height=48;const x=cv.getContext("2d");x.imageSmoothingEnabled=false;const px=(c,a,b,w,h)=>{x.fillStyle=c;x.fillRect(a,b,w,h)};
  px("rgba(0,0,0,.36)",6,45,20,2);
@@ -1030,19 +1092,23 @@ for(const n of npcSprites){
 // Interaction points sit on the aisle side of desks, so the player no longer has
 // to wedge behind a monitor or clip through a colleague to use a machine.
 const stationApproach={
+ pc_it:{x:-5.00,z:3.15,label:"POSTAZIONE IT MANAGER"},
  it_pc_02:{x:-3.75,z:2.15,label:"SECONDA POSTAZIONE IT"},
  hr_pc_01:{x:-4.35,z:7.05,label:"POSTAZIONE HR"},
  bim_pc_01:{x:-4.90,z:-5.18,label:"POSTAZIONE BIM 01"},
+ bim_pc_02:{x:-3.50,z:-5.18,label:"POSTAZIONE BIM 02"},
  central_pc_01:{x:3.75,z:3.45,label:"POSTAZIONE CENTRALE"},central_pc_02:{x:5.35,z:3.45,label:"POSTAZIONE CENTRALE"},central_pc_03:{x:6.95,z:3.45,label:"POSTAZIONE CENTRALE"},
  central_pc_04:{x:3.75,z:.75,label:"POSTAZIONE CENTRALE"},central_pc_05:{x:5.35,z:.75,label:"POSTAZIONE CENTRALE"},central_pc_06:{x:6.95,z:.75,label:"POSTAZIONE CENTRALE"},
  editoria_pc_01:{x:4.25,z:-4.22,label:"POSTAZIONE EDITORIA"},editoria_pc_02:{x:6.35,z:-4.22,label:"POSTAZIONE EDITORIA"},
  interior_pc_01:{x:10.95,z:3.75,label:"POSTAZIONE INTERIOR"},
- render_pc_01:{x:10.90,z:-2.75,label:"POSTAZIONE RENDER"}
+ interior_pc_03:{x:10.95,z:.45,label:"POSTAZIONE INTERIOR 02"},
+ render_pc_01:{x:10.90,z:-2.75,label:"POSTAZIONE RENDER"},
+ render_04:{x:11.70,z:-4.45,label:"POSTAZIONE RENDER 02"}
 };
 for(const sc of officeScreens){
  if(interactables.some(it=>it.id===sc.id))continue;
  const a=stationApproach[sc.id]||{x:sc.x,z:sc.z,label:"POSTAZIONE"};
- interactables.push({id:sc.id,label:a.label,x:a.x,z:a.z,range:1.78,type:"workstation",room:sc.room});
+ interactables.push({id:sc.id,label:a.label,x:a.x,z:a.z,range:.95,type:"workstation",room:sc.room});
 }
 // Existing mission devices also use aisle-side interaction points.
 for(const [id,pos] of Object.entries({
@@ -1054,14 +1120,14 @@ for(const [id,pos] of Object.entries({
 // and will NOT change the canonical 17-person fixed staff count.
 const npcHomePositions={
  zia_ale:{x:-1.55,z:10.55},
- it_manager:{x:-4.05,z:4.00},
- hr_01:{x:-5.10,z:6.35},
- bim_01:{x:-5.55,z:-5.05},bim_02:{x:-4.15,z:-5.05},
+ it_manager:{x:-5.45,z:3.46},
+ hr_01:{x:-5.10,z:6.25},
+ bim_01:{x:-5.55,z:-5.12},bim_02:{x:-4.15,z:-5.12},
  central_01:{x:3.75,z:3.48},central_02:{x:5.35,z:3.48},central_03:{x:6.95,z:3.48},
  central_04:{x:3.75,z:.72},central_05:{x:5.35,z:.72},central_06:{x:6.95,z:.72},
- alice_editoria:{x:4.55,z:-4.45},editoria_02:{x:6.35,z:-4.45},
- marino_interior:{x:10.55,z:3.25},interior_02:{x:10.85,z:.45},
- render_01:{x:10.85,z:-2.75},render_02:{x:11.55,z:-5.00}
+ alice_editoria:{x:4.25,z:-4.20},editoria_02:{x:6.35,z:-4.20},
+ marino_interior:{x:11.05,z:3.75},interior_02:{x:11.05,z:.45},
+ render_01:{x:10.95,z:-2.75},render_02:{x:11.70,z:-4.45}
 };
 const npcLunchPositions={
  // CUCINA // 6
@@ -1124,6 +1190,12 @@ function npcShouldTrackCamera(n){
  if(n.id==="corridor_figure"||n.id==="other_office_figure")return true;
  if(n.id==="capo"&&currentDay===4&&storyStep>=81)return true;
  if(n.id==="lorenzo"&&currentDay===4&&storyStep>=87)return true;
+ // Le postazioni da scrivania avevano un orientamento FISSO (npcFacingYaw)
+ // invece di ruotare verso la telecamera: da alcuni angoli (proprio quello
+ // di avvicinamento normale) lo sprite si vedeva quasi di taglio, con
+ // braccia/capelli che sembravano staccati dal corpo. Ora seguono sempre
+ // la telecamera come un vero billboard, leggibili da qualunque lato.
+ if(n.seated)return true;
  // Only late Friday do the remaining colleagues acquire the unnatural zombie stare.
  return currentDay===4&&storyStep>=83&&n.kind==="staff";
 }
@@ -1147,7 +1219,8 @@ function renderNpcSprites(vp,camX,camZ){
    if(!isNpcVisible(n.id))continue;
    const rv=npcRightVector(n,camX,camZ);
    const demonFloat=n.id==="capo"&&currentDay===4&&storyStep>=81;
-   const hover=demonFloat ? .62+Math.sin(performance.now()/420)*.08 : .025;
+   const seatedNow=n.seated&&n.texSit&&!demonFloat&&Math.hypot(n.x-n.seatX,n.z-n.seatZ)<.45;
+   const hover=demonFloat ? .62+Math.sin(performance.now()/420)*.08 : (seatedNow?-.075:.025);
    const drawW=demonFloat?n.w*1.32:n.w,drawH=demonFloat?n.h*1.18:n.h;
    const rx=rv.x,rz=rv.z,hw=drawW/2,y0=hover,y1=y0+drawH;
    const lx=n.x-rx*hw,lz=n.z-rz*hw,rrx=n.x+rx*hw,rrz=n.z+rz*hw;
@@ -1157,7 +1230,7 @@ function renderNpcSprites(vp,camX,camZ){
      lx,y0,lz, 0,1,  rrx,y1,rrz, 1,0,  lx,y1,lz, 0,0
    ]);
    gl.bufferData(gl.ARRAY_BUFFER,d,gl.DYNAMIC_DRAW);
-   gl.bindTexture(gl.TEXTURE_2D,(n.id==="capo"&&currentDay===4&&storyStep>=81&&n.texDemon)?n.texDemon:(activeTalkingNpcId===n.id?n.texTalk:n.texIdle));
+   gl.bindTexture(gl.TEXTURE_2D,(n.id==="capo"&&currentDay===4&&storyStep>=81&&n.texDemon)?n.texDemon:(seatedNow?n.texSit:(activeTalkingNpcId===n.id?n.texTalk:n.texIdle)));
    gl.drawArrays(gl.TRIANGLES,0,6);
  }
  gl.depthMask(true);gl.disable(gl.BLEND);
@@ -1638,7 +1711,10 @@ function showEnding(kind){
  choiceOpen=false;gameEnded=true;gameStarted=false;choiceScreenEl?.classList.add("hidden");safeRemove(SAVE_KEY);
  const lm=safeRead(LIMEN_KEY)||{session:"LMN_01",endings:[],profile:{rebellion:0,compliance:0,control:0}};if(!lm.endings.includes(kind))lm.endings.push(kind);lm.lastEnding=kind;lm.profile=lm.profile||{rebellion:0,compliance:0,control:0};lm.profile[data.axis]=(lm.profile[data.axis]||0)+1;safeWrite(LIMEN_KEY,lm);
  const title=document.getElementById("endingTitle"),body=document.getElementById("endingBody"),code=document.getElementById("endingCode");if(title)title.textContent=data.title;if(body)body.textContent=data.body;if(code)code.textContent='LMN_01 // SESSION CLOSED // '+kind.toUpperCase();
- endingScreenEl?.classList.remove("hidden");refreshTitleMeta();
+ endingScreenEl?.classList.remove("hidden");
+ endingScreenEl?.classList.remove("ending-good","ending-normal","ending-evil");
+ endingScreenEl?.classList.add("ending-"+kind);
+ refreshTitleMeta();
 }
 function bindReleaseUi(){
  document.getElementById("newGameBtn")?.addEventListener("click",startNewGame);
@@ -1824,7 +1900,7 @@ function ensureAudio(){
 
      // Low office electrical/HVAC bed. Intentionally subtle.
      ambientGain=audioCtx.createGain();
-     ambientGain.gain.value=.012;
+     ambientGain.gain.value=.030;
      ambientGain.connect(masterGain);
      for(const [f,g] of [[50,.42],[100,.18],[150,.08]]){
        const o=audioCtx.createOscillator(),og=audioCtx.createGain();
@@ -1845,7 +1921,7 @@ function ensureAudio(){
      // Fluorescent/electrical layer. It becomes slightly more noticeable as the
      // morning grows stranger, but remains below dialogue and device sounds.
      fluoroGain=audioCtx.createGain();
-     fluoroGain.gain.value=.0035;
+     fluoroGain.gain.value=.0090;
      fluoroGain.connect(masterGain);
      for(const [f,g] of [[60,.45],[120,.18],[240,.05]]){
        const o=audioCtx.createOscillator(),og=audioCtx.createGain();
@@ -1876,25 +1952,25 @@ function tone(freq=700,dur=.08,vol=.02,type='square',endFreq=null){
  g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(vol,now+.008);g.gain.exponentialRampToValueAtTime(.0001,now+dur);
  o.connect(g);g.connect(audioOut());o.start(now);o.stop(now+dur+.02);
 }
-function uiBlip(){tone(760,.055,.014,'square',620)}
+function uiBlip(){tone(760,.055,.034,'square',620)}
 function objectiveChime(){
- tone(520,.07,.018,'square',620);
- setTimeout(()=>tone(780,.09,.016,'square',900),70);
+ tone(520,.07,.042,'square',620);
+ setTimeout(()=>tone(780,.09,.038,'square',900),70);
 }
 function footstepSound(){
  footstepSide^=1;
- tone(footstepSide?92:82,.075,.022,'triangle',52);
+ tone(footstepSide?92:82,.075,.052,'triangle',52);
 }
-function deviceBeep(){tone(980,.09,.018,'square',760)}
+function deviceBeep(){tone(980,.09,.042,'square',760)}
 function rackConfirmSound(){
- tone(430,.10,.018,'square',520);
- setTimeout(()=>tone(720,.12,.018,'square',850),105);
+ tone(430,.10,.042,'square',520);
+ setTimeout(()=>tone(720,.12,.042,'square',850),105);
 }
 function printerSound(){
- [0,115,230,345].forEach((ms,i)=>setTimeout(()=>tone(i%2?150:175,.07,.018,'square',105),ms));
+ [0,115,230,345].forEach((ms,i)=>setTimeout(()=>tone(i%2?150:175,.07,.042,'square',105),ms));
 }
 function knockSound(){
- [0,180,360].forEach(ms=>setTimeout(()=>tone(88,.10,.032,'triangle',48),ms));
+ [0,180,360].forEach(ms=>setTimeout(()=>tone(88,.10,.070,'triangle',48),ms));
 }
 function phoneRingSound(){
  ensureAudio();if(!audioCtx||audioMuted)return;
@@ -1915,26 +1991,26 @@ function phoneRingSound(){
 function updateAmbientAudio(){
  if(!audioCtx)return;
  const level=atmosphereLevel();
- if(ambientGain)ambientGain.gain.setTargetAtTime(audioMuted?0:.012+level*.0025,audioCtx.currentTime,.18);
- if(fluoroGain)fluoroGain.gain.setTargetAtTime(audioMuted?0:.0035+level*.0055,audioCtx.currentTime,.22);
+ if(ambientGain)ambientGain.gain.setTargetAtTime(audioMuted?0:.030+level*.0060,audioCtx.currentTime,.18);
+ if(fluoroGain)fluoroGain.gain.setTargetAtTime(audioMuted?0:.0090+level*.0130,audioCtx.currentTime,.22);
 
  const rack=interactables.find(i=>i.id==='server_rack_02');
  if(rack&&serverHumGain){
    const dist=Math.hypot(player.x-rack.x,player.z-rack.z);
-   const target=audioMuted?0:Math.max(0,Math.min(.032,(6.2-dist)*.006));
+   const target=audioMuted?0:Math.max(0,Math.min(.080,(6.2-dist)*.015));
    serverHumGain.gain.setTargetAtTime(target,audioCtx.currentTime,.12);
  }
  const printer=interactables.find(i=>i.id==='printer_main');
  if(printer&&printerHumGain){
    const dist=Math.hypot(player.x-printer.x,player.z-printer.z);
-   const target=audioMuted?0:Math.max(0,Math.min(.008,(4.3-dist)*.0024));
+   const target=audioMuted?0:Math.max(0,Math.min(.020,(4.3-dist)*.0060));
    printerHumGain.gain.setTargetAtTime(target,audioCtx.currentTime,.16);
  }
  const phone=interactables.find(i=>i.id==='meet_phone');
  if(phone&&pbxWhineGain){
    const dist=Math.hypot(player.x-phone.x,player.z-phone.z);
    const active=storyStep>=27;
-   const target=(audioMuted||!active)?0:Math.max(0,Math.min(.006,(4.8-dist)*.0019));
+   const target=(audioMuted||!active)?0:Math.max(0,Math.min(.015,(4.8-dist)*.0048));
    pbxWhineGain.gain.setTargetAtTime(target,audioCtx.currentTime,.18);
  }
 }

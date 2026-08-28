@@ -358,6 +358,27 @@ html,body{font-family:"Courier New",Courier,monospace}
 #dialogueName{font:900 18px/1 "Courier New",Courier,monospace!important;color:#b9ff52!important;letter-spacing:2px!important;border-bottom:1px solid rgba(62,78,69,.9)!important;margin-bottom:12px!important;min-width:unset!important}
 #dialogueText{font:700 24px/1.38 "Courier New",Courier,monospace!important;color:#f1f5f1!important;max-width:100%!important;min-height:84px!important}
 #dialogueHint{font:700 11px/1 "Courier New",Courier,monospace!important;color:#8da094!important}
+
+/* M5.2 // il balloon era puro CSS piatto (gradiente + bordo), senza nulla di
+   "fisico". Bevel a rilievo, angoli a mirino e scanline lo rendono un vero
+   pannello invece di una card generata. */
+.dialogueFrame{
+ background-color:rgba(4,8,6,.95)!important;
+ background-repeat:repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat!important;
+ background-image:
+  repeating-linear-gradient(0deg,rgba(205,235,218,.05) 0,rgba(205,235,218,.05) 1px,transparent 1px,transparent 4px),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a)!important;
+ background-size:auto,16px 2px,2px 16px,16px 2px,2px 16px,16px 2px,2px 16px,16px 2px,2px 16px!important;
+ background-position:0 0,0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%!important;
+ box-shadow:7px 7px 0 #000,inset 1px 1px 0 rgba(255,255,255,.06),inset -2px -2px 0 rgba(0,0,0,.6)!important;
+}
+#dialogueName{
+ display:inline-block!important;padding:3px 11px!important;
+ background:rgba(0,0,0,.32)!important;border:1px solid rgba(155,224,90,.45)!important;
+}
 #miniWrap{display:block!important;position:absolute!important;right:10px!important;top:10px!important;width:188px!important;background:rgba(3,8,5,.90)!important;border:2px solid #5e7365!important;box-shadow:4px 4px 0 #000!important;padding:6px!important;z-index:7!important}
 #miniWrap canvas{border:1px solid #28382e!important}.#miniWrap span{}
 #miniWrap span{display:block!important;margin-top:4px!important;text-align:center!important;color:#86988d!important;font:700 7px/1.25 "Courier New",Courier,monospace!important;letter-spacing:.6px!important}
@@ -365,7 +386,80 @@ html,body{font-family:"Courier New",Courier,monospace}
 #dayBanner strong{font:900 46px/1 "Courier New",Courier,monospace!important;letter-spacing:6px!important;color:#cfd6d2!important;text-shadow:2px 2px #000}
 #dayBanner span{margin-top:12px!important;font:900 14px/1.3 "Courier New",Courier,monospace!important;letter-spacing:2px!important;color:#b7ff4a!important;text-transform:uppercase!important}
 .pauseHint{font:700 11px/1.5 "Courier New",Courier,monospace!important}
+
+/* M5.3 // stesso linguaggio "pannello PSX" del balloon dialoghi applicato a
+   tutto l'HUD DI GIOCO (non il menu iniziale, quello resta com'e): riquadro
+   obiettivo, minimappa, barra di interazione. Via l'immagine piatta a righe
+   e i box CSS a tinta unita, dentro bordo a bevel + angoli a mirino. */
+/* M5.4 // ora c'e' una vera illustrazione (hud_frame.png), non serve piu'
+   il pannello CSS di ripiego: torniamo all'immagine, ben allineata alle
+   3 fasce del riquadro (obiettivo / meta / orologio+giorno). */
+#hud{
+ background-image:url("hud_frame.png")!important;
+ background-color:transparent!important;
+ background-repeat:no-repeat!important;
+ background-size:100% 100%!important;
+ border:0!important;
+ box-shadow:none!important;
+}
+#miniWrap{
+ background-image:
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a)!important;
+ background-repeat:no-repeat!important;
+ background-size:12px 2px,2px 12px,12px 2px,2px 12px,12px 2px,2px 12px,12px 2px,2px 12px!important;
+ background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%!important;
+ box-shadow:4px 4px 0 #000,inset 1px 1px 0 rgba(255,255,255,.05),inset -2px -2px 0 rgba(0,0,0,.55)!important;
+}
+#interactionPrompt{
+ background-image:
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a),
+  linear-gradient(#9be05a,#9be05a),linear-gradient(#9be05a,#9be05a)!important;
+ background-repeat:no-repeat!important;
+ background-size:12px 2px,2px 12px,12px 2px,2px 12px,12px 2px,2px 12px,12px 2px,2px 12px!important;
+ background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%!important;
+ box-shadow:3px 3px 0 #000,inset 1px 1px 0 rgba(255,255,255,.05),inset -2px -2px 0 rgba(0,0,0,.55)!important;
+}
 @media(max-width:760px){#hud{width:calc(100vw - 20px)!important;padding:10px 10px 12px 10px!important;background-image:none!important;background:rgba(2,7,5,.86)!important;border:1px solid rgba(138,163,145,.55)!important;box-shadow:2px 2px 0 #000!important}#miniWrap{display:none!important}#interactionPrompt{min-width:0!important;width:88vw!important;max-width:88vw!important;bottom:112px!important;font-size:13px!important;padding:10px 12px!important}#interactionPrompt b{font-size:13px!important}#dialogue{bottom:112px!important;width:94vw!important}#dialogueName{font-size:15px!important}#dialogueText{font-size:18px!important;min-height:72px!important}#dayBanner{min-width:0!important;width:92vw!important;padding:18px 20px 22px 34px!important}#dayBanner strong{font-size:28px!important;letter-spacing:4px!important}#dayBanner span{font-size:11px!important}}
+
+/* M5.5 // schermata finale: prima era un box CSS generico uguale per tutti
+   e 3 i finali. Ora ogni ending ha la propria illustrazione a piena
+   immagine (stesso schema del menu), col testo vivo nella fascia scura
+   a sinistra per cui le immagini sono state composte apposta. */
+#endingScreen{padding:0!important;background:#000!important;overflow:hidden!important}
+.endingArtFrame{
+ position:relative;
+ width:min(100vw,calc(100vh * 1.777896));
+ aspect-ratio:1672/941;
+ max-height:100vh;
+ background-position:center center;
+ background-size:100% 100%;
+ background-repeat:no-repeat;
+ box-shadow:0 0 55px #000;
+ display:flex;
+ align-items:center;
+}
+#endingScreen.ending-good .endingArtFrame{background-image:url("ending_good.png")}
+#endingScreen.ending-normal .endingArtFrame{background-image:url("ending_normal.png")}
+#endingScreen.ending-evil .endingArtFrame{background-image:url("ending_evil.png")}
+.endingCard{
+ width:min(29%,430px)!important;margin-left:4.5%!important;padding:0!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+}
+.endingCard #endingTitle{font:900 30px/1 "Courier New",Courier,monospace!important;letter-spacing:2px!important;color:#ffc857!important;text-shadow:2px 2px #000!important;margin-bottom:16px!important}
+.endingCard #endingBody{color:#dce8df!important;font:13px/1.65 "Courier New",Courier,monospace!important;white-space:pre-line!important;text-shadow:1px 1px #000!important}
+.endingCard #endingCode{margin:18px 0 20px!important;padding:9px 10px!important;border:1px solid rgba(140,160,145,.4)!important;color:#9db3a1!important;font:9px "Courier New",Courier,monospace!important;background:rgba(0,0,0,.35)!important}
+.endingCard .releaseBtn{width:100%!important}
+@media(max-width:900px){
+ .endingArtFrame{width:100vw!important;height:100vh!important;aspect-ratio:auto!important;background-size:cover!important;background-position:60% center!important}
+ .endingCard{width:92%!important;margin-left:4%!important;background:rgba(2,6,4,.86)!important;padding:18px!important;border:1px solid rgba(138,163,145,.5)!important}
+ .endingCard #endingTitle{font-size:22px!important}
+}
+
 
 </style>
 </head>
@@ -431,12 +525,14 @@ html,body{font-family:"Courier New",Courier,monospace}
   </div>
 </div>
 <div id="endingScreen" class="hidden">
-  <div class="releaseCard">
-    <div id="endingTitle">ENDING</div>
-    <div id="endingBody"></div>
-    <div id="endingCode">LMN_01 // SESSION CLOSED</div>
-    <button id="endingRestartBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; NUOVO TURNO</span></button>
-    <button id="endingMenuBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; MENU PRINCIPALE</span></button>
+  <div class="endingArtFrame">
+    <div class="releaseCard endingCard">
+      <div id="endingTitle">ENDING</div>
+      <div id="endingBody"></div>
+      <div id="endingCode">LMN_01 // SESSION CLOSED</div>
+      <button id="endingRestartBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; NUOVO TURNO</span></button>
+      <button id="endingMenuBtn" class="releaseBtn" type="button"><span class="mainLine">&gt; MENU PRINCIPALE</span></button>
+    </div>
   </div>
 </div>
 
